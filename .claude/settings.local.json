@@ -47,7 +47,20 @@
       "Bash(git config:*)",
       "Bash(gh repo:*)",
       "Bash(git remote:*)",
-      "Bash(git status:*)"
+      "Bash(git status:*)",
+      "Bash(git push:*)",
+      "Bash(npx --version)",
+      "Bash(npx create-solana-dapp@latest fanshare-scaffold --preset anchor --force)",
+      "Bash(npx create-solana-dapp@latest fanshare-scaffold --help)",
+      "Bash(npx create-solana-dapp@latest fanshare-scaffold --list-template-ids)",
+      "Bash(rm -rf fanshare-scaffold)",
+      "Bash(npx create-solana-dapp@latest fanshare-scaffold --template \"gh:solana-foundation/templates/kit/nextjs-anchor\" --skip-git --skip-install)",
+      "Bash(anchor build:*)",
+      "Bash(export PATH=\"$HOME/.avm/bin:$HOME/.cargo/bin:$HOME/bin:$PATH\")",
+      "Bash(export PATH=\"$HOME/.local/share/solana/install/active_release/bin:$HOME/.avm/bin:$HOME/.cargo/bin:$HOME/bin:$PATH\")",
+      "Bash(solana-keygen new:*)",
+      "Bash(cargo test:*)",
+      "Bash(npm install:*)"
     ]
   }
 }
