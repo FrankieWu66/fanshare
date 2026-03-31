@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./setup)",
+      "Bash(curl -fsSL https://bun.sh/install)",
+      "Bash(bash)",
+      "Bash(~/.bun/bin/bun install:*)",
+      "Bash(export PATH=\"$HOME/.bun/bin:$PATH\")",
+      "Bash(B=~/.claude/skills/gstack/browse/dist/browse)",
+      "Bash($B goto:*)",
+      "Bash($B screenshot:*)",
+      "Bash($B eval:*)",
+      "Bash($B click:*)",
+      "Bash($B javascript:*)",
+      "Bash($B viewport:*)",
+      "Skill(browse)",
+      "Skill(browse:*)",
+      "WebSearch",
+      "Bash(~/.claude/skills/gstack/bin/gstack-review-read)",
+      "Bash(rustc --version)",
+      "Bash(cargo --version)",
+      "Bash(solana --version)",
+      "Bash(anchor --version)",
+      "Bash(npm --version)",
+      "Bash(git add:*)"
+    ]
+  }
+}

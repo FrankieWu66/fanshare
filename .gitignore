@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+.yarn/
+
+# Build
+.next/
+target/
+dist/
+
+# Anchor
+.anchor/
+test-ledger/
+
+# Environment
+.env
+.env.local
+.env.*.local
+*.pem
+
+# Keys (NEVER commit)
+*-keypair.json
+oracle-keypair*.json
+
+# OS
+.DS_Store
+.Rhistory
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# gstack internal
+.gstack/browse-network.log
