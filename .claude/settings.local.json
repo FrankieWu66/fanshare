@@ -22,7 +22,32 @@
       "Bash(solana --version)",
       "Bash(anchor --version)",
       "Bash(npm --version)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(gh auth:*)",
+      "Bash(curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs)",
+      "Bash(sh -s -- -y)",
+      "Bash(. \"$HOME/.cargo/env\")",
+      "Bash(export PATH=\"$HOME/.local/share/solana/install/active_release/bin:$PATH\")",
+      "Bash(cargo install:*)",
+      "Bash(export PATH=\"$HOME/.local/share/solana/install/active_release/bin:$HOME/.cargo/bin:$PATH\")",
+      "Bash(avm install:*)",
+      "Bash(curl -sL \"https://github.com/cli/cli/releases/download/v2.89.0/gh_2.89.0_macOS_arm64.zip\" -o /tmp/gh.zip)",
+      "Bash(unzip -o gh.zip)",
+      "Bash(mkdir -p /usr/local/bin)",
+      "Bash(cp /tmp/gh_2.89.0_macOS_arm64/bin/gh /usr/local/bin/gh)",
+      "Bash(chmod +x /usr/local/bin/gh)",
+      "Bash(/usr/local/bin/gh --version)",
+      "Bash(mkdir -p ~/bin)",
+      "Bash(cp /tmp/gh_2.89.0_macOS_arm64/bin/gh ~/bin/gh)",
+      "Bash(chmod +x ~/bin/gh)",
+      "Bash(~/bin/gh --version)",
+      "Bash(export PATH=\"$HOME/bin:$PATH\")",
+      "Bash(ssh -T git@github.com)",
+      "Bash(git config:*)",
+      "Bash(gh repo:*)",
+      "Bash(git remote:*)",
+      "Bash(git status:*)"
     ]
   }
 }
