@@ -512,6 +512,75 @@ Cost: ~0.000005 SOL per update. Monitor: if oracle stops updating, check wallet 
 
 ---
 
+## Devnet Scope — What Ships First
+
+This section is the authoritative reference for what runs on devnet.
+When upgrading to mainnet, diff against the Mainnet Upgrade section below.
+
+| Component | Devnet Behavior | Decision date |
+|-----------|----------------|---------------|
+| **Roster** | 15 star players (abstract IDs: Player_LBJ, Player_SC, etc.) | 2026-03-31 |
+| **Token supply** | 1,000,000 tokens per player | 2026-03-31 |
+| **Base price** | 1,000 lamports (0.000001 SOL) — uniform, all players | 2026-03-31 |
+| **Slope** | 10 lamports per token sold | 2026-03-31 |
+| **Player pricing** | Uniform — market differentiates, founder does not rank | 2026-03-31 |
+| **Graduation** | None — bonding curve runs indefinitely | 2026-03-31 |
+| **Oracle cadence** | Per-game cron (fires once after each NBA game ends) | 2026-03-31 |
+| **Oracle source** | BallDontLie API (free, no license required) | 2026-03-29 |
+| **Player names** | Abstract IDs only — no real names pending legal review | 2026-03-28 |
+| **Wallet support** | Phantom + Backpack (Solana wallet standard) | 2026-03-29 |
+| **RPC provider** | Helius free tier (100k req/day) | 2026-03-29 |
+| **Program** | Upgradeable — admin keypair as upgrade authority | 2026-03-29 |
+| **Frontend** | Market grid + Trade page, no portfolio/PnL view | 2026-03-29 |
+| **Hosting** | Vercel free tier | 2026-03-29 |
+| **Access** | Invite-only, 10-15 beta contacts | 2026-03-28 |
+
+**Devnet success criteria:**
+- 10 beta users complete at least one buy/sell transaction
+- At least 3 users describe the stats index as "useful for trading decisions" unprompted
+- At least 1 user says "I would use this with real SOL on mainnet"
+- No integer overflow or reserve invariant violations observed
+
+---
+
+## Mainnet Upgrade — What Changes
+
+This section documents every devnet shortcut and what replaces it for mainnet.
+Read this before any mainnet sprint planning.
+
+| Component | Devnet | Mainnet upgrade | Effort | Blocking? |
+|-----------|--------|----------------|--------|-----------|
+| **Player names** | Abstract IDs (Player_LBJ) | Real names + likenesses | — | Legal review required |
+| **Roster size** | 15 players | Every active NBA player (~450) | M | No — can expand incrementally |
+| **Oracle cadence** | Per-game cron | Real-time daemon (~5 min ticks during live games) | M | No — ship per-game first |
+| **Oracle source** | BallDontLie (unofficial) | Sportradar or Stats Perform (licensed feed) | L | Legal + budget |
+| **Oracle validation** | Centralized cron | Switchboard custom job (decentralized) | L | No |
+| **Initial pricing** | Uniform (1,000 lamports) | Stats-anchored (base_price = composite × 10,000 lam) | S | No |
+| **Graduation** | None | 69 SOL threshold → Raydium CPMM migration | M | Spike Raydium CPI first |
+| **Program authority** | Admin keypair | Squads multisig upgrade authority | S | Security |
+| **Program** | Upgradeable | Immutable after security audit | — | Audit required ($20-50k) |
+| **Wallet onboarding** | Phantom/Backpack only (crypto-native) | Embedded wallet + fiat onramp (Privy/MoonPay) | L | No — v2 |
+| **RPC provider** | Helius free | Helius Pro (~$49/mo) or dedicated node | S | Volume dependent |
+| **Hosting** | Vercel free | Vercel Pro (~$20/mo) for custom domain + analytics | S | No |
+| **Frontend search** | 3-col grid (15 cards) | Search + team/position filters (450 players) | S | At ~20+ players |
+| **Portfolio view** | None | PnL tracking, position history | M | Post-PMF |
+| **Fee collection** | Disabled (`collect_fees` gated) | Protocol fee on each trade | S | Legal structure first |
+
+**Mainnet prerequisites (hard blockers):**
+1. Legal review — token issuance structure, right of publicity, NBA data license
+2. Security audit — Solana program audit ($20-50k, 4-6 week lead time)
+3. Licensed stats feed contract (Sportradar or Stats Perform)
+4. Raydium graduation feasibility spike (CPI vs client-side)
+5. Squads multisig setup for upgrade authority
+
+**Mainnet success criteria:**
+- 5 player tokens live
+- At least 1 token reaches 69 SOL graduation threshold and migrates to Raydium
+- Total volume > 500 SOL in first 30 days
+- 50+ unique wallets trade at least once
+
+---
+
 ## GSTACK REVIEW REPORT
 
 | Review | Trigger | Why | Runs | Status | Findings |
