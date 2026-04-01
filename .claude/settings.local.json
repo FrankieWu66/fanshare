@@ -60,7 +60,8 @@
       "Bash(export PATH=\"$HOME/.local/share/solana/install/active_release/bin:$HOME/.avm/bin:$HOME/.cargo/bin:$HOME/bin:$PATH\")",
       "Bash(solana-keygen new:*)",
       "Bash(cargo test:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(ls /Users/frankiewu/dev/fanshare-1/app/trade/[playerId]/)"
     ]
   }
 }

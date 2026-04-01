@@ -58,16 +58,22 @@ export function usePlayerData(playerId: string): {
   return { player, isLoading, error };
 }
 
-// Mock data generator — simulates different curve positions per player
+// Mock data generator — simulates different curve positions per player (15 players)
+const MOCK_TOKENS_SOLD = [
+  0n, 5000n, 12000n, 800n, 25000n,
+  3200n, 18000n, 450n, 31000n, 7600n,
+  1100n, 9800n, 22000n, 650n, 41000n,
+];
+const MOCK_INDEX_PRICES = [
+  50000n, 60000n, 45000n, 30000n, 120000n,
+  35000n, 85000n, 28000n, 95000n, 55000n,
+  22000n, 70000n, 110000n, 18000n, 200000n,
+];
+
 function mockPlayerData(config: PlayerConfig, index: number): PlayerMarketData {
-  // Each player has a different number of "tokens sold" to show varied prices
-  const mockTokensSold = BigInt([0, 5000, 12000, 800, 25000][index] ?? 0);
-
+  const mockTokensSold = MOCK_TOKENS_SOLD[index] ?? 0n;
   const price = currentPrice(DEFAULT_BASE_PRICE, DEFAULT_SLOPE, mockTokensSold);
-
-  // Mock oracle index prices (simulating stats-based valuation)
-  const mockIndexPrices = [50000n, 60000n, 45000n, 30000n, 120000n];
-  const indexPrice = mockIndexPrices[index] ?? 0n;
+  const indexPrice = MOCK_INDEX_PRICES[index] ?? 0n;
 
   const spread = calculateSpread(price, indexPrice);
 

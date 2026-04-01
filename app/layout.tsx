@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Solana dApp Starter",
-  description: "A minimal Next.js starter powered by @solana/kit",
+  title: "FanShare — Stock Market for Human Performance",
+  description:
+    "Trade tokens pegged to NBA player performance. Price moves with supply and demand. Built on Solana.",
   icons: {
     icon: "/icon.svg",
     shortcut: "/icon.svg",

@@ -16,18 +16,34 @@ export const DEFAULT_SLOPE = 10n; // 10 lamports per token sold
 export const DEFAULT_TOTAL_SUPPLY = 1_000_000n;
 
 // Devnet player roster — abstract IDs per design doc (no real names until legal review)
+// 15-player roster locked by CEO review 2026-03-31
 export interface PlayerConfig {
   id: string;
   displayName: string;
   emoji: string; // visual identifier for devnet
+  position: "PG" | "SG" | "SF" | "PF" | "C";
+  team: string; // abbreviated team for display
 }
 
 export const DEVNET_PLAYERS: PlayerConfig[] = [
-  { id: "Player_23", displayName: "Player #23", emoji: "\u{1F451}" },
-  { id: "Player_77", displayName: "Player #77", emoji: "\u{26A1}" },
-  { id: "Player_15", displayName: "Player #15", emoji: "\u{1F525}" },
-  { id: "Player_0", displayName: "Player #0", emoji: "\u{1F3AF}" },
-  { id: "Player_30", displayName: "Player #30", emoji: "\u{1F4A7}" },
+  // Top tier stars
+  { id: "Player_LBJ", displayName: "The King",       emoji: "👑", position: "SF", team: "LAL" },
+  { id: "Player_SC",  displayName: "The Chef",        emoji: "🍛", position: "PG", team: "GSW" },
+  { id: "Player_LD",  displayName: "The Maverick",    emoji: "⚡", position: "PG", team: "DAL" },
+  { id: "Player_NJ",  displayName: "The Joker",       emoji: "🃏", position: "C",  team: "DEN" },
+  { id: "Player_JT",  displayName: "The Jaybird",     emoji: "🦅", position: "SF", team: "BOS" },
+  // Second tier
+  { id: "Player_SGA", displayName: "The Shai",        emoji: "🌩", position: "PG", team: "OKC" },
+  { id: "Player_GA",  displayName: "The Greek Freak", emoji: "🦌", position: "PF", team: "MIL" },
+  { id: "Player_JE",  displayName: "The Process",     emoji: "🔨", position: "C",  team: "PHI" },
+  { id: "Player_KD",  displayName: "The Slim Reaper", emoji: "🪄", position: "SF", team: "PHX" },
+  { id: "Player_JB",  displayName: "The Jet",         emoji: "✈️", position: "SG", team: "BOS" },
+  // Rising stars
+  { id: "Player_DB",  displayName: "The Book",        emoji: "📖", position: "SG", team: "PHX" },
+  { id: "Player_AD",  displayName: "The Brow",        emoji: "🦾", position: "PF", team: "LAL" },
+  { id: "Player_VW",  displayName: "The Alien",       emoji: "👽", position: "C",  team: "SAS" },
+  { id: "Player_CC",  displayName: "The Cade",        emoji: "🎯", position: "PG", team: "DET" },
+  { id: "Player_TH",  displayName: "The Hali",        emoji: "💧", position: "PG", team: "IND" },
 ];
 
 // On-chain account types (deserialized from BondingCurveAccount)
