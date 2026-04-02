@@ -207,17 +207,20 @@ async function main() {
     "confirmed"
   );
 
-  // Load authority keypair
-  const walletPath = path.join(process.env.HOME!, ".config/solana/id.json");
+  // Load authority keypair — prefer oracle-keypair.json in project root, fall back to default wallet
+  const __scriptDir = path.dirname(fileURLToPath(import.meta.url));
+  const oracleKeypairPath = path.join(__scriptDir, "../oracle-keypair.json");
+  const defaultWalletPath = path.join(process.env.HOME!, ".config/solana/id.json");
+  const walletPath = fs.existsSync(oracleKeypairPath) ? oracleKeypairPath : defaultWalletPath;
   if (!fs.existsSync(walletPath)) {
-    throw new Error(`No keypair at ${walletPath}`);
+    throw new Error(`No keypair found. Expected oracle-keypair.json or ${defaultWalletPath}`);
   }
+  console.log(`Using keypair: ${walletPath}`);
   const walletData: number[] = JSON.parse(fs.readFileSync(walletPath, "utf-8"));
   const authority = Keypair.fromSecretKey(new Uint8Array(walletData));
 
   // Load mint addresses from init-players output
-  const __dirname = path.dirname(fileURLToPath(import.meta.url));
-  const mintsPath = path.join(__dirname, "../app/lib/player-mints.json");
+  const mintsPath = path.join(__scriptDir, "../app/lib/player-mints.json");
   if (!fs.existsSync(mintsPath)) {
     throw new Error(
       `No player-mints.json found. Run 'npm run init-players' first.`

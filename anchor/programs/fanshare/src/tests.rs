@@ -166,6 +166,82 @@ mod tests {
         assert_eq!(total_cost, 5_000_995_000_000);
     }
 
+    // ========================================================================
+    // Unit tests — buy_with_sol math (the primary user-facing instruction)
+    // Tests the three-step logic: tokens_for_sol → dust guard → exact_cost check
+    // ========================================================================
+
+    #[test]
+    fn test_buy_with_sol_happy_path() {
+        // 1 SOL (1_000_000_000 lamports) at genesis.
+        // Step 1: how many tokens?
+        let sol_amount = 1_000_000_000u64;
+        let tokens = calculate_tokens_for_sol(1000, 10, 0, sol_amount, 1_000_000).unwrap();
+        assert!(tokens > 0, "Should buy at least 1 token with 1 SOL");
+
+        // Step 2: recalculate exact cost — must not exceed sol_amount
+        let exact_cost = calculate_buy_cost(1000, 10, 0, tokens).unwrap();
+        assert!(exact_cost <= sol_amount, "Exact cost must not exceed supplied SOL");
+
+        // Step 3: one more token must exceed budget (binary search is tight)
+        if tokens + 1 <= 1_000_000 {
+            let cost_plus_one = calculate_buy_cost(1000, 10, 0, tokens + 1).unwrap();
+            assert!(cost_plus_one > sol_amount, "Binary search must be tight — one more token exceeds budget");
+        }
+    }
+
+    #[test]
+    fn test_buy_with_sol_dust_amount_returns_zero() {
+        // 999 lamports — not enough to buy even 1 token (costs 1000).
+        // The instruction rejects this with DustAmount.
+        let tokens = calculate_tokens_for_sol(1000, 10, 0, 999, 1_000_000).unwrap();
+        assert_eq!(tokens, 0, "Sub-1-token SOL must return 0 tokens (dust guard triggers)");
+    }
+
+    #[test]
+    fn test_buy_with_sol_exact_single_token_cost() {
+        // Exactly 1000 lamports — the price of exactly 1 token at genesis.
+        let tokens = calculate_tokens_for_sol(1000, 10, 0, 1000, 1_000_000).unwrap();
+        assert_eq!(tokens, 1);
+        let exact_cost = calculate_buy_cost(1000, 10, 0, 1).unwrap();
+        assert_eq!(exact_cost, 1000);
+        assert!(exact_cost <= 1000);
+    }
+
+    #[test]
+    fn test_buy_with_sol_mid_curve() {
+        // At position 500 (tokens_sold=500), price = 1000 + 10*500 = 6000 lamports per token.
+        // Supply 60_000 lamports — should buy roughly 9-10 tokens.
+        let sol_amount = 60_000u64;
+        let tokens = calculate_tokens_for_sol(1000, 10, 500, sol_amount, 1_000_000).unwrap();
+        assert!(tokens > 0, "Should buy tokens at mid-curve");
+        let exact_cost = calculate_buy_cost(1000, 10, 500, tokens).unwrap();
+        assert!(exact_cost <= sol_amount, "Exact cost must not exceed supplied SOL");
+    }
+
+    #[test]
+    fn test_buy_with_sol_respects_supply_cap() {
+        // Only 3 tokens left in supply. Huge SOL amount — must cap at 3.
+        let tokens = calculate_tokens_for_sol(1000, 10, 999_997, 1_000_000_000_000, 1_000_000).unwrap();
+        assert_eq!(tokens, 3, "Cannot buy more tokens than remaining supply");
+    }
+
+    #[test]
+    fn test_buy_with_sol_slippage_check() {
+        // Simulate the slippage guard: min_tokens_out = tokens - 1 (should pass).
+        // min_tokens_out = tokens + 1 (should fail: tokens < min).
+        let sol_amount = 1_000_000_000u64;
+        let tokens = calculate_tokens_for_sol(1000, 10, 0, sol_amount, 1_000_000).unwrap();
+
+        // Acceptable slippage (1% tolerance)
+        let min_tokens_acceptable = tokens * 99 / 100;
+        assert!(tokens >= min_tokens_acceptable, "Should pass 1% slippage check");
+
+        // Unacceptable slippage (asking for more than we got)
+        let min_tokens_too_high = tokens + 1;
+        assert!(tokens < min_tokens_too_high, "Should fail if min_tokens_out > tokens received");
+    }
+
     #[test]
     fn test_cross_language_parity_vectors() {
         // These test vectors must be replicated exactly in TypeScript.

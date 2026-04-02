@@ -10,6 +10,7 @@ import { useSendTransaction } from "../../lib/hooks/use-send-transaction";
 import { lamportsToSolString } from "../../lib/lamports";
 import { GridBackground } from "../../components/grid-background";
 import { ClusterSelect } from "../../components/cluster-select";
+import { useCluster } from "../../components/cluster-context";
 import { WalletButton } from "../../components/wallet-button";
 import {
   formatSol,
