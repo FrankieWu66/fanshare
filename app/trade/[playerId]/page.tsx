@@ -7,20 +7,17 @@ import { useWallet } from "../../lib/wallet/context";
 import { useBalance } from "../../lib/hooks/use-balance";
 import { usePlayerData } from "../../lib/hooks/use-player-markets";
 import { useSendTransaction } from "../../lib/hooks/use-send-transaction";
-import { lamportsToSolString, lamportsFromSol } from "../../lib/lamports";
-import { useCluster } from "../../components/cluster-context";
+import { lamportsToSolString } from "../../lib/lamports";
 import { GridBackground } from "../../components/grid-background";
-import { ThemeToggle } from "../../components/theme-toggle";
 import { ClusterSelect } from "../../components/cluster-select";
 import { WalletButton } from "../../components/wallet-button";
 import {
   formatSol,
-  calculateBuyCost,
+  // calculateBuyCost — used in POST-DEPLOY buy instruction (commented out below)
   calculateSellReturn,
   calculateTokensForSol,
   currentPrice,
 } from "../../lib/bonding-curve";
-import { parseTransactionError } from "../../lib/errors";
 
 const SLIPPAGE_PCT = 1; // 1% slippage tolerance
 
@@ -32,8 +29,8 @@ export default function TradePage({
   const { playerId } = use(params);
   const { player, isLoading } = usePlayerData(playerId);
   const { wallet, status } = useWallet();
-  const { send, isSending } = useSendTransaction();
-  const { getExplorerUrl } = useCluster();
+  const { isSending } = useSendTransaction();
+  useCluster(); // will destructure getExplorerUrl post-deploy
 
   const address = wallet?.account.address;
   const balance = useBalance(address);
@@ -87,9 +84,9 @@ export default function TradePage({
     indexPrice === 0n
       ? null
       : spread < -5
-        ? { text: "Undervalued", color: "text-emerald-500", bg: "bg-emerald-500/10" }
+        ? { text: "Undervalued", color: "text-accent", bg: "bg-accent-subtle" }
         : spread > 5
-          ? { text: "Overvalued", color: "text-red-400", bg: "bg-red-400/10" }
+          ? { text: "Overvalued", color: "text-negative", bg: "bg-negative/10" }
           : { text: "Fair value", color: "text-muted", bg: "bg-cream" };
 
   // ── Handlers ─────────────────────────────────────────────────────────────
@@ -173,7 +170,6 @@ export default function TradePage({
             <span className="text-sm font-semibold">{config.displayName}</span>
           </div>
           <div className="flex items-center gap-3">
-            <ThemeToggle />
             <ClusterSelect />
             <WalletButton />
           </div>
@@ -186,7 +182,7 @@ export default function TradePage({
               <div className="flex items-center gap-3">
                 <span className="text-5xl">{config.emoji}</span>
                 <div>
-                  <h1 className="text-3xl font-black tracking-tight">
+                  <h1 className="font-display text-3xl font-extrabold tracking-tight">
                     {config.displayName}
                   </h1>
                   <div className="mt-1 flex items-center gap-2 text-sm text-muted">
@@ -249,7 +245,7 @@ export default function TradePage({
                   </div>
                   <div className="h-2 w-full overflow-hidden rounded-full bg-border-low">
                     <div
-                      className="h-full rounded-full bg-foreground/40 transition-all"
+                      className="h-full rounded-full bg-accent/60 transition-all"
                       style={{ width: `${Math.min(supplyPct, 100)}%` }}
                     />
                   </div>
@@ -341,7 +337,7 @@ export default function TradePage({
                     onClick={() => setTab("buy")}
                     className={`flex-1 cursor-pointer rounded-l-xl py-2 text-sm font-medium transition ${
                       tab === "buy"
-                        ? "bg-foreground text-background"
+                        ? "bg-accent text-accent-foreground"
                         : "text-muted hover:text-foreground"
                     }`}
                   >
@@ -351,7 +347,7 @@ export default function TradePage({
                     onClick={() => setTab("sell")}
                     className={`flex-1 cursor-pointer rounded-r-xl py-2 text-sm font-medium transition ${
                       tab === "sell"
-                        ? "bg-foreground text-background"
+                        ? "bg-accent text-accent-foreground"
                         : "text-muted hover:text-foreground"
                     }`}
                   >
@@ -365,7 +361,7 @@ export default function TradePage({
                       <label className="mb-1.5 block text-xs text-muted">
                         SOL to spend
                       </label>
-                      <div className="flex items-center gap-2 rounded-xl border border-border bg-accent px-3 py-2">
+                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 focus-within:border-accent">
                         <input
                           type="number"
                           min="0"
@@ -395,7 +391,7 @@ export default function TradePage({
                     </div>
 
                     {tokensOut > 0n && (
-                      <div className="rounded-xl bg-accent px-3 py-2 text-sm">
+                      <div className="rounded-xl bg-accent-subtle px-3 py-2 text-sm">
                         <span className="text-muted">You receive ~</span>
                         <span className="ml-1 font-mono font-semibold">
                           {tokensOut.toLocaleString()}
@@ -412,7 +408,7 @@ export default function TradePage({
                       <button
                         onClick={handleBuy}
                         disabled={isSending || solLamports === 0n || tokensOut === 0n}
-                        className="w-full cursor-pointer rounded-xl bg-foreground py-3 text-sm font-semibold text-background transition hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="w-full cursor-pointer rounded-xl bg-positive py-3 text-sm font-bold text-background transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         {isSending ? "Buying..." : `Buy ${config.displayName}`}
                       </button>
@@ -424,7 +420,7 @@ export default function TradePage({
                       <label className="mb-1.5 block text-xs text-muted">
                         Tokens to sell
                       </label>
-                      <div className="flex items-center gap-2 rounded-xl border border-border bg-accent px-3 py-2">
+                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 focus-within:border-accent">
                         <input
                           type="number"
                           min="0"
@@ -439,7 +435,7 @@ export default function TradePage({
                     </div>
 
                     {solOut > 0n && (
-                      <div className="rounded-xl bg-accent px-3 py-2 text-sm">
+                      <div className="rounded-xl bg-accent-subtle px-3 py-2 text-sm">
                         <span className="text-muted">You receive ~</span>
                         <span className="ml-1 font-mono font-semibold">
                           {formatSol(solOut)}
@@ -458,7 +454,7 @@ export default function TradePage({
                         disabled={
                           isSending || tokenAmountIn === 0n || solOut === 0n
                         }
-                        className="w-full cursor-pointer rounded-xl bg-foreground py-3 text-sm font-semibold text-background transition hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
+                        className="w-full cursor-pointer rounded-xl bg-negative py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                       >
                         {isSending ? "Selling..." : "Sell tokens"}
                       </button>

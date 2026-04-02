@@ -38,3 +38,4 @@ npm-debug.log*
 
 # gstack internal
 .gstack/browse-network.log
+.gstack/

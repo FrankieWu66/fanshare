@@ -100,7 +100,7 @@ export function WalletButton() {
         onClick={() => (isOpen ? close() : open())}
         className="flex cursor-pointer items-center gap-2 rounded-lg border border-border-low bg-card px-3 py-2 text-xs font-medium transition hover:bg-cream"
       >
-        <span className="h-2 w-2 rounded-full bg-green-500" />
+        <span className="h-2 w-2 rounded-full bg-positive" />
         <span className="font-mono">{ellipsify(address!, 4)}</span>
       </button>
 

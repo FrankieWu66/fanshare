@@ -61,7 +61,9 @@
       "Bash(solana-keygen new:*)",
       "Bash(cargo test:*)",
       "Bash(npm install:*)",
-      "Bash(ls /Users/frankiewu/dev/fanshare-1/app/trade/[playerId]/)"
+      "Bash(ls /Users/frankiewu/dev/fanshare-1/app/trade/[playerId]/)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(ls -la /Users/frankiewu/dev/fanshare-1/.env*)"
     ]
   }
 }
