@@ -24,6 +24,21 @@ Key routing rules:
 - Visual audit, design polish → invoke design-review
 - Architecture review → invoke plan-eng-review
 
+## Deploy Configuration (configured by /setup-deploy)
+- Platform: Vercel
+- Production URL: https://fanshare-1.vercel.app
+- Deploy workflow: `vercel --prod --yes` (CLI push, no auto-deploy from GitHub yet)
+- Deploy status command: `vercel ls --prod`
+- Merge method: squash
+- Project type: web app (Next.js 16)
+- Post-deploy health check: `curl -sf https://fanshare-1.vercel.app -o /dev/null -w "%{http_code}"`
+
+### Custom deploy hooks
+- Pre-merge: `npm run test && npm run build`
+- Deploy trigger: `vercel --prod --yes`
+- Deploy status: `vercel inspect <deployment-url>`
+- Health check: https://fanshare-1.vercel.app (HTTP 200)
+
 ## Design System
 Always read DESIGN_SYSTEM.md before making any visual or UI decisions.
 All font choices, colors, spacing, and aesthetic direction are defined there.
