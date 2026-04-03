@@ -9,6 +9,7 @@ dist/
 
 # Anchor
 .anchor/
+anchor/target/
 test-ledger/
 
 # Environment
