@@ -207,11 +207,14 @@ async function main() {
     "confirmed"
   );
 
-  // Load authority keypair — prefer oracle-keypair.json in project root, fall back to default wallet
+  // Load authority keypair — ORACLE_KEYPAIR_PATH env var overrides all (useful for localnet
+  // where the default wallet is the init authority, not a dedicated oracle signer).
   const __scriptDir = path.dirname(fileURLToPath(import.meta.url));
   const oracleKeypairPath = path.join(__scriptDir, "../oracle-keypair.json");
   const defaultWalletPath = path.join(process.env.HOME!, ".config/solana/id.json");
-  const walletPath = fs.existsSync(oracleKeypairPath) ? oracleKeypairPath : defaultWalletPath;
+  const walletPath =
+    process.env.ORACLE_KEYPAIR_PATH ??
+    (fs.existsSync(oracleKeypairPath) ? oracleKeypairPath : defaultWalletPath);
   if (!fs.existsSync(walletPath)) {
     throw new Error(`No keypair found. Expected oracle-keypair.json or ${defaultWalletPath}`);
   }

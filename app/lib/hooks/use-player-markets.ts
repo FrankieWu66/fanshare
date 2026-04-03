@@ -25,6 +25,7 @@ import {
   address,
   getProgramDerivedAddress,
   getUtf8Encoder,
+  getAddressEncoder,
   type Address,
 } from "@solana/kit";
 
@@ -112,16 +113,18 @@ async function fetchOnChainData(
     if (!mintAddr) continue;
 
     const mint = address(mintAddr);
-    const encoder = getUtf8Encoder();
+    const utf8 = getUtf8Encoder();
+    const addrEncoder = getAddressEncoder();
+    const mintBytes = addrEncoder.encode(mint); // 32-byte decoded pubkey
 
     const [bondingPda] = await getProgramDerivedAddress({
       programAddress: address(PROGRAM_ID),
-      seeds: [encoder.encode(BONDING_CURVE_SEED), mint],
+      seeds: [utf8.encode(BONDING_CURVE_SEED), mintBytes],
     });
 
     const [oraclePda] = await getProgramDerivedAddress({
       programAddress: address(PROGRAM_ID),
-      seeds: [encoder.encode(STATS_ORACLE_SEED), mint],
+      seeds: [utf8.encode(STATS_ORACLE_SEED), mintBytes],
     });
 
     pdaAddresses.push(bondingPda, oraclePda);
@@ -129,7 +132,10 @@ async function fetchOnChainData(
   }
 
   // Batch fetch all accounts in one RPC call
-  const accounts = await client.getMultipleAccounts(pdaAddresses);
+  // @solana/kit returns base64-encoded data as [dataBase64, "base64"]
+  const { value: accounts } = await client.rpc
+    .getMultipleAccounts(pdaAddresses, { encoding: "base64" })
+    .send();
 
   // Parse results — every 2 accounts = [bondingCurve, statsOracle] for one player
   const results: PlayerMarketData[] = [];
@@ -143,23 +149,27 @@ async function fetchOnChainData(
     let oracle: StatsOracleData | null = null;
 
     if (curveAccount?.data) {
-      const data =
-        curveAccount.data instanceof Uint8Array
+      // data is [base64String, "base64"] tuple from the RPC
+      const [b64, encoding] = curveAccount.data as [string, string];
+      const raw = encoding === "base64"
+        ? new Uint8Array(Buffer.from(b64, "base64"))
+        : curveAccount.data instanceof Uint8Array
           ? curveAccount.data
-          : new Uint8Array(Buffer.from(curveAccount.data[0], curveAccount.data[1]));
-      // Verify discriminator
-      if (matchesDiscriminator(data, BONDING_CURVE_DISCRIMINATOR)) {
-        curve = deserializeBondingCurve(data);
+          : new Uint8Array();
+      if (matchesDiscriminator(raw, BONDING_CURVE_DISCRIMINATOR)) {
+        curve = deserializeBondingCurve(raw);
       }
     }
 
     if (oracleAccount?.data) {
-      const data =
-        oracleAccount.data instanceof Uint8Array
+      const [b64, encoding] = oracleAccount.data as [string, string];
+      const raw = encoding === "base64"
+        ? new Uint8Array(Buffer.from(b64, "base64"))
+        : oracleAccount.data instanceof Uint8Array
           ? oracleAccount.data
-          : new Uint8Array(Buffer.from(oracleAccount.data[0], oracleAccount.data[1]));
-      if (matchesDiscriminator(data, STATS_ORACLE_DISCRIMINATOR)) {
-        oracle = deserializeStatsOracle(data);
+          : new Uint8Array();
+      if (matchesDiscriminator(raw, STATS_ORACLE_DISCRIMINATOR)) {
+        oracle = deserializeStatsOracle(raw);
       }
     }
 

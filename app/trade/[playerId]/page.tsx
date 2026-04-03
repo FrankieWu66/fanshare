@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useCallback, use } from "react";
+import { type Address } from "@solana/kit";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useWallet } from "../../lib/wallet/context";
 import { useBalance } from "../../lib/hooks/use-balance";
+import { useTokenBalance } from "../../lib/hooks/use-token-balance";
 import { usePlayerData } from "../../lib/hooks/use-player-markets";
 import { useSendTransaction } from "../../lib/hooks/use-send-transaction";
 import { lamportsToSolString } from "../../lib/lamports";
@@ -35,6 +37,8 @@ export default function TradePage({
 
   const address = wallet?.account.address;
   const balance = useBalance(address);
+  const mintAddress = player?.curve?.mint as Address | undefined;
+  const tokenBalance = useTokenBalance(address, mintAddress);
 
   const [tab, setTab] = useState<"buy" | "sell">("buy");
   const [solInput, setSolInput] = useState("");
@@ -434,6 +438,20 @@ export default function TradePage({
                         <span className="text-xs text-muted">tokens</span>
                       </div>
                     </div>
+
+                    {tokenBalance.tokenAmount !== null && (
+                      <div className="mt-1 flex justify-between text-xs text-muted">
+                        <span>Balance: {tokenBalance.tokenAmount.toLocaleString()} tokens</span>
+                        <button
+                          onClick={() =>
+                            setTokenInput(tokenBalance.tokenAmount!.toString())
+                          }
+                          className="cursor-pointer underline"
+                        >
+                          Max
+                        </button>
+                      </div>
+                    )}
 
                     {tokenAmountIn > 0n && tokenAmountIn > tokensSold && (
                       <p className="text-xs text-muted">
