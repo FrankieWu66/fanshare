@@ -435,6 +435,11 @@ export default function TradePage({
                       </div>
                     </div>
 
+                    {tokenAmountIn > 0n && tokenAmountIn > tokensSold && (
+                      <p className="text-xs text-muted">
+                        Only {tokensSold.toLocaleString()} tokens on curve — enter a smaller amount.
+                      </p>
+                    )}
                     {solOut > 0n && (
                       <div className="rounded-xl bg-accent-subtle px-3 py-2 text-sm">
                         <span className="text-muted">You receive ~</span>

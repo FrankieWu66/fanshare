@@ -62,7 +62,7 @@ export function usePlayerMarkets(): {
         try {
           return await fetchOnChainData(client);
         } catch (err) {
-          console.warn("On-chain fetch failed, falling back to mock:", err);
+          console.debug("On-chain fetch failed, falling back to mock:", err);
         }
       }
       // Fallback: mock data
