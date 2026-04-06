@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, use } from "react";
+import { useState, useCallback, use, useEffect, useRef } from "react";
 import { type Address } from "@solana/kit";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -17,11 +17,13 @@ import { WalletButton } from "../../components/wallet-button";
 import { BondingCurveChart } from "../../components/bonding-curve-chart";
 import {
   formatSol,
-  // calculateBuyCost — used in POST-DEPLOY buy instruction (commented out below)
   calculateSellReturn,
   calculateTokensForSol,
   currentPrice,
 } from "../../lib/bonding-curve";
+import { oracleScore } from "../../lib/fanshare-program";
+
+type TxStage = "idle" | "signing" | "confirming" | "success" | "failed";
 
 const SLIPPAGE_PCT = 1; // 1% slippage tolerance
 
@@ -44,6 +46,23 @@ export default function TradePage({
   const [tab, setTab] = useState<"buy" | "sell">("buy");
   const [solInput, setSolInput] = useState("");
   const [tokenInput, setTokenInput] = useState("");
+  const [txStage, setTxStage] = useState<TxStage>("idle");
+  const [txError, setTxError] = useState<string | null>(null);
+  const txTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Auto-reset from success back to idle after 3s
+  useEffect(() => {
+    if (txStage === "success") {
+      txTimerRef.current = setTimeout(() => {
+        setTxStage("idle");
+        setSolInput("");
+        setTokenInput("");
+      }, 3000);
+    }
+    return () => { if (txTimerRef.current) clearTimeout(txTimerRef.current); };
+  }, [txStage]);
+
+  const isBusy = txStage !== "idle";
 
   // ── Derived curve values ──────────────────────────────────────────────────
   const curve = player?.curve;
@@ -97,45 +116,46 @@ export default function TradePage({
 
   // ── Handlers ─────────────────────────────────────────────────────────────
   const handleBuy = useCallback(async () => {
-    if (!address || !player || !curve || solLamports === 0n || tokensOut === 0n) return;
+    if (isBusy || !address || !player || !curve || solLamports === 0n || tokensOut === 0n) return;
+    setTxError(null);
+    setTxStage("signing");
 
-    // PRE-DEPLOY: Show mock success (no real program on devnet yet)
-    toast.info("Devnet program not yet deployed — showing preview only.");
-    return;
+    // PRE-DEPLOY: Simulate stages so UX is visible
+    await new Promise((r) => setTimeout(r, 1200));
+    setTxStage("confirming");
+    await new Promise((r) => setTimeout(r, 2000));
+    setTxStage("success");
+    toast.success(`Bought ${tokensOut.toLocaleString()} tokens`);
 
-    /* POST-DEPLOY: uncomment when program is live
+    /* POST-DEPLOY: replace simulation above with real tx
     try {
-      const bondingCurvePda = await getBondingCurvePda(address(curve.mint));
-      const buyerAta = await getAssociatedTokenAccount(address(address), address(curve.mint));
+      setTxStage("signing");
       const minTokensOut = (tokensOut * BigInt(100 - SLIPPAGE_PCT)) / 100n;
-
-      const ix = getBuyWithSolInstruction({
-        buyer: address(address),
-        mint: address(curve.mint),
-        bondingCurve: bondingCurvePda,
-        buyerTokenAccount: buyerAta,
-        solAmount: solLamports,
-        minTokensOut,
-      });
-
-      const sig = await send({ instructions: [ix] });
-      toast.success(`Bought ${tokensOut.toLocaleString()} tokens!`, {
-        description: <a href={getExplorerUrl(`/tx/${sig}`)} target="_blank" rel="noopener noreferrer" className="underline">View tx</a>,
-      });
-      setSolInput("");
-    } catch (err) {
-      toast.error(parseTransactionError(err));
+      const sig = await send({ instructions: [...] });
+      setTxStage("confirming");
+      // confirmation happens inside send(); on return it's confirmed
+      setTxStage("success");
+      toast.success(`Bought ${tokensOut.toLocaleString()} tokens!`);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Transaction failed";
+      setTxError(msg);
+      setTxStage("failed");
     }
     */
-  }, [address, player, curve, solLamports, tokensOut]);
+  }, [isBusy, address, player, curve, solLamports, tokensOut]);
 
   const handleSell = useCallback(async () => {
-    if (!address || !player || !curve || tokenAmountIn === 0n || solOut === 0n) return;
+    if (isBusy || !address || !player || !curve || tokenAmountIn === 0n || solOut === 0n) return;
+    setTxError(null);
+    setTxStage("signing");
 
-    // PRE-DEPLOY: Show mock success
-    toast.info("Devnet program not yet deployed — showing preview only.");
-    return;
-  }, [address, player, curve, tokenAmountIn, solOut]);
+    // PRE-DEPLOY: Simulate stages
+    await new Promise((r) => setTimeout(r, 1200));
+    setTxStage("confirming");
+    await new Promise((r) => setTimeout(r, 2000));
+    setTxStage("success");
+    toast.success(`Sold ${tokenAmountIn.toLocaleString()} tokens for ${formatSol(solOut)} SOL`);
+  }, [isBusy, address, player, curve, tokenAmountIn, solOut]);
 
   // ── Loading / not found ───────────────────────────────────────────────────
   if (isLoading) {
@@ -295,6 +315,7 @@ export default function TradePage({
                   tokensSold={tokensSold}
                   totalSupply={totalSupply}
                   indexPriceLamports={indexPrice > 0n ? indexPrice : undefined}
+                  inputLamports={tab === "buy" && solLamports > 0n ? solLamports : undefined}
                 />
 
                 {/* Supply bar */}
@@ -320,12 +341,23 @@ export default function TradePage({
                   Bonding Curve
                 </p>
                 <p className="font-mono text-xs text-foreground/60">
-                  price = {basePrice.toLocaleString()} + {slope.toLocaleString()} × tokens_sold
+                  price = base + slope × tokens_sold
                 </p>
                 <p className="mt-1 font-mono text-xs text-foreground/60">
                   = {basePrice.toLocaleString()} + {slope.toLocaleString()} × {tokensSold.toLocaleString()}
                   {" "}= <span className="font-semibold text-foreground">{marketPrice.toLocaleString()} lam</span>
                 </p>
+                {config.priceFormula.type === "veteran" && (
+                  <p className="mt-2 font-mono text-xs text-foreground/40">
+                    base = round({stats.ppg}×1k + {stats.rpg}×500 + {stats.apg}×700 + {stats.spg}×800 + {stats.bpg}×800) × 0.5
+                    {" "}= {config.priceFormula.score.toLocaleString()} × 0.5 = {basePrice.toLocaleString()}
+                  </p>
+                )}
+                {config.priceFormula.type === "rookie" && (
+                  <p className="mt-2 font-mono text-xs text-foreground/40">
+                    base = 18,000 × (61 − {config.priceFormula.draftPick}) / 60 = {basePrice.toLocaleString()}
+                  </p>
+                )}
                 <p className="mt-2 text-xs text-muted">
                   Every buy raises the price. Every sell lowers it.
                 </p>
@@ -466,13 +498,30 @@ export default function TradePage({
                         Connect wallet to buy
                       </div>
                     ) : (
-                      <button
-                        onClick={handleBuy}
-                        disabled={isSending || solLamports === 0n || tokensOut === 0n}
-                        className="w-full cursor-pointer rounded-xl bg-positive py-3 text-sm font-bold text-background transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
-                      >
-                        {isSending ? "Buying..." : `Buy ${config.displayName}`}
-                      </button>
+                      <>
+                        <button
+                          onClick={handleBuy}
+                          disabled={isBusy || solLamports === 0n || tokensOut === 0n}
+                          className="w-full cursor-pointer rounded-xl bg-positive py-3 text-sm font-bold text-background transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          {txStage === "signing" && "Approve in wallet..."}
+                          {txStage === "confirming" && "Confirming on Solana..."}
+                          {txStage === "success" && "Done!"}
+                          {txStage === "failed" && "Transaction failed"}
+                          {txStage === "idle" && `Buy ${config.displayName}`}
+                        </button>
+                        {txStage === "failed" && txError && (
+                          <p className="mt-1 text-center text-xs text-negative">{txError}</p>
+                        )}
+                        {txStage === "failed" && (
+                          <button
+                            onClick={() => setTxStage("idle")}
+                            className="mt-1 w-full text-center text-xs text-muted underline"
+                          >
+                            Dismiss
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 ) : (
@@ -529,15 +578,30 @@ export default function TradePage({
                         Connect wallet to sell
                       </div>
                     ) : (
-                      <button
-                        onClick={handleSell}
-                        disabled={
-                          isSending || tokenAmountIn === 0n || solOut === 0n
-                        }
-                        className="w-full cursor-pointer rounded-xl bg-negative py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
-                      >
-                        {isSending ? "Selling..." : "Sell tokens"}
-                      </button>
+                      <>
+                        <button
+                          onClick={handleSell}
+                          disabled={isBusy || tokenAmountIn === 0n || solOut === 0n}
+                          className="w-full cursor-pointer rounded-xl bg-negative py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          {txStage === "signing" && "Approve in wallet..."}
+                          {txStage === "confirming" && "Confirming on Solana..."}
+                          {txStage === "success" && "Done!"}
+                          {txStage === "failed" && "Transaction failed"}
+                          {txStage === "idle" && "Sell tokens"}
+                        </button>
+                        {txStage === "failed" && txError && (
+                          <p className="mt-1 text-center text-xs text-negative">{txError}</p>
+                        )}
+                        {txStage === "failed" && (
+                          <button
+                            onClick={() => setTxStage("idle")}
+                            className="mt-1 w-full text-center text-xs text-muted underline"
+                          >
+                            Dismiss
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 )}

@@ -27,35 +27,50 @@ import {
 } from "@solana/web3.js";
 import { createMint } from "@solana/spl-token";
 
-// ── Constants (LOCKED — match lib.rs and bonding-curve.ts) ─────────────────
+// ── Constants ──────────────────────────────────────────────────────────────
 const PROGRAM_ID = new PublicKey("B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz");
-const BASE_PRICE = 1000n;       // lamports  — LOCKED
-const SLOPE = 10n;              // lamports per token — LOCKED
-const TOTAL_SUPPLY = 1_000_000n; // tokens per player — LOCKED
-const TOKEN_DECIMALS = 0;        // integer tokens (no fractional)
+const TOKEN_DECIMALS = 0; // integer tokens (no fractional)
+
+// ── Stats-anchored pricing (CEO review 2026-04-06) ─────────────────────────
+// base_price is set once at init from player stats. Never mutated by oracle.
+// formula: oracle_score = PPG×1000 + RPG×500 + APG×700 + SPG×800 + BPG×800
+//          base_price   = round(oracle_score × 0.5)  [lamports]
+// tier (slope + supply) derived from oracle_score:
+//   Stars  (≥40k): slope=50,  supply=500,000
+//   Second (≥25k): slope=20,  supply=750,000
+//   Rising (<25k): slope=8,   supply=1,000,000
+interface PlayerInitStats { ppg: number; rpg: number; apg: number; spg: number; bpg: number; }
+
+function getPlayerParams(stats: PlayerInitStats): { basePrice: bigint; slope: bigint; totalSupply: bigint } {
+  const score = stats.ppg * 1000 + stats.rpg * 500 + stats.apg * 700 + stats.spg * 800 + stats.bpg * 800;
+  const basePrice = BigInt(Math.round(score * 0.5));
+  if (score >= 40_000) return { basePrice, slope: 50n, totalSupply: 500_000n };
+  if (score >= 25_000) return { basePrice, slope: 20n, totalSupply: 750_000n };
+  return { basePrice, slope: 8n, totalSupply: 1_000_000n };
+}
 
 // initialize_curve discriminator from IDL — DO NOT CHANGE
 const INIT_CURVE_DISCRIMINATOR = Buffer.from([170, 84, 186, 253, 131, 149, 95, 213]);
 
 const TOKEN_PROGRAM_ID = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
 
-// ── Player roster (mirrors fanshare-program.ts) ────────────────────────────
+// ── Player roster with stats for pricing formula ────────────────────────────
 const DEVNET_PLAYERS = [
-  { id: "Player_LBJ", displayName: "The King",       emoji: "👑", position: "SF", team: "LAL" },
-  { id: "Player_SC",  displayName: "The Chef",        emoji: "🍛", position: "PG", team: "GSW" },
-  { id: "Player_LD",  displayName: "The Maverick",    emoji: "⚡", position: "PG", team: "DAL" },
-  { id: "Player_NJ",  displayName: "The Joker",       emoji: "🃏", position: "C",  team: "DEN" },
-  { id: "Player_JT",  displayName: "The Jaybird",     emoji: "🦅", position: "SF", team: "BOS" },
-  { id: "Player_SGA", displayName: "The Shai",        emoji: "🌩", position: "PG", team: "OKC" },
-  { id: "Player_GA",  displayName: "The Greek Freak", emoji: "🦌", position: "PF", team: "MIL" },
-  { id: "Player_JE",  displayName: "The Process",     emoji: "🔨", position: "C",  team: "PHI" },
-  { id: "Player_KD",  displayName: "The Slim Reaper", emoji: "🪄", position: "SF", team: "PHX" },
-  { id: "Player_JB",  displayName: "The Jet",         emoji: "✈️", position: "SG", team: "BOS" },
-  { id: "Player_DB",  displayName: "The Book",        emoji: "📖", position: "SG", team: "PHX" },
-  { id: "Player_AD",  displayName: "The Brow",        emoji: "🦾", position: "PF", team: "LAL" },
-  { id: "Player_VW",  displayName: "The Alien",       emoji: "👽", position: "C",  team: "SAS" },
-  { id: "Player_CC",  displayName: "The Cade",        emoji: "🎯", position: "PG", team: "DET" },
-  { id: "Player_TH",  displayName: "The Hali",        emoji: "💧", position: "PG", team: "IND" },
+  { id: "Player_LD",  displayName: "The Maverick",    stats: { ppg: 33.9, rpg: 9.2,  apg: 9.8,  spg: 1.4, bpg: 0.5 } },
+  { id: "Player_JE",  displayName: "The Process",     stats: { ppg: 34.7, rpg: 11.0, apg: 5.6,  spg: 1.2, bpg: 1.7 } },
+  { id: "Player_GA",  displayName: "The Greek Freak", stats: { ppg: 30.4, rpg: 11.5, apg: 6.5,  spg: 1.2, bpg: 1.1 } },
+  { id: "Player_NJ",  displayName: "The Joker",       stats: { ppg: 26.4, rpg: 12.4, apg: 9.0,  spg: 1.4, bpg: 0.9 } },
+  { id: "Player_SGA", displayName: "The Shai",        stats: { ppg: 30.1, rpg: 5.5,  apg: 6.2,  spg: 2.0, bpg: 0.7 } },
+  { id: "Player_LBJ", displayName: "The King",        stats: { ppg: 25.7, rpg: 7.3,  apg: 8.3,  spg: 1.3, bpg: 0.5 } },
+  { id: "Player_AD",  displayName: "The Brow",        stats: { ppg: 24.7, rpg: 12.6, apg: 3.5,  spg: 1.2, bpg: 2.3 } },
+  { id: "Player_KD",  displayName: "The Slim Reaper", stats: { ppg: 27.1, rpg: 6.6,  apg: 5.0,  spg: 0.9, bpg: 1.4 } },
+  { id: "Player_JT",  displayName: "The Jaybird",     stats: { ppg: 26.9, rpg: 8.1,  apg: 4.9,  spg: 1.0, bpg: 0.6 } },
+  { id: "Player_DB",  displayName: "The Book",        stats: { ppg: 27.1, rpg: 4.5,  apg: 6.9,  spg: 0.9, bpg: 0.3 } },
+  { id: "Player_SC",  displayName: "The Chef",        stats: { ppg: 26.4, rpg: 4.5,  apg: 6.1,  spg: 0.7, bpg: 0.4 } },
+  { id: "Player_TH",  displayName: "The Hali",        stats: { ppg: 20.7, rpg: 3.7,  apg: 10.9, spg: 1.2, bpg: 0.7 } },
+  { id: "Player_CC",  displayName: "The Cade",        stats: { ppg: 22.7, rpg: 4.3,  apg: 7.5,  spg: 0.9, bpg: 0.3 } },
+  { id: "Player_VW",  displayName: "The Alien",       stats: { ppg: 21.4, rpg: 10.6, apg: 3.9,  spg: 1.2, bpg: 3.6 } },
+  { id: "Player_JB",  displayName: "The Jet",         stats: { ppg: 23.0, rpg: 5.5,  apg: 3.6,  spg: 1.2, bpg: 0.5 } },
 ] as const;
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -93,14 +108,17 @@ function buildInitCurveInstruction(
   mint: PublicKey,
   bondingCurvePda: PublicKey,
   statsOraclePda: PublicKey,
-  playerId: string
+  playerId: string,
+  basePrice: bigint,
+  slope: bigint,
+  totalSupply: bigint,
 ): TransactionInstruction {
   const data = Buffer.concat([
     INIT_CURVE_DISCRIMINATOR,
     encodeAnchorString(playerId),
-    encodeU64LE(BASE_PRICE),
-    encodeU64LE(SLOPE),
-    encodeU64LE(TOTAL_SUPPLY),
+    encodeU64LE(basePrice),
+    encodeU64LE(slope),
+    encodeU64LE(totalSupply),
   ]);
 
   return new TransactionInstruction({
@@ -158,7 +176,11 @@ async function main() {
       continue;
     }
 
+    const { basePrice, slope, totalSupply } = getPlayerParams(player.stats);
+    const score = Math.round(player.stats.ppg * 1000 + player.stats.rpg * 500 + player.stats.apg * 700 + player.stats.spg * 800 + player.stats.bpg * 800);
+    const tier = score >= 40_000 ? "Stars" : score >= 25_000 ? "Second" : "Rising";
     console.log(`\n⏳ Initializing ${player.id} (${player.displayName})...`);
+    console.log(`   Score: ${score} → ${tier} tier | base=${basePrice}L slope=${slope} supply=${totalSupply.toLocaleString()}`);
 
     // Step 1: Generate mint keypair
     const mintKeypair = Keypair.generate();
@@ -191,7 +213,10 @@ async function main() {
       mintPubkey,
       bondingCurvePda,
       statsOraclePda,
-      player.id
+      player.id,
+      basePrice,
+      slope,
+      totalSupply,
     );
 
     const tx = new Transaction().add(ix);

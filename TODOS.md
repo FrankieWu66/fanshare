@@ -104,3 +104,56 @@ position/team filters. The current grid works fine up to ~20 cards.
 **Effort:** S | **Depends on:** Roster expansion
 
 ### [ ] Raydium graduation mechanic (v1.5 — spike Raydium CPMM pool creation via SDK)
+
+---
+
+## From CEO Review 2026-04-06 (tokenomics v2)
+
+### [ ] Provision Vercel KV before merging price history feature
+
+**What:** Set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in Vercel dashboard.
+Smoke-test: `curl https://fanshare-1.vercel.app/api/price-history/Player_LD` → `{"data":[]}`.
+
+**Effort:** S | **Priority:** P1 (blocks #6 price history chart)
+
+### [ ] Extract bonding curve math to shared TS module
+
+**What:** `calculateBuyCost`, `calculateTokensForSol` (reverse binary search), and
+`current_price` currently exist scattered across `fanshare-program.ts` and the trade page.
+Move to `app/lib/bonding-math.ts`. Reuse in chart preview + trade page.
+
+**Why:** Third copy (chart preview) would be added if not extracted first. DRY.
+**Effort:** S | **Priority:** P1 (needed before interactive chart)
+
+### [ ] Fix double-click Buy bug — disable button during SIGNING + CONFIRMING
+
+**What:** Trade widget Buy/Sell button must be disabled during both SIGNING and CONFIRMING
+states. Current `disabled={isSending}` may not cover the wallet approval gap.
+**Why:** Without this, a user can click Buy twice and send two transactions.
+**Effort:** XS | **Priority:** P1 (security/correctness)
+
+### [ ] Oracle base_price mutations — mainnet
+
+**What:** After each game, oracle calls a new `update_base_price` Rust instruction that
+mutates `bonding_curve.base_price` based on performance. Formula: `new_base = tier_base × (score / league_avg)`.
+**Why:** The mainnet engagement story — prices tick with game events. Deferred from devnet
+because it requires a new Rust instruction, rebuild, and holder fairness UX treatment.
+**Effort:** L | **Priority:** P2 (mainnet only) | **Depends on:** security audit, Squads multisig
+
+### [ ] Price history chart: 1-data-point edge case
+
+**What:** recharts LineChart renders nothing with a single data point. When `data.length === 1`,
+render a Scatter dot or show "Not enough data — check back after the next oracle update."
+**Effort:** XS | **Priority:** P2
+
+### [ ] Move DEVNET_PLAYERS to JSON file when roster exceeds 30 players
+
+**What:** `app/lib/fanshare-program.ts` DEVNET_PLAYERS array with `priceFormula` fields
+will become unwieldy at 30+ players. Move to `app/lib/players.json` or a DB.
+**Effort:** S | **Priority:** P3 (future)
+
+### [ ] Formula section: collapse on mobile
+
+**What:** The bonding curve formula display on the trade page always-visible on mobile pushes
+the trade widget down. Add a disclosure `<details>` or accordion: "How is price calculated?"
+**Effort:** XS | **Priority:** P3

@@ -1,11 +1,15 @@
 "use client";
 
+import { calculateTokensForSol } from "../lib/bonding-curve";
+
 interface BondingCurveChartProps {
   basePrice: bigint;
   slope: bigint;
   tokensSold: bigint;
   totalSupply: bigint;
   indexPriceLamports?: bigint;
+  /** SOL amount user is typing in the trade widget (in lamports). Shows preview dot. */
+  inputLamports?: bigint;
 }
 
 // Chart layout constants
@@ -25,6 +29,7 @@ export function BondingCurveChart({
   tokensSold,
   totalSupply,
   indexPriceLamports,
+  inputLamports,
 }: BondingCurveChartProps) {
   const supply = num(totalSupply);
   const sold = num(tokensSold);
@@ -71,6 +76,14 @@ export function BondingCurveChart({
   const currentPrice = priceAt(sold);
   const dotX = xOf(sold);
   const dotY = yOf(currentPrice);
+
+  // Preview dot — shows projected position when user is typing a trade amount
+  const previewTokens = inputLamports && inputLamports > 0n
+    ? num(calculateTokensForSol(basePrice, slope, tokensSold, inputLamports, totalSupply))
+    : 0;
+  const previewSold = sold + previewTokens;
+  const previewDotX = previewTokens > 0 ? xOf(Math.min(previewSold, supply)) : null;
+  const previewDotY = previewTokens > 0 ? yOf(priceAt(Math.min(previewSold, supply))) : null;
 
   // Y-axis grid lines (4 ticks)
   const yTicks = [0, 0.33, 0.67, 1].map((frac) => {
@@ -242,6 +255,34 @@ export function BondingCurveChart({
         >
           supply distributed
         </text>
+
+        {/* Preview dot — projected position for typed trade amount */}
+        {previewDotX !== null && previewDotY !== null && (
+          <>
+            <circle
+              cx={previewDotX}
+              cy={previewDotY}
+              r="7"
+              fill="var(--color-accent)"
+              opacity="0.15"
+            />
+            <circle
+              cx={previewDotX}
+              cy={previewDotY}
+              r="4"
+              fill="none"
+              stroke="var(--color-accent)"
+              strokeWidth="2"
+              opacity="0.8"
+            />
+            <circle
+              cx={previewDotX}
+              cy={previewDotY}
+              r="2"
+              fill="var(--color-accent)"
+            />
+          </>
+        )}
       </svg>
     </div>
   );
