@@ -1,0 +1,63 @@
+/**
+ * GET /api/price-history/[playerId]
+ *
+ * Returns the last 500 index price snapshots for a player from Vercel KV.
+ * Each entry: { t: number (unix seconds), p: number (lamports) }
+ *
+ * Returns [] when KV is not configured (local dev without KV credentials).
+ */
+
+import { NextRequest, NextResponse } from "next/server";
+
+interface PricePoint {
+  t: number; // unix timestamp (seconds)
+  p: number; // index price in lamports
+}
+
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ playerId: string }> }
+) {
+  const { playerId } = await params;
+
+  // Validate playerId format (e.g. "Player_LD")
+  if (!/^Player_[A-Za-z0-9_]+$/.test(playerId)) {
+    return NextResponse.json({ error: "Invalid playerId" }, { status: 400 });
+  }
+
+  const kvUrl = process.env.KV_REST_API_URL;
+  const kvToken = process.env.KV_REST_API_READ_ONLY_TOKEN ?? process.env.KV_REST_API_TOKEN;
+
+  // Return empty array when KV is not configured (local dev)
+  if (!kvUrl || !kvToken) {
+    return NextResponse.json([], { headers: { "Cache-Control": "no-store" } });
+  }
+
+  const key = `price-history:${playerId}`;
+  // LRANGE to fetch all 500 entries (0 to -1 = full list, capped at 500 by oracle LTRIM)
+  const res = await fetch(`${kvUrl}/lrange/${encodeURIComponent(key)}/0/-1`, {
+    headers: { Authorization: `Bearer ${kvToken}` },
+    next: { revalidate: 30 }, // cache 30s — oracle runs every 5 min
+  });
+
+  if (!res.ok) {
+    return NextResponse.json([], { status: 200 });
+  }
+
+  const json = await res.json();
+  const rawEntries: string[] = json.result ?? [];
+
+  const points: PricePoint[] = rawEntries
+    .map((raw) => {
+      try {
+        return JSON.parse(raw) as PricePoint;
+      } catch {
+        return null;
+      }
+    })
+    .filter((p): p is PricePoint => p !== null);
+
+  return NextResponse.json(points, {
+    headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=60" },
+  });
+}

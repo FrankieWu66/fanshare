@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, use, useEffect, useRef } from "react";
+import useSWR from "swr";
 import { type Address } from "@solana/kit";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -15,6 +16,7 @@ import { ClusterSelect } from "../../components/cluster-select";
 import { useCluster } from "../../components/cluster-context";
 import { WalletButton } from "../../components/wallet-button";
 import { BondingCurveChart } from "../../components/bonding-curve-chart";
+import { PriceHistoryChart } from "../../components/price-history-chart";
 import {
   formatSol,
   calculateSellReturn,
@@ -44,11 +46,18 @@ export default function TradePage({
   const tokenBalance = useTokenBalance(address, mintAddress);
 
   const [tab, setTab] = useState<"buy" | "sell">("buy");
+  const [chartView, setChartView] = useState<"curve" | "history">("curve");
   const [solInput, setSolInput] = useState("");
   const [tokenInput, setTokenInput] = useState("");
   const [txStage, setTxStage] = useState<TxStage>("idle");
   const [txError, setTxError] = useState<string | null>(null);
   const txTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const { data: priceHistory = [] } = useSWR(
+    chartView === "history" ? `/api/price-history/${playerId}` : null,
+    (url: string) => fetch(url).then((r) => r.json()),
+    { refreshInterval: 30_000 }
+  );
 
   // Auto-reset from success back to idle after 3s
   useEffect(() => {
@@ -301,22 +310,41 @@ export default function TradePage({
             <div className="order-3 space-y-4 lg:order-2 lg:col-span-5">
               <div className="rounded-xl border border-border-low bg-card p-5">
                 <div className="mb-3 flex items-center justify-between">
-                  <p className="text-xs font-medium uppercase tracking-wide text-muted">
-                    Price Curve
-                  </p>
+                  <div className="flex gap-1 rounded-lg bg-background p-0.5">
+                    {(["curve", "history"] as const).map((v) => (
+                      <button
+                        key={v}
+                        onClick={() => setChartView(v)}
+                        className={`min-h-[32px] rounded-md px-3 text-xs font-medium capitalize transition-colors ${
+                          chartView === v
+                            ? "bg-card text-foreground shadow-sm"
+                            : "text-muted hover:text-foreground"
+                        }`}
+                      >
+                        {v}
+                      </button>
+                    ))}
+                  </div>
                   <span className="font-mono text-xs text-muted">
                     {supplyPct.toFixed(1)}% sold
                   </span>
                 </div>
 
-                <BondingCurveChart
-                  basePrice={basePrice}
-                  slope={slope}
-                  tokensSold={tokensSold}
-                  totalSupply={totalSupply}
-                  indexPriceLamports={indexPrice > 0n ? indexPrice : undefined}
-                  inputLamports={tab === "buy" && solLamports > 0n ? solLamports : undefined}
-                />
+                {chartView === "curve" ? (
+                  <BondingCurveChart
+                    basePrice={basePrice}
+                    slope={slope}
+                    tokensSold={tokensSold}
+                    totalSupply={totalSupply}
+                    indexPriceLamports={indexPrice > 0n ? indexPrice : undefined}
+                    inputLamports={tab === "buy" && solLamports > 0n ? solLamports : undefined}
+                  />
+                ) : (
+                  <PriceHistoryChart
+                    data={priceHistory}
+                    currentPrice={indexPrice > 0n ? Number(indexPrice) : undefined}
+                  />
+                )}
 
                 {/* Supply bar */}
                 <div className="mt-3">
@@ -350,12 +378,12 @@ export default function TradePage({
                 {config.priceFormula.type === "veteran" && (
                   <p className="mt-2 font-mono text-xs text-foreground/40">
                     base = round({stats.ppg}×1k + {stats.rpg}×500 + {stats.apg}×700 + {stats.spg}×800 + {stats.bpg}×800) × 0.5
-                    {" "}= {config.priceFormula.score.toLocaleString()} × 0.5 = {basePrice.toLocaleString()}
+                    {" "}= {config.priceFormula.score.toLocaleString()} × 0.5 = {Math.round(config.priceFormula.score * 0.5).toLocaleString()}
                   </p>
                 )}
                 {config.priceFormula.type === "rookie" && (
                   <p className="mt-2 font-mono text-xs text-foreground/40">
-                    base = 18,000 × (61 − {config.priceFormula.draftPick}) / 60 = {basePrice.toLocaleString()}
+                    base = 18,000 × (61 − {config.priceFormula.draftPick}) / 60 = {Math.round(18000 * (61 - config.priceFormula.draftPick) / 60).toLocaleString()}
                   </p>
                 )}
                 <p className="mt-2 text-xs text-muted">

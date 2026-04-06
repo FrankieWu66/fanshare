@@ -26,6 +26,10 @@ import {
   TransactionInstruction,
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
+import dotenv from "dotenv";
+
+// Load .env.local for KV credentials (Next.js convention)
+dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), "../.env.local") });
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const PROGRAM_ID = new PublicKey("B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz");
@@ -287,6 +291,29 @@ async function main() {
       });
       console.log(`  ✓ Updated (tx: ${sig})`);
       updated++;
+
+      // Write price history to Vercel KV (non-blocking; skip if KV not configured)
+      if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+        try {
+          const entry = JSON.stringify({ t: Math.floor(Date.now() / 1000), p: Number(indexPrice) });
+          const kvUrl = process.env.KV_REST_API_URL;
+          const kvToken = process.env.KV_REST_API_TOKEN;
+          const key = `price-history:${playerId}`;
+          // RPUSH then LTRIM to keep newest 500 entries
+          await fetch(`${kvUrl}/rpush/${encodeURIComponent(key)}`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${kvToken}`, "Content-Type": "application/json" },
+            body: JSON.stringify([entry]),
+          });
+          await fetch(`${kvUrl}/ltrim/${encodeURIComponent(key)}/-500/-1`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${kvToken}` },
+          });
+          console.log(`  ✓ KV price history recorded`);
+        } catch (kvErr) {
+          console.warn(`  ⚠ KV write failed (non-fatal):`, kvErr);
+        }
+      }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(`  ✗ Failed: ${msg}`);
