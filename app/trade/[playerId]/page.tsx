@@ -14,6 +14,7 @@ import { GridBackground } from "../../components/grid-background";
 import { ClusterSelect } from "../../components/cluster-select";
 import { useCluster } from "../../components/cluster-context";
 import { WalletButton } from "../../components/wallet-button";
+import { BondingCurveChart } from "../../components/bonding-curve-chart";
 import {
   formatSol,
   // calculateBuyCost — used in POST-DEPLOY buy instruction (commented out below)
@@ -157,13 +158,14 @@ export default function TradePage({
   }
 
   const { config } = player;
+  const stats = config.stats;
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
       <GridBackground />
       <div className="relative z-10">
         {/* Header */}
-        <header className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+        <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
             <Link
               href="/"
@@ -180,23 +182,21 @@ export default function TradePage({
           </div>
         </header>
 
-        <main className="mx-auto max-w-4xl px-6 pb-20">
+        <main className="mx-auto max-w-6xl px-6 pb-20">
           {/* Player Hero */}
-          <div className="mb-8 flex items-start justify-between">
-            <div>
-              <div className="flex items-center gap-3">
-                <span className="text-5xl">{config.emoji}</span>
-                <div>
-                  <h1 className="font-display text-3xl font-extrabold tracking-tight">
-                    {config.displayName}
-                  </h1>
-                  <div className="mt-1 flex items-center gap-2 text-sm text-muted">
-                    <span>{config.position}</span>
-                    <span>·</span>
-                    <span>{config.team}</span>
-                    <span>·</span>
-                    <span className="font-mono text-xs">{config.id}</span>
-                  </div>
+          <div className="mb-6 flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-5xl">{config.emoji}</span>
+              <div>
+                <h1 className="font-display text-3xl font-extrabold tracking-tight">
+                  {config.displayName}
+                </h1>
+                <div className="mt-1 flex items-center gap-2 text-sm text-muted">
+                  <span>{config.position}</span>
+                  <span>·</span>
+                  <span>{config.team}</span>
+                  <span>·</span>
+                  <span className="font-mono text-xs">{config.id}</span>
                 </div>
               </div>
             </div>
@@ -215,40 +215,97 @@ export default function TradePage({
             )}
           </div>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-            {/* Left — Stats panel */}
+          {/* 3-column layout */}
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+
+            {/* ── Col 1: Player Stats sidebar ──────────────────────────────── */}
             <div className="space-y-4 lg:col-span-3">
-              {/* Price card */}
+              {/* Season averages */}
               <div className="rounded-2xl border border-border-low bg-card p-5">
-                <div className="grid grid-cols-2 gap-6">
+                <p className="mb-4 text-xs font-medium uppercase tracking-wide text-muted">
+                  Season Averages
+                </p>
+                <div className="space-y-3">
+                  {[
+                    { label: "Points", key: "ppg", value: stats.ppg, color: "bg-accent" },
+                    { label: "Rebounds", key: "rpg", value: stats.rpg, color: "bg-positive" },
+                    { label: "Assists", key: "apg", value: stats.apg, color: "bg-accent" },
+                    { label: "Steals", key: "spg", value: stats.spg, color: "bg-positive" },
+                    { label: "Blocks", key: "bpg", value: stats.bpg, color: "bg-muted/40" },
+                  ].map(({ label, value, color }) => (
+                    <div key={label}>
+                      <div className="mb-1 flex items-center justify-between">
+                        <span className="text-xs text-muted">{label}</span>
+                        <span className="font-mono text-sm font-semibold tabular-nums">
+                          {value.toFixed(1)}
+                        </span>
+                      </div>
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-border-low">
+                        <div
+                          className={`h-full rounded-full ${color} transition-all`}
+                          style={{ width: `${Math.min((value / 40) * 100, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Market prices */}
+              <div className="rounded-2xl border border-border-low bg-card p-5">
+                <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
+                  Pricing
+                </p>
+                <div className="space-y-3">
                   <div>
                     <p className="text-xs text-muted">Market Price</p>
-                    <p className="mt-1 font-mono text-3xl font-bold tabular-nums">
+                    <p className="mt-0.5 font-mono text-xl font-bold tabular-nums">
                       {formatSol(marketPrice)}
-                      <span className="ml-1 text-base font-normal text-muted">SOL</span>
+                      <span className="ml-1 text-sm font-normal text-muted">SOL</span>
                     </p>
                   </div>
                   {indexPrice > 0n && (
                     <div>
                       <p className="text-xs text-muted">Stats Index</p>
-                      <p className="mt-1 font-mono text-3xl font-bold tabular-nums">
+                      <p className="mt-0.5 font-mono text-xl font-bold tabular-nums">
                         {formatSol(indexPrice)}
-                        <span className="ml-1 text-base font-normal text-muted">SOL</span>
+                        <span className="ml-1 text-sm font-normal text-muted">SOL</span>
                       </p>
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
 
-                {/* Curve position */}
-                <div className="mt-5">
+            {/* ── Col 2: Bonding curve chart ───────────────────────────────── */}
+            <div className="space-y-4 lg:col-span-5">
+              <div className="rounded-2xl border border-border-low bg-card p-5">
+                <div className="mb-3 flex items-center justify-between">
+                  <p className="text-xs font-medium uppercase tracking-wide text-muted">
+                    Price Curve
+                  </p>
+                  <span className="font-mono text-xs text-muted">
+                    {supplyPct.toFixed(1)}% sold
+                  </span>
+                </div>
+
+                <BondingCurveChart
+                  basePrice={basePrice}
+                  slope={slope}
+                  tokensSold={tokensSold}
+                  totalSupply={totalSupply}
+                  indexPriceLamports={indexPrice > 0n ? indexPrice : undefined}
+                />
+
+                {/* Supply bar */}
+                <div className="mt-3">
                   <div className="mb-1.5 flex items-center justify-between text-xs text-muted">
-                    <span>Curve supply</span>
+                    <span>Supply distributed</span>
                     <span>
-                      {tokensSold.toLocaleString()} / {totalSupply.toLocaleString()} tokens
-                      ({supplyPct.toFixed(1)}%)
+                      {tokensSold.toLocaleString()} / {totalSupply.toLocaleString()}
                     </span>
                   </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-border-low">
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-border-low">
                     <div
                       className="h-full rounded-full bg-accent/60 transition-all"
                       style={{ width: `${Math.min(supplyPct, 100)}%` }}
@@ -257,28 +314,27 @@ export default function TradePage({
                 </div>
               </div>
 
-              {/* Bonding curve formula */}
+              {/* Curve formula */}
               <div className="rounded-2xl border border-border-low bg-card p-5">
-                <p className="mb-3 text-xs font-medium text-muted uppercase tracking-wide">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
                   Bonding Curve
                 </p>
-                <p className="font-mono text-sm text-foreground/70">
+                <p className="font-mono text-xs text-foreground/60">
                   price = {basePrice.toLocaleString()} + {slope.toLocaleString()} × tokens_sold
                 </p>
-                <p className="mt-1 font-mono text-sm text-foreground/70">
-                  price = {basePrice.toLocaleString()} + {slope.toLocaleString()} × {tokensSold.toLocaleString()}
-                  {" "}= <span className="text-foreground font-semibold">{marketPrice.toLocaleString()} lamports</span>
+                <p className="mt-1 font-mono text-xs text-foreground/60">
+                  = {basePrice.toLocaleString()} + {slope.toLocaleString()} × {tokensSold.toLocaleString()}
+                  {" "}= <span className="font-semibold text-foreground">{marketPrice.toLocaleString()} lam</span>
                 </p>
-                <p className="mt-3 text-xs text-muted">
-                  Every buy raises the price. Every sell lowers it. Price is determined
-                  by supply and demand, anchored to player performance via the stats index.
+                <p className="mt-2 text-xs text-muted">
+                  Every buy raises the price. Every sell lowers it.
                 </p>
               </div>
 
               {/* Trade preview (visible when inputs are filled) */}
               {tab === "buy" && tokensOut > 0n && (
                 <div className="rounded-2xl border border-border-low bg-card p-5">
-                  <p className="mb-3 text-xs font-medium text-muted uppercase tracking-wide">
+                  <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
                     Trade Preview
                   </p>
                   <div className="space-y-2 text-sm">
@@ -306,7 +362,7 @@ export default function TradePage({
 
               {tab === "sell" && solOut > 0n && (
                 <div className="rounded-2xl border border-border-low bg-card p-5">
-                  <p className="mb-3 text-xs font-medium text-muted uppercase tracking-wide">
+                  <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
                     Trade Preview
                   </p>
                   <div className="space-y-2 text-sm">
@@ -333,8 +389,8 @@ export default function TradePage({
               )}
             </div>
 
-            {/* Right — Trade widget */}
-            <div className="lg:col-span-2">
+            {/* ── Col 3: Trade widget ───────────────────────────────────────── */}
+            <div className="lg:col-span-4">
               <div className="rounded-2xl border border-border-low bg-card p-5">
                 {/* Buy / Sell tabs */}
                 <div className="mb-5 flex rounded-xl border border-border-low">
@@ -488,10 +544,11 @@ export default function TradePage({
 
                 {/* Devnet banner */}
                 <p className="mt-4 text-center text-xs text-muted">
-                  Devnet only. Program deploys soon.
+                  Localnet. Program live on local validator.
                 </p>
               </div>
             </div>
+
           </div>
         </main>
       </div>
