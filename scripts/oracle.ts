@@ -117,7 +117,7 @@ async function fetchPlayerStats(playerName: string): Promise<PlayerStats | null>
     // Search for player by name
     const searchUrl = `https://api.balldontlie.io/v1/players?search=${encodeURIComponent(playerName)}`;
     const searchRes = await fetch(searchUrl, {
-      headers: { Authorization: process.env.BALLDONTLIE_API_KEY || "" },
+      headers: process.env.BALLDONTLIE_API_KEY ? { Authorization: process.env.BALLDONTLIE_API_KEY } : {},
     });
 
     if (!searchRes.ok) {
@@ -135,7 +135,7 @@ async function fetchPlayerStats(playerName: string): Promise<PlayerStats | null>
     // Fetch season averages
     const statsUrl = `https://api.balldontlie.io/v1/season_averages?player_ids[]=${player.id}`;
     const statsRes = await fetch(statsUrl, {
-      headers: { Authorization: process.env.BALLDONTLIE_API_KEY || "" },
+      headers: process.env.BALLDONTLIE_API_KEY ? { Authorization: process.env.BALLDONTLIE_API_KEY } : {},
     });
 
     if (!statsRes.ok) {

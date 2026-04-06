@@ -41,7 +41,8 @@ export async function GET(
   });
 
   if (!res.ok) {
-    return NextResponse.json([], { status: 200 });
+    console.error(`[price-history] KV error ${res.status} for ${playerId}`);
+    return NextResponse.json([], { status: 503 });
   }
 
   const json = await res.json();
@@ -50,7 +51,9 @@ export async function GET(
   const points: PricePoint[] = rawEntries
     .map((raw) => {
       try {
-        return JSON.parse(raw) as PricePoint;
+        const parsed = JSON.parse(raw);
+        if (typeof parsed?.t !== "number" || typeof parsed?.p !== "number") return null;
+        return parsed as PricePoint;
       } catch {
         return null;
       }

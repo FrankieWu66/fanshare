@@ -23,7 +23,7 @@ import {
   calculateTokensForSol,
   currentPrice,
 } from "../../lib/bonding-curve";
-import { oracleScore } from "../../lib/fanshare-program";
+import { type PlayerConfig } from "../../lib/fanshare-program";
 
 type TxStage = "idle" | "signing" | "confirming" | "success" | "failed";
 
@@ -37,7 +37,7 @@ export default function TradePage({
   const { playerId } = use(params);
   const { player, isLoading } = usePlayerData(playerId);
   const { wallet, status } = useWallet();
-  const { isSending } = useSendTransaction();
+  useSendTransaction(); // wired post-deploy; hook must run for context
   useCluster(); // will destructure getExplorerUrl post-deploy
 
   const address = wallet?.account.address;
@@ -55,7 +55,7 @@ export default function TradePage({
 
   const { data: priceHistory = [] } = useSWR(
     chartView === "history" ? `/api/price-history/${playerId}` : null,
-    (url: string) => fetch(url).then((r) => r.json()),
+    (url: string) => fetch(url).then((r) => { if (!r.ok) throw new Error(r.statusText); return r.json(); }),
     { refreshInterval: 30_000 }
   );
 
