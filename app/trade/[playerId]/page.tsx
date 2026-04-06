@@ -227,12 +227,12 @@ export default function TradePage({
                 </p>
                 <div className="space-y-3">
                   {[
-                    { label: "Points", key: "ppg", value: stats.ppg, color: "bg-accent" },
-                    { label: "Rebounds", key: "rpg", value: stats.rpg, color: "bg-positive" },
-                    { label: "Assists", key: "apg", value: stats.apg, color: "bg-accent" },
-                    { label: "Steals", key: "spg", value: stats.spg, color: "bg-positive" },
-                    { label: "Blocks", key: "bpg", value: stats.bpg, color: "bg-muted/40" },
-                  ].map(({ label, value, color }) => (
+                    { label: "Points", key: "ppg", value: stats.ppg },
+                    { label: "Rebounds", key: "rpg", value: stats.rpg },
+                    { label: "Assists", key: "apg", value: stats.apg },
+                    { label: "Steals", key: "spg", value: stats.spg },
+                    { label: "Blocks", key: "bpg", value: stats.bpg },
+                  ].map(({ label, value }) => (
                     <div key={label}>
                       <div className="mb-1 flex items-center justify-between">
                         <span className="text-xs text-muted">{label}</span>
@@ -242,7 +242,7 @@ export default function TradePage({
                       </div>
                       <div className="h-1.5 w-full overflow-hidden rounded-full bg-border-low">
                         <div
-                          className={`h-full rounded-full ${color} transition-all`}
+                          className="h-full rounded-full bg-accent transition-all"
                           style={{ width: `${Math.min((value / 40) * 100, 100)}%` }}
                         />
                       </div>
