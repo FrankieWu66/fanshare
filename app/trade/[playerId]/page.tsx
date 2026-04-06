@@ -219,7 +219,7 @@ export default function TradePage({
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
 
             {/* ── Col 1: Player Stats sidebar ──────────────────────────────── */}
-            <div className="space-y-4 lg:col-span-3">
+            <div className="order-2 space-y-4 lg:order-1 lg:col-span-3">
               {/* Season averages */}
               <div className="rounded-2xl border border-border-low bg-card p-5">
                 <p className="mb-4 text-xs font-medium uppercase tracking-wide text-muted">
@@ -278,7 +278,7 @@ export default function TradePage({
             </div>
 
             {/* ── Col 2: Bonding curve chart ───────────────────────────────── */}
-            <div className="space-y-4 lg:col-span-5">
+            <div className="order-3 space-y-4 lg:order-2 lg:col-span-5">
               <div className="rounded-2xl border border-border-low bg-card p-5">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-xs font-medium uppercase tracking-wide text-muted">
@@ -389,8 +389,8 @@ export default function TradePage({
               )}
             </div>
 
-            {/* ── Col 3: Trade widget ───────────────────────────────────────── */}
-            <div className="lg:col-span-4">
+            {/* ── Col 3: Trade widget (first on mobile for primary action) ── */}
+            <div className="order-1 lg:order-3 lg:col-span-4">
               <div className="rounded-2xl border border-border-low bg-card p-5">
                 {/* Buy / Sell tabs */}
                 <div className="mb-5 flex rounded-xl border border-border-low">
