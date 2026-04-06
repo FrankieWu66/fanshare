@@ -169,7 +169,7 @@ export default function TradePage({
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="text-sm text-muted transition hover:text-foreground"
+              className="inline-flex min-h-[44px] items-center text-sm text-muted transition hover:text-foreground"
             >
               ← Market
             </Link>
@@ -396,7 +396,7 @@ export default function TradePage({
                 <div className="mb-5 flex rounded-xl border border-border-low">
                   <button
                     onClick={() => setTab("buy")}
-                    className={`flex-1 cursor-pointer rounded-l-xl py-2 text-sm font-medium transition ${
+                    className={`flex-1 cursor-pointer rounded-l-xl py-3 text-sm font-medium transition ${
                       tab === "buy"
                         ? "bg-accent text-accent-foreground"
                         : "text-muted hover:text-foreground"
@@ -406,7 +406,7 @@ export default function TradePage({
                   </button>
                   <button
                     onClick={() => setTab("sell")}
-                    className={`flex-1 cursor-pointer rounded-r-xl py-2 text-sm font-medium transition ${
+                    className={`flex-1 cursor-pointer rounded-r-xl py-3 text-sm font-medium transition ${
                       tab === "sell"
                         ? "bg-accent text-accent-foreground"
                         : "text-muted hover:text-foreground"
