@@ -21,7 +21,7 @@ Economics:
 - Full sellout treasury: ~5,000 SOL
 - With 10 beta users × 0.5 SOL each: ~5 SOL per player, ~117k tokens sold (11.7% supply)
 
-### [ ] Create 15-player devnet roster config
+### [x] Create 15-player devnet roster config
 
 **What:** A config file (`scripts/roster.ts` or `app/lib/players.ts`) listing all 15 devnet
 players with their display name, emoji/avatar, and player_id string.
@@ -116,7 +116,7 @@ Smoke-test: `curl https://fanshare-1.vercel.app/api/price-history/Player_LD` →
 
 **Effort:** S | **Priority:** P1 (blocks #6 price history chart)
 
-### [ ] Extract bonding curve math to shared TS module
+### [x] Extract bonding curve math to shared TS module
 
 **What:** `calculateBuyCost`, `calculateTokensForSol` (reverse binary search), and
 `current_price` currently exist scattered across `fanshare-program.ts` and the trade page.
@@ -125,7 +125,7 @@ Move to `app/lib/bonding-math.ts`. Reuse in chart preview + trade page.
 **Why:** Third copy (chart preview) would be added if not extracted first. DRY.
 **Effort:** S | **Priority:** P1 (needed before interactive chart)
 
-### [ ] Fix double-click Buy bug — disable button during SIGNING + CONFIRMING
+### [x] Fix double-click Buy bug — disable button during SIGNING + CONFIRMING
 
 **What:** Trade widget Buy/Sell button must be disabled during both SIGNING and CONFIRMING
 states. Current `disabled={isSending}` may not cover the wallet approval gap.
@@ -151,6 +151,15 @@ render a Scatter dot or show "Not enough data — check back after the next orac
 **What:** `app/lib/fanshare-program.ts` DEVNET_PLAYERS array with `priceFormula` fields
 will become unwieldy at 30+ players. Move to `app/lib/players.json` or a DB.
 **Effort:** S | **Priority:** P3 (future)
+
+### [ ] KV RPUSH+LTRIM atomicity
+
+**What:** In `scripts/oracle.ts`, RPUSH and LTRIM are two separate HTTP calls. If LTRIM fails
+(rate limit, timeout), the list grows unbounded. Wrap using Upstash pipeline API to make
+them atomic: one HTTP call, both commands, all-or-nothing.
+**Why:** At devnet scale (15 players, 5-min cron) this is low risk. At mainnet scale (100+
+players, continuous oracle) unbounded growth becomes a real issue.
+**Effort:** XS | **Priority:** P2
 
 ### [ ] Formula section: collapse on mobile
 
