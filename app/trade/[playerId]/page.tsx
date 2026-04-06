@@ -188,7 +188,7 @@ export default function TradePage({
             <div className="flex items-center gap-3">
               <span className="text-5xl">{config.emoji}</span>
               <div>
-                <h1 className="font-display text-3xl font-extrabold tracking-tight">
+                <h1 className="font-display text-4xl font-extrabold tracking-tight">
                   {config.displayName}
                 </h1>
                 <div className="mt-1 flex items-center gap-2 text-sm text-muted">
