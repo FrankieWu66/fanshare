@@ -221,7 +221,7 @@ export default function TradePage({
             {/* ── Col 1: Player Stats sidebar ──────────────────────────────── */}
             <div className="order-2 space-y-4 lg:order-1 lg:col-span-3">
               {/* Season averages */}
-              <div className="rounded-2xl border border-border-low bg-card p-5">
+              <div className="rounded-xl border border-border-low bg-card p-5">
                 <p className="mb-4 text-xs font-medium uppercase tracking-wide text-muted">
                   Season Averages
                 </p>
@@ -252,7 +252,7 @@ export default function TradePage({
               </div>
 
               {/* Market prices */}
-              <div className="rounded-2xl border border-border-low bg-card p-5">
+              <div className="rounded-xl border border-border-low bg-card p-5">
                 <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
                   Pricing
                 </p>
@@ -279,7 +279,7 @@ export default function TradePage({
 
             {/* ── Col 2: Bonding curve chart ───────────────────────────────── */}
             <div className="order-3 space-y-4 lg:order-2 lg:col-span-5">
-              <div className="rounded-2xl border border-border-low bg-card p-5">
+              <div className="rounded-xl border border-border-low bg-card p-5">
                 <div className="mb-3 flex items-center justify-between">
                   <p className="text-xs font-medium uppercase tracking-wide text-muted">
                     Price Curve
@@ -315,7 +315,7 @@ export default function TradePage({
               </div>
 
               {/* Curve formula */}
-              <div className="rounded-2xl border border-border-low bg-card p-5">
+              <div className="rounded-xl border border-border-low bg-card p-5">
                 <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
                   Bonding Curve
                 </p>
@@ -333,7 +333,7 @@ export default function TradePage({
 
               {/* Trade preview (visible when inputs are filled) */}
               {tab === "buy" && tokensOut > 0n && (
-                <div className="rounded-2xl border border-border-low bg-card p-5">
+                <div className="rounded-xl border border-border-low bg-card p-5">
                   <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
                     Trade Preview
                   </p>
@@ -361,7 +361,7 @@ export default function TradePage({
               )}
 
               {tab === "sell" && solOut > 0n && (
-                <div className="rounded-2xl border border-border-low bg-card p-5">
+                <div className="rounded-xl border border-border-low bg-card p-5">
                   <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
                     Trade Preview
                   </p>
