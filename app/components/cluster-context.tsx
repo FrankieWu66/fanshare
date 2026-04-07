@@ -21,12 +21,12 @@ const ClusterContext = createContext<ClusterContextValue | null>(null);
 
 const STORAGE_KEY = "solana-cluster";
 function getInitialCluster(): ClusterMoniker {
-  if (typeof window === "undefined") return "devnet";
+  if (typeof window === "undefined") return "localnet";
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored && CLUSTERS.includes(stored as ClusterMoniker)) {
     return stored as ClusterMoniker;
   }
-  return "devnet";
+  return "localnet";
 }
 
 export { CLUSTERS };
