@@ -647,9 +647,11 @@ export default function TradePage({
                   </div>
                 )}
 
-                {/* Devnet banner */}
+                {/* Network banner */}
                 <p className="mt-4 text-center text-xs text-muted">
-                  Localnet. Program live on local validator.
+                  {cluster === "localnet"
+                    ? "Localnet. Program live on local validator."
+                    : `${cluster.charAt(0).toUpperCase() + cluster.slice(1)}. Program not yet deployed — showing mock data.`}
                 </p>
               </div>
             </div>
