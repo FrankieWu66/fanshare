@@ -44,6 +44,12 @@ Key routing rules:
 - `npm run oracle` — fetches live NBA stats from balldontlie.io and updates on-chain StatsOracle. Use `npm run oracle:mock` for offline testing.
 - Both scripts load env from `.env.local` (not `.env`) via explicit `dotenv.config({ path: '.env.local' })`.
 
+## RPC Provider
+- **Helius** — paid plan active as of 2026-04-07 ($25 first month, $49/mo after)
+- Devnet RPC URL: `https://devnet.helius-rpc.com/?api-key=<HELIUS_API_KEY>` (get from Helius dashboard)
+- Always prefer Helius RPC over public `api.devnet.solana.com` — more reliable, higher rate limits
+- Use Helius URL for: `SOLANA_RPC_URL` env var, `anchor deploy --url`, `npm run init-players`, `npm run oracle`
+
 ## Environment Variables
 Required for price history chart to work:
 ```
@@ -52,6 +58,15 @@ KV_REST_API_TOKEN=       # Read-write token
 KV_REST_API_READ_ONLY_TOKEN=  # Optional read-only token for API route
 ```
 Without these, `/api/price-history/[playerId]` returns `[]` (safe fallback — chart shows empty state).
+
+Required for oracle cron job (/api/cron/oracle):
+```
+ORACLE_SECRET_KEY=       # JSON array from oracle-keypair.json e.g. [1,2,3,...]
+SOLANA_RPC_URL=          # Helius devnet URL (see RPC Provider section above)
+SOLANA_CLUSTER=          # "devnet"
+CRON_SECRET=             # Random secret — Vercel injects as Authorization: Bearer <secret>
+BALLDONTLIE_API_KEY=     # Optional — improves balldontlie.io rate limits
+```
 
 ## Design System
 Always read DESIGN_SYSTEM.md before making any visual or UI decisions.
