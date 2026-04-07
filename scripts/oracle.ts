@@ -207,7 +207,7 @@ function buildUpdateOracleInstruction(
 
 async function main() {
   const connection = new Connection(
-    process.env.SOLANA_RPC_URL || "https://api.devnet.solana.com",
+    process.env.SOLANA_RPC_URL || "http://localhost:8899", // localnet default — matches Anchor.toml
     "confirmed"
   );
 
@@ -298,7 +298,14 @@ async function main() {
           const entry = JSON.stringify({ t: Math.floor(Date.now() / 1000), p: Number(indexPrice) });
           const kvUrl = process.env.KV_REST_API_URL;
           const kvToken = process.env.KV_REST_API_TOKEN;
-          const key = `price-history:${playerId}`;
+          // Cluster prefix: set SOLANA_CLUSTER env var, or derive from RPC URL
+          const rpcUrl = process.env.SOLANA_RPC_URL ?? "";
+          const cluster =
+            process.env.SOLANA_CLUSTER ??
+            (rpcUrl.includes("devnet") ? "devnet" :
+             rpcUrl.includes("mainnet") ? "mainnet" :
+             rpcUrl.includes("testnet") ? "testnet" : "localnet");
+          const key = `price-history:${cluster}:${playerId}`;
           // RPUSH then LTRIM to keep newest 500 entries
           await fetch(`${kvUrl}/rpush/${encodeURIComponent(key)}`, {
             method: "POST",

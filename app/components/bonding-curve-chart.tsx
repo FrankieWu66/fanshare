@@ -1,6 +1,7 @@
 "use client";
 
 import { calculateTokensForSol } from "../lib/bonding-curve";
+import { formatLamports } from "../lib/format";
 
 interface BondingCurveChartProps {
   basePrice: bigint;
@@ -288,9 +289,4 @@ export function BondingCurveChart({
   );
 }
 
-/** Format lamports for axis labels (compact: 1200 → "1.2k") */
-function formatLamports(lamports: number): string {
-  if (lamports >= 1_000_000) return `${(lamports / 1_000_000).toFixed(1)}M`;
-  if (lamports >= 1_000) return `${(lamports / 1_000).toFixed(1)}k`;
-  return lamports.toFixed(0);
-}
+// formatLamports imported from app/lib/format.ts

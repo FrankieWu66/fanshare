@@ -138,7 +138,7 @@ function buildInitCurveInstruction(
 // ── Main ───────────────────────────────────────────────────────────────────
 
 async function main() {
-  const rpcUrl = process.env.SOLANA_RPC_URL ?? "https://api.devnet.solana.com";
+  const rpcUrl = process.env.SOLANA_RPC_URL ?? "http://localhost:8899"; // localnet default — matches Anchor.toml
   const connection = new Connection(rpcUrl, "confirmed");
 
   // Load authority keypair from Solana CLI default path

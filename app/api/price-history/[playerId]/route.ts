@@ -1,13 +1,17 @@
 /**
- * GET /api/price-history/[playerId]
+ * GET /api/price-history/[playerId]?cluster=<moniker>
  *
  * Returns the last 500 index price snapshots for a player from Vercel KV.
  * Each entry: { t: number (unix seconds), p: number (lamports) }
  *
+ * cluster defaults to "localnet" when omitted.
  * Returns [] when KV is not configured (local dev without KV credentials).
  */
 
 import { NextRequest, NextResponse } from "next/server";
+
+const VALID_CLUSTERS = ["localnet", "devnet", "testnet", "mainnet"] as const;
+type ClusterMoniker = (typeof VALID_CLUSTERS)[number];
 
 interface PricePoint {
   t: number; // unix timestamp (seconds)
@@ -15,7 +19,7 @@ interface PricePoint {
 }
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ playerId: string }> }
 ) {
   const { playerId } = await params;
@@ -25,6 +29,12 @@ export async function GET(
     return NextResponse.json({ error: "Invalid playerId" }, { status: 400 });
   }
 
+  // Cluster query param — determines which KV namespace to read from
+  const clusterParam = req.nextUrl.searchParams.get("cluster") ?? "localnet";
+  const cluster: ClusterMoniker = (VALID_CLUSTERS as readonly string[]).includes(clusterParam)
+    ? (clusterParam as ClusterMoniker)
+    : "localnet";
+
   const kvUrl = process.env.KV_REST_API_URL;
   const kvToken = process.env.KV_REST_API_READ_ONLY_TOKEN ?? process.env.KV_REST_API_TOKEN;
 
@@ -33,7 +43,7 @@ export async function GET(
     return NextResponse.json([], { headers: { "Cache-Control": "no-store" } });
   }
 
-  const key = `price-history:${playerId}`;
+  const key = `price-history:${cluster}:${playerId}`;
   // LRANGE to fetch all 500 entries (0 to -1 = full list, capped at 500 by oracle LTRIM)
   const res = await fetch(`${kvUrl}/lrange/${encodeURIComponent(key)}/0/-1`, {
     headers: { Authorization: `Bearer ${kvToken}` },

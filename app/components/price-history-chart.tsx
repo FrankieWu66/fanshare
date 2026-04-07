@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
+import { formatLamports } from "../lib/format";
 
 interface PricePoint {
   t: number; // unix timestamp (seconds)
@@ -20,11 +21,6 @@ interface PriceHistoryChartProps {
   currentPrice?: number; // lamports — draws a horizontal reference line
 }
 
-function formatLamports(n: number): string {
-  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-  if (n >= 1_000) return `${(n / 1_000).toFixed(1)}k`;
-  return n.toFixed(0);
-}
 
 function formatTime(ts: number): string {
   const d = new Date(ts * 1000);
@@ -45,11 +41,18 @@ export function PriceHistoryChart({ data, currentPrice }: PriceHistoryChartProps
     );
   }
 
-  // Downsample to at most 120 points for performance
+  // Downsample to at most 120 points for performance.
+  // Always force-include the last point so the chart end matches the current reference line.
   const sampled =
     data.length <= 120
       ? data
-      : data.filter((_, i) => i % Math.ceil(data.length / 120) === 0);
+      : (() => {
+          const step = Math.ceil(data.length / 120);
+          const filtered = data.filter((_, i) => i % step === 0);
+          const last = data[data.length - 1];
+          if (filtered[filtered.length - 1] !== last) filtered.push(last);
+          return filtered;
+        })();
 
   const prices = sampled.map((p) => p.p);
   const minP = Math.min(...prices);

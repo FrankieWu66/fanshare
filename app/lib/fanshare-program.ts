@@ -44,13 +44,15 @@ export interface PlayerConfig {
 
 /** Weighted stat score used to anchor base_price. Mirrors oracle.ts STAT_WEIGHTS. */
 export function oracleScore(stats: PlayerStats): number {
-  return (
+  const score =
     stats.ppg * 1000 +
     stats.rpg * 500 +
     stats.apg * 700 +
     stats.spg * 800 +
-    stats.bpg * 800
-  );
+    stats.bpg * 800;
+  if (!isFinite(score))
+    throw new TypeError(`oracleScore: invalid stats (NaN/Infinity) — check API response`);
+  return score;
 }
 
 /** Tier parameters derived from oracle score. */
@@ -62,11 +64,14 @@ export function tierParams(score: number): { slope: bigint; totalSupply: bigint 
 
 /** base_price in lamports from veteran stats formula: round(score × 0.5). */
 export function veteranBasePrice(stats: PlayerStats): bigint {
-  return BigInt(Math.round(oracleScore(stats) * 0.5));
+  const score = oracleScore(stats); // throws if stats contain NaN/Infinity
+  return BigInt(Math.round(score * 0.5));
 }
 
 /** base_price in lamports from draft pick (rookies with no stats). Max 18,000L. */
 export function rookieBasePrice(draftPick: number): bigint {
+  if (draftPick < 1 || draftPick > 60)
+    throw new RangeError(`Draft pick must be 1–60, got ${draftPick}`);
   return BigInt(Math.round(18_000 * (61 - draftPick) / 60));
 }
 

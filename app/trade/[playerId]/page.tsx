@@ -23,7 +23,14 @@ import {
   calculateTokensForSol,
   currentPrice,
 } from "../../lib/bonding-curve";
-import { type PlayerConfig } from "../../lib/fanshare-program";
+import { type PlayerConfig, DEFAULT_BASE_PRICE, DEFAULT_SLOPE } from "../../lib/fanshare-program";
+
+// Module-level fetcher — stable reference, avoids new function on every render
+const jsonFetcher = (url: string) =>
+  fetch(url).then((r) => {
+    if (!r.ok) throw new Error(r.statusText);
+    return r.json();
+  });
 
 type TxStage = "idle" | "signing" | "confirming" | "success" | "failed";
 
@@ -38,7 +45,7 @@ export default function TradePage({
   const { player, isLoading } = usePlayerData(playerId);
   const { wallet, status } = useWallet();
   useSendTransaction(); // wired post-deploy; hook must run for context
-  useCluster(); // will destructure getExplorerUrl post-deploy
+  const { cluster } = useCluster(); // getExplorerUrl wired post-deploy
 
   const address = wallet?.account.address;
   const balance = useBalance(address);
@@ -52,10 +59,9 @@ export default function TradePage({
   const [txStage, setTxStage] = useState<TxStage>("idle");
   const [txError, setTxError] = useState<string | null>(null);
   const txTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
   const { data: priceHistory = [] } = useSWR(
-    chartView === "history" ? `/api/price-history/${playerId}` : null,
-    (url: string) => fetch(url).then((r) => { if (!r.ok) throw new Error(r.statusText); return r.json(); }),
+    chartView === "history" ? `/api/price-history/${playerId}?cluster=${cluster}` : null,
+    jsonFetcher,
     { refreshInterval: 30_000 }
   );
 
@@ -75,15 +81,17 @@ export default function TradePage({
 
   // ── Derived curve values ──────────────────────────────────────────────────
   const curve = player?.curve;
-  const basePrice = curve?.basePrice ?? 1000n;
-  const slope = curve?.slope ?? 10n;
+  const basePrice = curve?.basePrice ?? DEFAULT_BASE_PRICE;
+  const slope = curve?.slope ?? DEFAULT_SLOPE;
   const tokensSold = curve?.tokensSold ?? 0n;
   const totalSupply = curve?.totalSupply ?? 1_000_000n;
   const indexPrice = player?.oracle?.indexPriceLamports ?? 0n;
   const marketPrice = currentPrice(basePrice, slope, tokensSold);
 
   // How many tokens would buying X SOL get you?
-  const solLamports = BigInt(Math.floor(parseFloat(solInput || "0") * 1e9));
+  // Guard against NaN/Infinity from scientific notation inputs (e.g. "1e308")
+  const _parsedSol = parseFloat(solInput || "0") * 1e9;
+  const solLamports = Number.isFinite(_parsedSol) ? BigInt(Math.floor(_parsedSol)) : 0n;
   const tokensOut = calculateTokensForSol(
     basePrice,
     slope,
@@ -105,7 +113,7 @@ export default function TradePage({
       ? currentPrice(basePrice, slope, tokensSold + tokensOut)
       : marketPrice;
   const priceAfterSell =
-    tokenAmountIn > 0n
+    tokenAmountIn > 0n && tokenAmountIn <= tokensSold
       ? currentPrice(basePrice, slope, tokensSold - tokenAmountIn)
       : marketPrice;
 
@@ -610,7 +618,7 @@ export default function TradePage({
                         <button
                           onClick={handleSell}
                           disabled={isBusy || tokenAmountIn === 0n || solOut === 0n}
-                          className="w-full cursor-pointer rounded-xl bg-negative py-3 text-sm font-bold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                          className="w-full cursor-pointer rounded-xl bg-negative py-3 text-sm font-bold text-background transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           {txStage === "signing" && "Approve in wallet..."}
                           {txStage === "confirming" && "Confirming on Solana..."}
