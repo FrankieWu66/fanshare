@@ -98,6 +98,8 @@ export function usePlayerData(playerId: string): {
 
 // ── On-chain fetcher ───────────────────────────────────────────────────────
 
+const RPC_TIMEOUT_MS = 8000; // 8s — prevents infinite spinner on RPC hang
+
 async function fetchOnChainData(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   client: any
@@ -131,11 +133,15 @@ async function fetchOnChainData(
     playerOrder.push(config);
   }
 
-  // Batch fetch all accounts in one RPC call
+  // Batch fetch all accounts in one RPC call — with timeout guard
   // @solana/kit returns base64-encoded data as [dataBase64, "base64"]
-  const { value: accounts } = await client.rpc
-    .getMultipleAccounts(pdaAddresses, { encoding: "base64" })
-    .send();
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error(`RPC timeout after ${RPC_TIMEOUT_MS}ms`)), RPC_TIMEOUT_MS)
+  );
+  const { value: accounts } = await Promise.race([
+    client.rpc.getMultipleAccounts(pdaAddresses, { encoding: "base64" }).send(),
+    timeoutPromise,
+  ]);
 
   // Parse results — every 2 accounts = [bondingCurve, statsOracle] for one player
   const results: PlayerMarketData[] = [];

@@ -2,6 +2,12 @@
 
 All notable changes to FanShare are documented here.
 
+## [0.1.1.0] - 2026-04-07
+
+### Fixed
+- **RPC timeout guard** — `getMultipleAccounts` now rejects after 8s instead of hanging indefinitely, triggering the mock data fallback so the market grid stays usable.
+- **Dust amount hint** — entering a SOL amount too small to buy any tokens now shows "Amount too small — enter at least X SOL" instead of silently disabling the Buy button.
+
 ## [0.1.0.0] - 2026-04-06
 
 ### Added

@@ -528,6 +528,11 @@ export default function TradePage({
                         <span className="ml-1 text-muted">tokens</span>
                       </div>
                     )}
+                    {solLamports > 0n && tokensOut === 0n && (
+                      <p className="text-xs text-negative">
+                        Amount too small — enter at least {formatSol(marketPrice)} SOL
+                      </p>
+                    )}
 
                     {status !== "connected" ? (
                       <div className="text-center text-sm text-muted">
