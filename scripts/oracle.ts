@@ -27,6 +27,7 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import dotenv from "dotenv";
+import { STAT_WEIGHTS } from "../app/lib/oracle-weights.js";
 
 // Load .env.local for KV credentials (Next.js convention)
 dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), "../.env.local") });
@@ -37,15 +38,8 @@ const PROGRAM_ID = new PublicKey("B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz")
 // update_oracle discriminator from IDL
 const UPDATE_ORACLE_DISCRIMINATOR = Buffer.from([112, 41, 209, 18, 248, 226, 252, 188]);
 
-// Stat weights for index price calculation
+// Stat weights — single source of truth in app/lib/oracle-weights.ts
 // index = (PPG × 1000 + RPG × 500 + APG × 700 + SPG × 800 + BPG × 800) lamports
-const STAT_WEIGHTS = {
-  ppg: 1000,   // points per game
-  rpg: 500,    // rebounds per game
-  apg: 700,    // assists per game
-  spg: 800,    // steals per game
-  bpg: 800,    // blocks per game
-} as const;
 
 // Player ID → real NBA player mapping (for stats API lookup)
 // Using abstract IDs until legal review clears real names

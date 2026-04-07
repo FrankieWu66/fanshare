@@ -3,6 +3,8 @@
  * Works with @solana/kit (new SDK).
  */
 
+import { STAT_WEIGHTS } from "./oracle-weights";
+
 // Program ID from anchor build
 export const PROGRAM_ID = "B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz" as const;
 
@@ -42,14 +44,14 @@ export interface PlayerConfig {
   priceFormula: PriceFormula;
 }
 
-/** Weighted stat score used to anchor base_price. Mirrors oracle.ts STAT_WEIGHTS. */
+/** Weighted stat score used to anchor base_price. Weights defined in oracle-weights.ts. */
 export function oracleScore(stats: PlayerStats): number {
   const score =
-    stats.ppg * 1000 +
-    stats.rpg * 500 +
-    stats.apg * 700 +
-    stats.spg * 800 +
-    stats.bpg * 800;
+    stats.ppg * STAT_WEIGHTS.ppg +
+    stats.rpg * STAT_WEIGHTS.rpg +
+    stats.apg * STAT_WEIGHTS.apg +
+    stats.spg * STAT_WEIGHTS.spg +
+    stats.bpg * STAT_WEIGHTS.bpg;
   if (!isFinite(score))
     throw new TypeError(`oracleScore: invalid stats (NaN/Infinity) — check API response`);
   return score;
