@@ -23,3 +23,38 @@ Key routing rules:
 - Design system, brand → invoke design-consultation
 - Visual audit, design polish → invoke design-review
 - Architecture review → invoke plan-eng-review
+
+## Deploy Configuration (configured by /setup-deploy)
+- Platform: Vercel
+- Production URL: https://fanshare-1.vercel.app
+- Deploy workflow: `vercel --prod --yes` (CLI push, no auto-deploy from GitHub yet)
+- Deploy status command: `vercel ls --prod`
+- Merge method: squash
+- Project type: web app (Next.js 16)
+- Post-deploy health check: `curl -sf https://fanshare-1.vercel.app -o /dev/null -w "%{http_code}"`
+
+### Custom deploy hooks
+- Pre-merge: `npm run test && npm run build`
+- Deploy trigger: `vercel --prod --yes`
+- Deploy status: `vercel inspect <deployment-url>`
+- Health check: https://fanshare-1.vercel.app (HTTP 200)
+
+## Scripts
+- `npm run init-players` — initializes all 15 player bonding curves on localnet with stats-anchored params. Requires `app/lib/player-mints.json` output.
+- `npm run oracle` — fetches live NBA stats from balldontlie.io and updates on-chain StatsOracle. Use `npm run oracle:mock` for offline testing.
+- Both scripts load env from `.env.local` (not `.env`) via explicit `dotenv.config({ path: '.env.local' })`.
+
+## Environment Variables
+Required for price history chart to work:
+```
+KV_REST_API_URL=         # Vercel KV (Upstash Redis) REST URL
+KV_REST_API_TOKEN=       # Read-write token
+KV_REST_API_READ_ONLY_TOKEN=  # Optional read-only token for API route
+```
+Without these, `/api/price-history/[playerId]` returns `[]` (safe fallback — chart shows empty state).
+
+## Design System
+Always read DESIGN_SYSTEM.md before making any visual or UI decisions.
+All font choices, colors, spacing, and aesthetic direction are defined there.
+Do not deviate without explicit user approval.
+In QA mode, flag any code that doesn't match DESIGN_SYSTEM.md.

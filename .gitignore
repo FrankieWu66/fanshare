@@ -9,6 +9,7 @@ dist/
 
 # Anchor
 .anchor/
+anchor/target/
 test-ledger/
 
 # Environment
@@ -38,3 +39,5 @@ npm-debug.log*
 
 # gstack internal
 .gstack/browse-network.log
+.gstack/
+.vercel

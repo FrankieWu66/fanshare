@@ -2,55 +2,69 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* FanShare Design System — DESIGN_SYSTEM.md is the source of truth */
+/* Aesthetic: Industrial-Utilitarian meets sports arena */
+/* Palette: warm near-black + amber accent (basketball/arena lights) */
+
 :root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
-  --primary: #171717;
-  --primary-foreground: #fafafa;
-  --muted: #737373;
-  --muted-foreground: #737373;
-  --card: #ffffff;
-  --card-foreground: #0a0a0a;
-  --popover: #ffffff;
-  --popover-foreground: #0a0a0a;
-  --border: #e5e5e5;
-  --border-low: #f5f5f5;
-  --input: #e5e5e5;
-  --accent: #f5f5f5;
-  --accent-foreground: #171717;
-  --cream: #f5f5f5;
-  --destructive: #ef4444;
-  --destructive-foreground: #ef4444;
-  --ring: #a3a3a3;
-  --radius: 0.625rem;
-  --secondary: #f5f5f5;
-  --secondary-foreground: #171717;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --background: #09090B;
+  --foreground: #FAFAF9;
+  --primary: #FAFAF9;
+  --primary-foreground: #09090B;
+  --muted: #71717A;
+  --muted-foreground: #71717A;
+  --card: #141417;
+  --card-foreground: #FAFAF9;
+  --popover: #141417;
+  --popover-foreground: #FAFAF9;
+  --border: #1E1E22;
+  --border-low: rgba(30, 30, 34, 0.5);
+  --input: #1E1E22;
+  --accent: #F59E0B;
+  --accent-subtle: rgba(245, 158, 11, 0.15);
+  --accent-foreground: #09090B;
+  --cream: #141417;
+  --destructive: #EF4444;
+  --destructive-foreground: #EF4444;
+  --positive: #22C55E;
+  --negative: #EF4444;
+  --info: #3B82F6;
+  --ring: #F59E0B;
+  --radius: 0.75rem;
+  --secondary: #1E1E22;
+  --secondary-foreground: #FAFAF9;
+  --font-sans: var(--font-dm-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-display: var(--font-cabinet), system-ui, sans-serif;
 }
 
+/* No light mode for v1 — dark-only matches crypto + arena aesthetic */
 .dark {
-  --background: #0a0a0a;
-  --foreground: #fafafa;
-  --primary: #fafafa;
-  --primary-foreground: #171717;
-  --muted: #a3a3a3;
-  --muted-foreground: #737373;
-  --card: #171717;
-  --card-foreground: #fafafa;
-  --popover: #171717;
-  --popover-foreground: #fafafa;
-  --border: #262626;
-  --border-low: rgba(38, 38, 38, 0.5);
-  --input: #262626;
-  --accent: #262626;
-  --accent-foreground: #fafafa;
-  --cream: #262626;
-  --destructive: #ef4444;
-  --destructive-foreground: #ef4444;
-  --ring: #525252;
-  --secondary: #262626;
-  --secondary-foreground: #fafafa;
+  --background: #09090B;
+  --foreground: #FAFAF9;
+  --primary: #FAFAF9;
+  --primary-foreground: #09090B;
+  --muted: #71717A;
+  --muted-foreground: #71717A;
+  --card: #141417;
+  --card-foreground: #FAFAF9;
+  --popover: #141417;
+  --popover-foreground: #FAFAF9;
+  --border: #1E1E22;
+  --border-low: rgba(30, 30, 34, 0.5);
+  --input: #1E1E22;
+  --accent: #F59E0B;
+  --accent-subtle: rgba(245, 158, 11, 0.15);
+  --accent-foreground: #09090B;
+  --cream: #141417;
+  --destructive: #EF4444;
+  --destructive-foreground: #EF4444;
+  --positive: #22C55E;
+  --negative: #EF4444;
+  --info: #3B82F6;
+  --ring: #F59E0B;
+  --secondary: #1E1E22;
+  --secondary-foreground: #FAFAF9;
 }
 
 @theme inline {
@@ -68,16 +82,22 @@
   --color-border-low: var(--border-low);
   --color-input: var(--input);
   --color-accent: var(--accent);
+  --color-accent-subtle: var(--accent-subtle);
   --color-accent-foreground: var(--accent-foreground);
   --color-cream: var(--cream);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-positive: var(--positive);
+  --color-negative: var(--negative);
+  --color-info: var(--info);
   --color-ring: var(--ring);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
-  --radius-md: calc(var(--radius) - 2px);
+  --font-display: var(--font-display);
+  --radius-sm: 4px;
+  --radius-md: calc(var(--radius) - 4px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }

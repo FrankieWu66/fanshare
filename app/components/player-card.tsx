@@ -16,31 +16,41 @@ export function PlayerCard({ player }: PlayerCardProps) {
   const indexPrice = oracle?.indexPriceLamports ?? 0n;
 
   const isUndervalued = spreadPercent < 0;
+  const isOvervalued = spreadPercent > 5;
+
   const spreadColor = isUndervalued
-    ? "text-emerald-500"
-    : spreadPercent > 0
-      ? "text-red-400"
+    ? "text-accent"
+    : isOvervalued
+      ? "text-negative"
       : "text-muted";
+
+  const spreadBadge = isUndervalued
+    ? { text: "Undervalued", color: "text-accent", bg: "bg-accent-subtle" }
+    : isOvervalued
+      ? { text: "Overvalued", color: "text-negative", bg: "bg-negative/10" }
+      : null;
 
   return (
     <Link
       href={`/trade/${config.id}`}
-      className="group relative overflow-hidden rounded-2xl border border-border-low bg-card p-5 transition-all hover:border-border hover:shadow-lg"
+      className="group relative overflow-hidden rounded-xl border border-border-low bg-card p-5 transition-all duration-150 hover:-translate-y-px hover:border-accent/40 hover:shadow-lg hover:shadow-accent/5"
     >
       {/* Player header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <span className="text-3xl">{config.emoji}</span>
+          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/[0.08] text-2xl">
+            {config.emoji}
+          </span>
           <div>
             <h3 className="font-semibold text-foreground">
               {config.displayName}
             </h3>
-            <p className="text-xs text-muted">{config.id}</p>
+            <p className="font-mono text-[11px] text-muted">{config.id}</p>
           </div>
         </div>
-        {isUndervalued && (
-          <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-500">
-            Undervalued
+        {spreadBadge && (
+          <span className={`rounded-sm px-2 py-0.5 text-xs font-medium ${spreadBadge.color} ${spreadBadge.bg}`}>
+            {spreadBadge.text}
           </span>
         )}
       </div>
@@ -56,13 +66,13 @@ export function PlayerCard({ player }: PlayerCardProps) {
       {/* Stats row */}
       <div className="mt-3 grid grid-cols-3 gap-3 border-t border-border-low pt-3">
         <div>
-          <p className="text-xs text-muted">Stats Index</p>
+          <p className="text-[11px] text-muted">Stats Index</p>
           <p className="font-mono text-sm font-medium tabular-nums">
             {indexPrice > 0n ? formatSol(indexPrice) : "--"}
           </p>
         </div>
         <div>
-          <p className="text-xs text-muted">Spread</p>
+          <p className="text-[11px] text-muted">Spread</p>
           <p className={`font-mono text-sm font-medium tabular-nums ${spreadColor}`}>
             {indexPrice > 0n
               ? `${spreadPercent > 0 ? "+" : ""}${spreadPercent.toFixed(1)}%`
@@ -70,24 +80,24 @@ export function PlayerCard({ player }: PlayerCardProps) {
           </p>
         </div>
         <div>
-          <p className="text-xs text-muted">Supply</p>
+          <p className="text-[11px] text-muted">Supply</p>
           <p className="font-mono text-sm font-medium tabular-nums">
             {supplyPercent.toFixed(1)}%
           </p>
         </div>
       </div>
 
-      {/* Supply bar */}
-      <div className="mt-2 h-1 w-full overflow-hidden rounded-full bg-border-low">
+      {/* Supply bar — amber fill per design system */}
+      <div className="mt-2 h-[3px] w-full overflow-hidden rounded-full bg-border-low">
         <div
-          className="h-full rounded-full bg-foreground/30 transition-all"
+          className="h-full rounded-full bg-accent/60 transition-all"
           style={{ width: `${Math.min(supplyPercent, 100)}%` }}
         />
       </div>
 
       {/* Hover arrow */}
       <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100">
-        <span className="text-muted">&rarr;</span>
+        <span className="text-accent">&rarr;</span>
       </div>
     </Link>
   );

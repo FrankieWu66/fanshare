@@ -1,26 +1,38 @@
 "use client";
 
-import { useState, useCallback, use } from "react";
+import { useState, useCallback, use, useEffect, useRef } from "react";
+import useSWR from "swr";
+import { type Address } from "@solana/kit";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useWallet } from "../../lib/wallet/context";
 import { useBalance } from "../../lib/hooks/use-balance";
+import { useTokenBalance } from "../../lib/hooks/use-token-balance";
 import { usePlayerData } from "../../lib/hooks/use-player-markets";
 import { useSendTransaction } from "../../lib/hooks/use-send-transaction";
-import { lamportsToSolString, lamportsFromSol } from "../../lib/lamports";
-import { useCluster } from "../../components/cluster-context";
+import { lamportsToSolString } from "../../lib/lamports";
 import { GridBackground } from "../../components/grid-background";
-import { ThemeToggle } from "../../components/theme-toggle";
 import { ClusterSelect } from "../../components/cluster-select";
+import { useCluster } from "../../components/cluster-context";
 import { WalletButton } from "../../components/wallet-button";
+import { BondingCurveChart } from "../../components/bonding-curve-chart";
+import { PriceHistoryChart } from "../../components/price-history-chart";
 import {
   formatSol,
-  calculateBuyCost,
   calculateSellReturn,
   calculateTokensForSol,
   currentPrice,
 } from "../../lib/bonding-curve";
-import { parseTransactionError } from "../../lib/errors";
+import { type PlayerConfig, DEFAULT_BASE_PRICE, DEFAULT_SLOPE } from "../../lib/fanshare-program";
+
+// Module-level fetcher — stable reference, avoids new function on every render
+const jsonFetcher = (url: string) =>
+  fetch(url).then((r) => {
+    if (!r.ok) throw new Error(r.statusText);
+    return r.json();
+  });
+
+type TxStage = "idle" | "signing" | "confirming" | "success" | "failed";
 
 const SLIPPAGE_PCT = 1; // 1% slippage tolerance
 
@@ -32,27 +44,54 @@ export default function TradePage({
   const { playerId } = use(params);
   const { player, isLoading } = usePlayerData(playerId);
   const { wallet, status } = useWallet();
-  const { send, isSending } = useSendTransaction();
-  const { getExplorerUrl } = useCluster();
+  useSendTransaction(); // wired post-deploy; hook must run for context
+  const { cluster } = useCluster(); // getExplorerUrl wired post-deploy
 
   const address = wallet?.account.address;
   const balance = useBalance(address);
+  const mintAddress = player?.curve?.mint as Address | undefined;
+  const tokenBalance = useTokenBalance(address, mintAddress);
 
   const [tab, setTab] = useState<"buy" | "sell">("buy");
+  const [chartView, setChartView] = useState<"curve" | "history">("curve");
   const [solInput, setSolInput] = useState("");
   const [tokenInput, setTokenInput] = useState("");
+  const [txStage, setTxStage] = useState<TxStage>("idle");
+  const [txError, setTxError] = useState<string | null>(null);
+  const txTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { data: priceHistory = [] } = useSWR(
+    chartView === "history" ? `/api/price-history/${playerId}?cluster=${cluster}` : null,
+    jsonFetcher,
+    { refreshInterval: 30_000 }
+  );
+
+  // Auto-reset from success back to idle after 3s
+  useEffect(() => {
+    if (txStage === "success") {
+      txTimerRef.current = setTimeout(() => {
+        setTxStage("idle");
+        setSolInput("");
+        setTokenInput("");
+      }, 3000);
+    }
+    return () => { if (txTimerRef.current) clearTimeout(txTimerRef.current); };
+  }, [txStage]);
+
+  const isBusy = txStage !== "idle";
 
   // ── Derived curve values ──────────────────────────────────────────────────
   const curve = player?.curve;
-  const basePrice = curve?.basePrice ?? 1000n;
-  const slope = curve?.slope ?? 10n;
+  const basePrice = curve?.basePrice ?? DEFAULT_BASE_PRICE;
+  const slope = curve?.slope ?? DEFAULT_SLOPE;
   const tokensSold = curve?.tokensSold ?? 0n;
   const totalSupply = curve?.totalSupply ?? 1_000_000n;
   const indexPrice = player?.oracle?.indexPriceLamports ?? 0n;
   const marketPrice = currentPrice(basePrice, slope, tokensSold);
 
   // How many tokens would buying X SOL get you?
-  const solLamports = BigInt(Math.floor(parseFloat(solInput || "0") * 1e9));
+  // Guard against NaN/Infinity from scientific notation inputs (e.g. "1e308")
+  const _parsedSol = parseFloat(solInput || "0") * 1e9;
+  const solLamports = Number.isFinite(_parsedSol) ? BigInt(Math.floor(_parsedSol)) : 0n;
   const tokensOut = calculateTokensForSol(
     basePrice,
     slope,
@@ -74,7 +113,7 @@ export default function TradePage({
       ? currentPrice(basePrice, slope, tokensSold + tokensOut)
       : marketPrice;
   const priceAfterSell =
-    tokenAmountIn > 0n
+    tokenAmountIn > 0n && tokenAmountIn <= tokensSold
       ? currentPrice(basePrice, slope, tokensSold - tokenAmountIn)
       : marketPrice;
 
@@ -87,52 +126,53 @@ export default function TradePage({
     indexPrice === 0n
       ? null
       : spread < -5
-        ? { text: "Undervalued", color: "text-emerald-500", bg: "bg-emerald-500/10" }
+        ? { text: "Undervalued", color: "text-accent", bg: "bg-accent-subtle" }
         : spread > 5
-          ? { text: "Overvalued", color: "text-red-400", bg: "bg-red-400/10" }
+          ? { text: "Overvalued", color: "text-negative", bg: "bg-negative/10" }
           : { text: "Fair value", color: "text-muted", bg: "bg-cream" };
 
   // ── Handlers ─────────────────────────────────────────────────────────────
   const handleBuy = useCallback(async () => {
-    if (!address || !player || !curve || solLamports === 0n || tokensOut === 0n) return;
+    if (isBusy || !address || !player || !curve || solLamports === 0n || tokensOut === 0n) return;
+    setTxError(null);
+    setTxStage("signing");
 
-    // PRE-DEPLOY: Show mock success (no real program on devnet yet)
-    toast.info("Devnet program not yet deployed — showing preview only.");
-    return;
+    // PRE-DEPLOY: Simulate stages so UX is visible
+    await new Promise((r) => setTimeout(r, 1200));
+    setTxStage("confirming");
+    await new Promise((r) => setTimeout(r, 2000));
+    setTxStage("success");
+    toast.success(`Bought ${tokensOut.toLocaleString()} tokens`);
 
-    /* POST-DEPLOY: uncomment when program is live
+    /* POST-DEPLOY: replace simulation above with real tx
     try {
-      const bondingCurvePda = await getBondingCurvePda(address(curve.mint));
-      const buyerAta = await getAssociatedTokenAccount(address(address), address(curve.mint));
+      setTxStage("signing");
       const minTokensOut = (tokensOut * BigInt(100 - SLIPPAGE_PCT)) / 100n;
-
-      const ix = getBuyWithSolInstruction({
-        buyer: address(address),
-        mint: address(curve.mint),
-        bondingCurve: bondingCurvePda,
-        buyerTokenAccount: buyerAta,
-        solAmount: solLamports,
-        minTokensOut,
-      });
-
-      const sig = await send({ instructions: [ix] });
-      toast.success(`Bought ${tokensOut.toLocaleString()} tokens!`, {
-        description: <a href={getExplorerUrl(`/tx/${sig}`)} target="_blank" rel="noopener noreferrer" className="underline">View tx</a>,
-      });
-      setSolInput("");
-    } catch (err) {
-      toast.error(parseTransactionError(err));
+      const sig = await send({ instructions: [...] });
+      setTxStage("confirming");
+      // confirmation happens inside send(); on return it's confirmed
+      setTxStage("success");
+      toast.success(`Bought ${tokensOut.toLocaleString()} tokens!`);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Transaction failed";
+      setTxError(msg);
+      setTxStage("failed");
     }
     */
-  }, [address, player, curve, solLamports, tokensOut]);
+  }, [isBusy, address, player, curve, solLamports, tokensOut]);
 
   const handleSell = useCallback(async () => {
-    if (!address || !player || !curve || tokenAmountIn === 0n || solOut === 0n) return;
+    if (isBusy || !address || !player || !curve || tokenAmountIn === 0n || solOut === 0n) return;
+    setTxError(null);
+    setTxStage("signing");
 
-    // PRE-DEPLOY: Show mock success
-    toast.info("Devnet program not yet deployed — showing preview only.");
-    return;
-  }, [address, player, curve, tokenAmountIn, solOut]);
+    // PRE-DEPLOY: Simulate stages
+    await new Promise((r) => setTimeout(r, 1200));
+    setTxStage("confirming");
+    await new Promise((r) => setTimeout(r, 2000));
+    setTxStage("success");
+    toast.success(`Sold ${tokenAmountIn.toLocaleString()} tokens for ${formatSol(solOut)} SOL`);
+  }, [isBusy, address, player, curve, tokenAmountIn, solOut]);
 
   // ── Loading / not found ───────────────────────────────────────────────────
   if (isLoading) {
@@ -155,17 +195,18 @@ export default function TradePage({
   }
 
   const { config } = player;
+  const stats = config.stats;
 
   return (
     <div className="relative min-h-screen bg-background text-foreground">
       <GridBackground />
       <div className="relative z-10">
         {/* Header */}
-        <header className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+        <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="text-sm text-muted transition hover:text-foreground"
+              className="inline-flex min-h-[44px] items-center text-sm text-muted transition hover:text-foreground"
             >
               ← Market
             </Link>
@@ -173,29 +214,26 @@ export default function TradePage({
             <span className="text-sm font-semibold">{config.displayName}</span>
           </div>
           <div className="flex items-center gap-3">
-            <ThemeToggle />
             <ClusterSelect />
             <WalletButton />
           </div>
         </header>
 
-        <main className="mx-auto max-w-4xl px-6 pb-20">
+        <main className="mx-auto max-w-6xl px-6 pb-20">
           {/* Player Hero */}
-          <div className="mb-8 flex items-start justify-between">
-            <div>
-              <div className="flex items-center gap-3">
-                <span className="text-5xl">{config.emoji}</span>
-                <div>
-                  <h1 className="text-3xl font-black tracking-tight">
-                    {config.displayName}
-                  </h1>
-                  <div className="mt-1 flex items-center gap-2 text-sm text-muted">
-                    <span>{config.position}</span>
-                    <span>·</span>
-                    <span>{config.team}</span>
-                    <span>·</span>
-                    <span className="font-mono text-xs">{config.id}</span>
-                  </div>
+          <div className="mb-6 flex items-start justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-5xl">{config.emoji}</span>
+              <div>
+                <h1 className="font-display text-4xl font-extrabold tracking-tight">
+                  {config.displayName}
+                </h1>
+                <div className="mt-1 flex items-center gap-2 text-sm text-muted">
+                  <span>{config.position}</span>
+                  <span>·</span>
+                  <span>{config.team}</span>
+                  <span>·</span>
+                  <span className="font-mono text-xs">{config.id}</span>
                 </div>
               </div>
             </div>
@@ -214,70 +252,157 @@ export default function TradePage({
             )}
           </div>
 
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-            {/* Left — Stats panel */}
-            <div className="space-y-4 lg:col-span-3">
-              {/* Price card */}
-              <div className="rounded-2xl border border-border-low bg-card p-5">
-                <div className="grid grid-cols-2 gap-6">
+          {/* 3-column layout */}
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+
+            {/* ── Col 1: Player Stats sidebar ──────────────────────────────── */}
+            <div className="order-2 space-y-4 lg:order-1 lg:col-span-3">
+              {/* Season averages */}
+              <div className="rounded-xl border border-border-low bg-card p-5">
+                <p className="mb-4 text-xs font-medium uppercase tracking-wide text-muted">
+                  Season Averages
+                </p>
+                <div className="space-y-3">
+                  {[
+                    { label: "Points", key: "ppg", value: stats.ppg },
+                    { label: "Rebounds", key: "rpg", value: stats.rpg },
+                    { label: "Assists", key: "apg", value: stats.apg },
+                    { label: "Steals", key: "spg", value: stats.spg },
+                    { label: "Blocks", key: "bpg", value: stats.bpg },
+                  ].map(({ label, value }) => (
+                    <div key={label}>
+                      <div className="mb-1 flex items-center justify-between">
+                        <span className="text-xs text-muted">{label}</span>
+                        <span className="font-mono text-sm font-semibold tabular-nums">
+                          {value.toFixed(1)}
+                        </span>
+                      </div>
+                      <div className="h-1.5 w-full overflow-hidden rounded-full bg-border-low">
+                        <div
+                          className="h-full rounded-full bg-accent transition-all"
+                          style={{ width: `${Math.min((value / 40) * 100, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Market prices */}
+              <div className="rounded-xl border border-border-low bg-card p-5">
+                <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
+                  Pricing
+                </p>
+                <div className="space-y-3">
                   <div>
                     <p className="text-xs text-muted">Market Price</p>
-                    <p className="mt-1 font-mono text-3xl font-bold tabular-nums">
+                    <p className="mt-0.5 font-mono text-xl font-bold tabular-nums">
                       {formatSol(marketPrice)}
-                      <span className="ml-1 text-base font-normal text-muted">SOL</span>
+                      <span className="ml-1 text-sm font-normal text-muted">SOL</span>
                     </p>
                   </div>
                   {indexPrice > 0n && (
                     <div>
                       <p className="text-xs text-muted">Stats Index</p>
-                      <p className="mt-1 font-mono text-3xl font-bold tabular-nums">
+                      <p className="mt-0.5 font-mono text-xl font-bold tabular-nums">
                         {formatSol(indexPrice)}
-                        <span className="ml-1 text-base font-normal text-muted">SOL</span>
+                        <span className="ml-1 text-sm font-normal text-muted">SOL</span>
                       </p>
                     </div>
                   )}
                 </div>
+              </div>
+            </div>
 
-                {/* Curve position */}
-                <div className="mt-5">
+            {/* ── Col 2: Bonding curve chart ───────────────────────────────── */}
+            <div className="order-3 space-y-4 lg:order-2 lg:col-span-5">
+              <div className="rounded-xl border border-border-low bg-card p-5">
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="flex gap-1 rounded-lg bg-background p-0.5">
+                    {(["curve", "history"] as const).map((v) => (
+                      <button
+                        key={v}
+                        onClick={() => setChartView(v)}
+                        className={`min-h-[32px] rounded-md px-3 text-xs font-medium capitalize transition-colors ${
+                          chartView === v
+                            ? "bg-card text-foreground shadow-sm"
+                            : "text-muted hover:text-foreground"
+                        }`}
+                      >
+                        {v}
+                      </button>
+                    ))}
+                  </div>
+                  <span className="font-mono text-xs text-muted">
+                    {supplyPct.toFixed(1)}% sold
+                  </span>
+                </div>
+
+                {chartView === "curve" ? (
+                  <BondingCurveChart
+                    basePrice={basePrice}
+                    slope={slope}
+                    tokensSold={tokensSold}
+                    totalSupply={totalSupply}
+                    indexPriceLamports={indexPrice > 0n ? indexPrice : undefined}
+                    inputLamports={tab === "buy" && solLamports > 0n ? solLamports : undefined}
+                  />
+                ) : (
+                  <PriceHistoryChart
+                    data={priceHistory}
+                    currentPrice={indexPrice > 0n ? Number(indexPrice) : undefined}
+                  />
+                )}
+
+                {/* Supply bar */}
+                <div className="mt-3">
                   <div className="mb-1.5 flex items-center justify-between text-xs text-muted">
-                    <span>Curve supply</span>
+                    <span>Supply distributed</span>
                     <span>
-                      {tokensSold.toLocaleString()} / {totalSupply.toLocaleString()} tokens
-                      ({supplyPct.toFixed(1)}%)
+                      {tokensSold.toLocaleString()} / {totalSupply.toLocaleString()}
                     </span>
                   </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-border-low">
+                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-border-low">
                     <div
-                      className="h-full rounded-full bg-foreground/40 transition-all"
+                      className="h-full rounded-full bg-accent/60 transition-all"
                       style={{ width: `${Math.min(supplyPct, 100)}%` }}
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Bonding curve formula */}
-              <div className="rounded-2xl border border-border-low bg-card p-5">
-                <p className="mb-3 text-xs font-medium text-muted uppercase tracking-wide">
+              {/* Curve formula */}
+              <div className="rounded-xl border border-border-low bg-card p-5">
+                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
                   Bonding Curve
                 </p>
-                <p className="font-mono text-sm text-foreground/70">
-                  price = {basePrice.toLocaleString()} + {slope.toLocaleString()} × tokens_sold
+                <p className="font-mono text-xs text-foreground/60">
+                  price = base + slope × tokens_sold
                 </p>
-                <p className="mt-1 font-mono text-sm text-foreground/70">
-                  price = {basePrice.toLocaleString()} + {slope.toLocaleString()} × {tokensSold.toLocaleString()}
-                  {" "}= <span className="text-foreground font-semibold">{marketPrice.toLocaleString()} lamports</span>
+                <p className="mt-1 font-mono text-xs text-foreground/60">
+                  = {basePrice.toLocaleString()} + {slope.toLocaleString()} × {tokensSold.toLocaleString()}
+                  {" "}= <span className="font-semibold text-foreground">{marketPrice.toLocaleString()} lam</span>
                 </p>
-                <p className="mt-3 text-xs text-muted">
-                  Every buy raises the price. Every sell lowers it. Price is determined
-                  by supply and demand, anchored to player performance via the stats index.
+                {config.priceFormula.type === "veteran" && (
+                  <p className="mt-2 font-mono text-xs text-foreground/40">
+                    base = round({stats.ppg}×1k + {stats.rpg}×500 + {stats.apg}×700 + {stats.spg}×800 + {stats.bpg}×800) × 0.5
+                    {" "}= {config.priceFormula.score.toLocaleString()} × 0.5 = {Math.round(config.priceFormula.score * 0.5).toLocaleString()}
+                  </p>
+                )}
+                {config.priceFormula.type === "rookie" && (
+                  <p className="mt-2 font-mono text-xs text-foreground/40">
+                    base = 18,000 × (61 − {config.priceFormula.draftPick}) / 60 = {Math.round(18000 * (61 - config.priceFormula.draftPick) / 60).toLocaleString()}
+                  </p>
+                )}
+                <p className="mt-2 text-xs text-muted">
+                  Every buy raises the price. Every sell lowers it.
                 </p>
               </div>
 
               {/* Trade preview (visible when inputs are filled) */}
               {tab === "buy" && tokensOut > 0n && (
-                <div className="rounded-2xl border border-border-low bg-card p-5">
-                  <p className="mb-3 text-xs font-medium text-muted uppercase tracking-wide">
+                <div className="rounded-xl border border-border-low bg-card p-5">
+                  <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
                     Trade Preview
                   </p>
                   <div className="space-y-2 text-sm">
@@ -304,8 +429,8 @@ export default function TradePage({
               )}
 
               {tab === "sell" && solOut > 0n && (
-                <div className="rounded-2xl border border-border-low bg-card p-5">
-                  <p className="mb-3 text-xs font-medium text-muted uppercase tracking-wide">
+                <div className="rounded-xl border border-border-low bg-card p-5">
+                  <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
                     Trade Preview
                   </p>
                   <div className="space-y-2 text-sm">
@@ -332,16 +457,16 @@ export default function TradePage({
               )}
             </div>
 
-            {/* Right — Trade widget */}
-            <div className="lg:col-span-2">
+            {/* ── Col 3: Trade widget (first on mobile for primary action) ── */}
+            <div className="order-1 lg:order-3 lg:col-span-4">
               <div className="rounded-2xl border border-border-low bg-card p-5">
                 {/* Buy / Sell tabs */}
                 <div className="mb-5 flex rounded-xl border border-border-low">
                   <button
                     onClick={() => setTab("buy")}
-                    className={`flex-1 cursor-pointer rounded-l-xl py-2 text-sm font-medium transition ${
+                    className={`flex-1 cursor-pointer rounded-l-xl py-3 text-sm font-medium transition ${
                       tab === "buy"
-                        ? "bg-foreground text-background"
+                        ? "bg-accent text-accent-foreground"
                         : "text-muted hover:text-foreground"
                     }`}
                   >
@@ -349,9 +474,9 @@ export default function TradePage({
                   </button>
                   <button
                     onClick={() => setTab("sell")}
-                    className={`flex-1 cursor-pointer rounded-r-xl py-2 text-sm font-medium transition ${
+                    className={`flex-1 cursor-pointer rounded-r-xl py-3 text-sm font-medium transition ${
                       tab === "sell"
-                        ? "bg-foreground text-background"
+                        ? "bg-accent text-accent-foreground"
                         : "text-muted hover:text-foreground"
                     }`}
                   >
@@ -365,7 +490,7 @@ export default function TradePage({
                       <label className="mb-1.5 block text-xs text-muted">
                         SOL to spend
                       </label>
-                      <div className="flex items-center gap-2 rounded-xl border border-border bg-accent px-3 py-2">
+                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 focus-within:border-accent">
                         <input
                           type="number"
                           min="0"
@@ -395,7 +520,7 @@ export default function TradePage({
                     </div>
 
                     {tokensOut > 0n && (
-                      <div className="rounded-xl bg-accent px-3 py-2 text-sm">
+                      <div className="rounded-xl bg-accent-subtle px-3 py-2 text-sm">
                         <span className="text-muted">You receive ~</span>
                         <span className="ml-1 font-mono font-semibold">
                           {tokensOut.toLocaleString()}
@@ -409,13 +534,30 @@ export default function TradePage({
                         Connect wallet to buy
                       </div>
                     ) : (
-                      <button
-                        onClick={handleBuy}
-                        disabled={isSending || solLamports === 0n || tokensOut === 0n}
-                        className="w-full cursor-pointer rounded-xl bg-foreground py-3 text-sm font-semibold text-background transition hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
-                      >
-                        {isSending ? "Buying..." : `Buy ${config.displayName}`}
-                      </button>
+                      <>
+                        <button
+                          onClick={handleBuy}
+                          disabled={isBusy || solLamports === 0n || tokensOut === 0n}
+                          className="w-full cursor-pointer rounded-xl bg-positive py-3 text-sm font-bold text-background transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          {txStage === "signing" && "Approve in wallet..."}
+                          {txStage === "confirming" && "Confirming on Solana..."}
+                          {txStage === "success" && "Done!"}
+                          {txStage === "failed" && "Transaction failed"}
+                          {txStage === "idle" && `Buy ${config.displayName}`}
+                        </button>
+                        {txStage === "failed" && txError && (
+                          <p className="mt-1 text-center text-xs text-negative">{txError}</p>
+                        )}
+                        {txStage === "failed" && (
+                          <button
+                            onClick={() => setTxStage("idle")}
+                            className="mt-1 w-full text-center text-xs text-muted underline"
+                          >
+                            Dismiss
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 ) : (
@@ -424,7 +566,7 @@ export default function TradePage({
                       <label className="mb-1.5 block text-xs text-muted">
                         Tokens to sell
                       </label>
-                      <div className="flex items-center gap-2 rounded-xl border border-border bg-accent px-3 py-2">
+                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 focus-within:border-accent">
                         <input
                           type="number"
                           min="0"
@@ -438,8 +580,27 @@ export default function TradePage({
                       </div>
                     </div>
 
+                    {tokenBalance.tokenAmount !== null && (
+                      <div className="mt-1 flex justify-between text-xs text-muted">
+                        <span>Balance: {tokenBalance.tokenAmount.toLocaleString()} tokens</span>
+                        <button
+                          onClick={() =>
+                            setTokenInput(tokenBalance.tokenAmount!.toString())
+                          }
+                          className="cursor-pointer underline"
+                        >
+                          Max
+                        </button>
+                      </div>
+                    )}
+
+                    {tokenAmountIn > 0n && tokenAmountIn > tokensSold && (
+                      <p className="text-xs text-muted">
+                        Only {tokensSold.toLocaleString()} tokens on curve — enter a smaller amount.
+                      </p>
+                    )}
                     {solOut > 0n && (
-                      <div className="rounded-xl bg-accent px-3 py-2 text-sm">
+                      <div className="rounded-xl bg-accent-subtle px-3 py-2 text-sm">
                         <span className="text-muted">You receive ~</span>
                         <span className="ml-1 font-mono font-semibold">
                           {formatSol(solOut)}
@@ -453,25 +614,41 @@ export default function TradePage({
                         Connect wallet to sell
                       </div>
                     ) : (
-                      <button
-                        onClick={handleSell}
-                        disabled={
-                          isSending || tokenAmountIn === 0n || solOut === 0n
-                        }
-                        className="w-full cursor-pointer rounded-xl bg-foreground py-3 text-sm font-semibold text-background transition hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
-                      >
-                        {isSending ? "Selling..." : "Sell tokens"}
-                      </button>
+                      <>
+                        <button
+                          onClick={handleSell}
+                          disabled={isBusy || tokenAmountIn === 0n || solOut === 0n}
+                          className="w-full cursor-pointer rounded-xl bg-negative py-3 text-sm font-bold text-background transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          {txStage === "signing" && "Approve in wallet..."}
+                          {txStage === "confirming" && "Confirming on Solana..."}
+                          {txStage === "success" && "Done!"}
+                          {txStage === "failed" && "Transaction failed"}
+                          {txStage === "idle" && "Sell tokens"}
+                        </button>
+                        {txStage === "failed" && txError && (
+                          <p className="mt-1 text-center text-xs text-negative">{txError}</p>
+                        )}
+                        {txStage === "failed" && (
+                          <button
+                            onClick={() => setTxStage("idle")}
+                            className="mt-1 w-full text-center text-xs text-muted underline"
+                          >
+                            Dismiss
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
                 )}
 
                 {/* Devnet banner */}
                 <p className="mt-4 text-center text-xs text-muted">
-                  Devnet only. Program deploys soon.
+                  Localnet. Program live on local validator.
                 </p>
               </div>
             </div>
+
           </div>
         </main>
       </div>

@@ -10,31 +10,57 @@ export const CLUSTERS: ClusterMoniker[] = [
   "localnet",
 ];
 
-const CLUSTER_URLS: Record<ClusterMoniker, string> = {
-  devnet: "https://api.devnet.solana.com",
-  testnet: "https://api.testnet.solana.com",
-  mainnet: "https://api.mainnet-beta.solana.com",
-  localnet: "http://localhost:8899",
-};
+// When NEXT_PUBLIC_HELIUS_API_KEY is set, devnet/mainnet use Helius RPC for
+// reliability (public endpoints are rate-limited and often congested).
+function buildClusterUrls(): Record<ClusterMoniker, string> {
+  const heliusKey =
+    typeof process !== "undefined"
+      ? process.env.NEXT_PUBLIC_HELIUS_API_KEY
+      : undefined;
+  return {
+    devnet: heliusKey
+      ? `https://devnet.helius-rpc.com/?api-key=${heliusKey}`
+      : "https://api.devnet.solana.com",
+    testnet: "https://api.testnet.solana.com",
+    mainnet: heliusKey
+      ? `https://mainnet.helius-rpc.com/?api-key=${heliusKey}`
+      : "https://api.mainnet-beta.solana.com",
+    localnet: "http://localhost:8899",
+  };
+}
 
-const WS_URLS: Record<ClusterMoniker, string> = {
-  devnet: "wss://api.devnet.solana.com",
-  testnet: "wss://api.testnet.solana.com",
-  mainnet: "wss://api.mainnet-beta.solana.com",
-  localnet: "ws://localhost:8900",
-};
+function buildWsUrls(): Record<ClusterMoniker, string> {
+  const heliusKey =
+    typeof process !== "undefined"
+      ? process.env.NEXT_PUBLIC_HELIUS_API_KEY
+      : undefined;
+  return {
+    devnet: heliusKey
+      ? `wss://devnet.helius-rpc.com/?api-key=${heliusKey}`
+      : "wss://api.devnet.solana.com",
+    testnet: "wss://api.testnet.solana.com",
+    mainnet: heliusKey
+      ? `wss://mainnet.helius-rpc.com/?api-key=${heliusKey}`
+      : "wss://api.mainnet-beta.solana.com",
+    localnet: "ws://localhost:8900",
+  };
+}
 
 export function getClusterUrl(cluster: ClusterMoniker) {
-  return CLUSTER_URLS[cluster];
+  return buildClusterUrls()[cluster];
 }
 
 export function getClusterWsConfig(cluster: ClusterMoniker) {
-  return cluster === "localnet" ? { url: WS_URLS[cluster] } : undefined;
+  return cluster === "localnet"
+    ? { url: buildWsUrls()[cluster] }
+    : undefined;
 }
 
 export function createSolanaClient(cluster: ClusterMoniker) {
-  const url = CLUSTER_URLS[cluster];
-  const wsUrl = WS_URLS[cluster];
+  const urls = buildClusterUrls();
+  const wsUrls = buildWsUrls();
+  const url = urls[cluster];
+  const wsUrl = wsUrls[cluster];
   return createEmptyClient()
     .use(rpc(url, { url: wsUrl }))
     .use(rpcAirdrop());

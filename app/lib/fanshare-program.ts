@@ -10,40 +10,93 @@ export const PROGRAM_ID = "B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz" as cons
 export const BONDING_CURVE_SEED = "bonding-curve";
 export const STATS_ORACLE_SEED = "stats-oracle";
 
-// Default bonding curve parameters (from design doc TODOS.md)
-export const DEFAULT_BASE_PRICE = 1000n; // 0.000001 SOL
-export const DEFAULT_SLOPE = 10n; // 10 lamports per token sold
+// Default bonding curve parameters — floor fallback for incomplete stats
+export const DEFAULT_BASE_PRICE = 10_000n; // floor for players with missing stats
+export const DEFAULT_SLOPE = 8n;
 export const DEFAULT_TOTAL_SUPPLY = 1_000_000n;
 
 // Devnet player roster — abstract IDs per design doc (no real names until legal review)
 // 15-player roster locked by CEO review 2026-03-31
+// Pricing: stats-anchored at init (CEO review 2026-04-06). base_price is set once, never mutated.
+export interface PlayerStats {
+  ppg: number; // points per game
+  rpg: number; // rebounds per game
+  apg: number; // assists per game
+  spg: number; // steals per game
+  bpg: number; // blocks per game
+}
+
+/** How base_price was derived — shown on trade page formula section. */
+export type PriceFormula =
+  | { type: "veteran"; score: number }
+  | { type: "rookie"; draftPick: number }
+  | { type: "floor" }; // incomplete stats
+
 export interface PlayerConfig {
   id: string;
   displayName: string;
   emoji: string; // visual identifier for devnet
   position: "PG" | "SG" | "SF" | "PF" | "C";
   team: string; // abbreviated team for display
+  stats: PlayerStats; // season averages (mirrors oracle mock data)
+  priceFormula: PriceFormula;
+}
+
+/** Weighted stat score used to anchor base_price. Mirrors oracle.ts STAT_WEIGHTS. */
+export function oracleScore(stats: PlayerStats): number {
+  const score =
+    stats.ppg * 1000 +
+    stats.rpg * 500 +
+    stats.apg * 700 +
+    stats.spg * 800 +
+    stats.bpg * 800;
+  if (!isFinite(score))
+    throw new TypeError(`oracleScore: invalid stats (NaN/Infinity) — check API response`);
+  return score;
+}
+
+/** Tier parameters derived from oracle score. */
+export function tierParams(score: number): { slope: bigint; totalSupply: bigint } {
+  if (score >= 40_000) return { slope: 50n, totalSupply: 500_000n };
+  if (score >= 25_000) return { slope: 20n, totalSupply: 750_000n };
+  return { slope: 8n, totalSupply: 1_000_000n };
+}
+
+/** base_price in lamports from veteran stats formula: round(score × 0.5). */
+export function veteranBasePrice(stats: PlayerStats): bigint {
+  const score = oracleScore(stats); // throws if stats contain NaN/Infinity
+  return BigInt(Math.round(score * 0.5));
+}
+
+/** base_price in lamports from draft pick (rookies with no stats). Max 18,000L. */
+export function rookieBasePrice(draftPick: number): bigint {
+  if (draftPick < 1 || draftPick > 60)
+    throw new RangeError(`Draft pick must be 1–60, got ${draftPick}`);
+  return BigInt(Math.round(18_000 * (61 - draftPick) / 60));
+}
+
+function vf(stats: PlayerStats): PriceFormula {
+  return { type: "veteran", score: oracleScore(stats) };
 }
 
 export const DEVNET_PLAYERS: PlayerConfig[] = [
-  // Top tier stars
-  { id: "Player_LBJ", displayName: "The King",       emoji: "👑", position: "SF", team: "LAL" },
-  { id: "Player_SC",  displayName: "The Chef",        emoji: "🍛", position: "PG", team: "GSW" },
-  { id: "Player_LD",  displayName: "The Maverick",    emoji: "⚡", position: "PG", team: "DAL" },
-  { id: "Player_NJ",  displayName: "The Joker",       emoji: "🃏", position: "C",  team: "DEN" },
-  { id: "Player_JT",  displayName: "The Jaybird",     emoji: "🦅", position: "SF", team: "BOS" },
-  // Second tier
-  { id: "Player_SGA", displayName: "The Shai",        emoji: "🌩", position: "PG", team: "OKC" },
-  { id: "Player_GA",  displayName: "The Greek Freak", emoji: "🦌", position: "PF", team: "MIL" },
-  { id: "Player_JE",  displayName: "The Process",     emoji: "🔨", position: "C",  team: "PHI" },
-  { id: "Player_KD",  displayName: "The Slim Reaper", emoji: "🪄", position: "SF", team: "PHX" },
-  { id: "Player_JB",  displayName: "The Jet",         emoji: "✈️", position: "SG", team: "BOS" },
-  // Rising stars
-  { id: "Player_DB",  displayName: "The Book",        emoji: "📖", position: "SG", team: "PHX" },
-  { id: "Player_AD",  displayName: "The Brow",        emoji: "🦾", position: "PF", team: "LAL" },
-  { id: "Player_VW",  displayName: "The Alien",       emoji: "👽", position: "C",  team: "SAS" },
-  { id: "Player_CC",  displayName: "The Cade",        emoji: "🎯", position: "PG", team: "DET" },
-  { id: "Player_TH",  displayName: "The Hali",        emoji: "💧", position: "PG", team: "IND" },
+  // Stars tier (oracle_score ≥ 40,000) — slope=50, supply=500k
+  { id: "Player_LD",  displayName: "The Maverick",    emoji: "⚡",  position: "PG", team: "DAL", stats: { ppg: 33.9, rpg: 9.2,  apg: 9.8,  spg: 1.4, bpg: 0.5 }, priceFormula: vf({ ppg: 33.9, rpg: 9.2,  apg: 9.8,  spg: 1.4, bpg: 0.5 }) },
+  { id: "Player_JE",  displayName: "The Process",     emoji: "🔨",  position: "C",  team: "PHI", stats: { ppg: 34.7, rpg: 11.0, apg: 5.6,  spg: 1.2, bpg: 1.7 }, priceFormula: vf({ ppg: 34.7, rpg: 11.0, apg: 5.6,  spg: 1.2, bpg: 1.7 }) },
+  { id: "Player_GA",  displayName: "The Greek Freak", emoji: "🦌",  position: "PF", team: "MIL", stats: { ppg: 30.4, rpg: 11.5, apg: 6.5,  spg: 1.2, bpg: 1.1 }, priceFormula: vf({ ppg: 30.4, rpg: 11.5, apg: 6.5,  spg: 1.2, bpg: 1.1 }) },
+  { id: "Player_NJ",  displayName: "The Joker",       emoji: "🃏",  position: "C",  team: "DEN", stats: { ppg: 26.4, rpg: 12.4, apg: 9.0,  spg: 1.4, bpg: 0.9 }, priceFormula: vf({ ppg: 26.4, rpg: 12.4, apg: 9.0,  spg: 1.4, bpg: 0.9 }) },
+  // Second tier (oracle_score 25,000–39,999) — slope=20, supply=750k
+  { id: "Player_SGA", displayName: "The Shai",        emoji: "🌩",  position: "PG", team: "OKC", stats: { ppg: 30.1, rpg: 5.5,  apg: 6.2,  spg: 2.0, bpg: 0.7 }, priceFormula: vf({ ppg: 30.1, rpg: 5.5,  apg: 6.2,  spg: 2.0, bpg: 0.7 }) },
+  { id: "Player_LBJ", displayName: "The King",        emoji: "👑",  position: "SF", team: "LAL", stats: { ppg: 25.7, rpg: 7.3,  apg: 8.3,  spg: 1.3, bpg: 0.5 }, priceFormula: vf({ ppg: 25.7, rpg: 7.3,  apg: 8.3,  spg: 1.3, bpg: 0.5 }) },
+  { id: "Player_AD",  displayName: "The Brow",        emoji: "🦾",  position: "PF", team: "LAL", stats: { ppg: 24.7, rpg: 12.6, apg: 3.5,  spg: 1.2, bpg: 2.3 }, priceFormula: vf({ ppg: 24.7, rpg: 12.6, apg: 3.5,  spg: 1.2, bpg: 2.3 }) },
+  { id: "Player_KD",  displayName: "The Slim Reaper", emoji: "🪄",  position: "SF", team: "PHX", stats: { ppg: 27.1, rpg: 6.6,  apg: 5.0,  spg: 0.9, bpg: 1.4 }, priceFormula: vf({ ppg: 27.1, rpg: 6.6,  apg: 5.0,  spg: 0.9, bpg: 1.4 }) },
+  { id: "Player_JT",  displayName: "The Jaybird",     emoji: "🦅",  position: "SF", team: "BOS", stats: { ppg: 26.9, rpg: 8.1,  apg: 4.9,  spg: 1.0, bpg: 0.6 }, priceFormula: vf({ ppg: 26.9, rpg: 8.1,  apg: 4.9,  spg: 1.0, bpg: 0.6 }) },
+  { id: "Player_DB",  displayName: "The Book",        emoji: "📖",  position: "SG", team: "PHX", stats: { ppg: 27.1, rpg: 4.5,  apg: 6.9,  spg: 0.9, bpg: 0.3 }, priceFormula: vf({ ppg: 27.1, rpg: 4.5,  apg: 6.9,  spg: 0.9, bpg: 0.3 }) },
+  { id: "Player_SC",  displayName: "The Chef",        emoji: "🍛",  position: "PG", team: "GSW", stats: { ppg: 26.4, rpg: 4.5,  apg: 6.1,  spg: 0.7, bpg: 0.4 }, priceFormula: vf({ ppg: 26.4, rpg: 4.5,  apg: 6.1,  spg: 0.7, bpg: 0.4 }) },
+  { id: "Player_TH",  displayName: "The Hali",        emoji: "💧",  position: "PG", team: "IND", stats: { ppg: 20.7, rpg: 3.7,  apg: 10.9, spg: 1.2, bpg: 0.7 }, priceFormula: vf({ ppg: 20.7, rpg: 3.7,  apg: 10.9, spg: 1.2, bpg: 0.7 }) },
+  { id: "Player_CC",  displayName: "The Cade",        emoji: "🎯",  position: "PG", team: "DET", stats: { ppg: 22.7, rpg: 4.3,  apg: 7.5,  spg: 0.9, bpg: 0.3 }, priceFormula: vf({ ppg: 22.7, rpg: 4.3,  apg: 7.5,  spg: 0.9, bpg: 0.3 }) },
+  { id: "Player_VW",  displayName: "The Alien",       emoji: "👽",  position: "C",  team: "SAS", stats: { ppg: 21.4, rpg: 10.6, apg: 3.9,  spg: 1.2, bpg: 3.6 }, priceFormula: vf({ ppg: 21.4, rpg: 10.6, apg: 3.9,  spg: 1.2, bpg: 3.6 }) },
+  { id: "Player_JB",  displayName: "The Jet",         emoji: "✈️",  position: "SG", team: "BOS", stats: { ppg: 23.0, rpg: 5.5,  apg: 3.6,  spg: 1.2, bpg: 0.5 }, priceFormula: vf({ ppg: 23.0, rpg: 5.5,  apg: 3.6,  spg: 1.2, bpg: 0.5 }) },
 ];
 
 // On-chain account types (deserialized from BondingCurveAccount)

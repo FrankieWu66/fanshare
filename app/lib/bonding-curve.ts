@@ -34,6 +34,10 @@ export function calculateSellReturn(
   tokensSold: bigint,
   amount: bigint
 ): bigint {
+  if (amount > tokensSold)
+    throw new RangeError(
+      `Cannot sell ${amount} tokens — only ${tokensSold} on curve`
+    );
   const newSold = tokensSold - amount;
   return calculateBuyCost(basePrice, slope, newSold, amount);
 }

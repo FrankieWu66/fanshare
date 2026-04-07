@@ -11,7 +11,6 @@ import { useSolanaClient } from "./lib/solana-client-context";
 import { ellipsify } from "./lib/explorer";
 import { PlayerCard } from "./components/player-card";
 import { GridBackground } from "./components/grid-background";
-import { ThemeToggle } from "./components/theme-toggle";
 import { ClusterSelect } from "./components/cluster-select";
 import { WalletButton } from "./components/wallet-button";
 import { useCluster } from "./components/cluster-context";
@@ -92,12 +91,11 @@ export default function Home() {
         <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <span className="text-sm font-bold tracking-tight">
             FanShare
-            <span className="ml-1 rounded bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-medium text-emerald-500">
-              devnet
+            <span className="ml-1 rounded bg-accent-subtle px-1.5 py-0.5 text-[10px] font-medium text-accent">
+              {cluster}
             </span>
           </span>
           <div className="flex items-center gap-3">
-            <ThemeToggle />
             <ClusterSelect />
             <WalletButton />
           </div>
@@ -107,7 +105,7 @@ export default function Home() {
           {/* Hero */}
           <section className="pt-6 pb-12 md:pt-8 md:pb-16">
             <div className="flex flex-col gap-4">
-              <h1 className="font-black tracking-tight text-foreground">
+              <h1 className="font-display font-extrabold tracking-tight text-foreground">
                 <span className="block text-5xl md:text-6xl">
                   Stock Market
                 </span>
@@ -193,7 +191,7 @@ export default function Home() {
                 onClick={() => setFilter("undervalued")}
                 className={`cursor-pointer px-3 py-1 text-xs font-medium transition ${
                   filter === "undervalued"
-                    ? "bg-emerald-500 text-white"
+                    ? "bg-accent text-accent-foreground"
                     : "text-muted hover:text-foreground"
                 } rounded-r-lg`}
               >
