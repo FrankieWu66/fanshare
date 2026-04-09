@@ -113,7 +113,7 @@ export default function Home() {
                   for Human Performance
                 </span>
               </h1>
-              <p className="max-w-xl text-base leading-relaxed text-foreground/50">
+              <p className="max-w-xl text-base leading-relaxed text-muted">
                 Trade tokens pegged to NBA player performance. Price moves with
                 supply and demand. Stats index shows what each player is actually
                 worth.
