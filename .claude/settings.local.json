@@ -63,7 +63,10 @@
       "Bash(npm install:*)",
       "Bash(ls /Users/frankiewu/dev/fanshare-1/app/trade/[playerId]/)",
       "mcp__Claude_Preview__preview_start",
-      "Bash(ls -la /Users/frankiewu/dev/fanshare-1/.env*)"
+      "Bash(ls -la /Users/frankiewu/dev/fanshare-1/.env*)",
+      "Bash(ls /Users/frankiewu/dev/fanshare-1/*.md)",
+      "Bash(ls /Users/frankiewu/dev/fanshare-1/app/*.md)",
+      "Bash(git -C /Users/frankiewu/dev/fanshare-claude status)"
     ]
   }
 }

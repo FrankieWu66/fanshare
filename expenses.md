@@ -1,6 +1,6 @@
 # FanShare — Project Expenses
 
-Last updated: 2026-04-03
+Last updated: 2026-04-07
 
 | Service | Cost | Billing | Start Date | Purpose | Notes |
 |---------|------|---------|------------|---------|-------|
@@ -8,8 +8,10 @@ Last updated: 2026-04-03
 | Claude (Anthropic) | $20 | One-time | 2026-04-03 | Extra usage overage | Additional usage charge during intensive build sessions. |
 | Vercel Pro | $20/mo | Monthly | 2026-04-03 | Frontend hosting + oracle cron | Upgraded from Hobby — required for team CLI deploys. Now active. |
 | Helius RPC (free tier) | $0/mo | — | Day 0 | Solana devnet RPC for frontend + oracle | Free: 100k requests/day. Upgrade to Pro (~$49/mo) when free tier is exhausted (likely post-mainnet). |
+| Helius RPC (paid) | $25 first month, then $49/mo | Monthly | 2026-04-07 | Devnet faucet access + reliable RPC | Upgraded to unblock devnet deploy after weeks of faucet outage. Renews at $49/mo from 2026-05-07. |
+| Manus AI | $40/mo | Monthly | 2026-04-07 | AI assistant | Active. |
 
-**Active monthly: $40/month**
+**Active monthly: $129/month** (increases to $149/month from 2026-05-07)
 **One-time charges to date: $20**
 
 ---
