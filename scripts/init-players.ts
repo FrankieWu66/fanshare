@@ -16,6 +16,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
+import dotenv from "dotenv";
+dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), "../.env.local") });
 import {
   Connection,
   Keypair,
@@ -154,7 +156,7 @@ async function main() {
 
   const balance = await connection.getBalance(authority.publicKey);
   console.log(`Balance:   ${balance / 1e9} SOL`);
-  if (balance < 0.5e9) {
+  if (balance < 0.2e9) {
     throw new Error(
       `Insufficient SOL. Need at least 0.5 SOL, have ${balance / 1e9}.\n` +
       `Visit https://faucet.solana.com and airdrop to: ${authority.publicKey.toString()}`

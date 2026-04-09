@@ -40,9 +40,12 @@ Key routing rules:
 - Health check: https://fanshare-1.vercel.app (HTTP 200)
 
 ## Scripts
-- `npm run init-players` — initializes all 15 player bonding curves on localnet with stats-anchored params. Requires `app/lib/player-mints.json` output.
+- `npm run init-players` — initializes all 15 player bonding curves on devnet. Loads env from `.env.local`. Saves mint addresses to `app/lib/player-mints.json`. Resume-safe (skips already-initialized players by checking the json file).
 - `npm run oracle` — fetches live NBA stats from balldontlie.io and updates on-chain StatsOracle. Use `npm run oracle:mock` for offline testing.
 - Both scripts load env from `.env.local` (not `.env`) via explicit `dotenv.config({ path: '.env.local' })`.
+
+### Oracle authority note
+The `stats_oracle` accounts are initialized with the `init-players` authority (`CsGh5T7...`, main deploy wallet) as the oracle authority. The `update_oracle` instruction requires signing with that same wallet. The oracle script defaults to `oracle-keypair.json` but falls back to `~/.config/solana/id.json`. To force the main wallet: `ORACLE_KEYPAIR_PATH=~/.config/solana/id.json npm run oracle:mock`. The Vercel cron uses `ORACLE_SECRET_KEY` env var (JSON array of the main wallet's secret key bytes).
 
 ## RPC Provider
 - **Helius** — paid plan active as of 2026-04-07 ($25 first month, $49/mo after)
