@@ -179,7 +179,7 @@ export default function Home() {
             <div className="flex rounded-lg border border-border-low">
               <button
                 onClick={() => setFilter("all")}
-                className={`cursor-pointer px-3 py-1 text-xs font-medium transition ${
+                className={`cursor-pointer min-h-[44px] px-3 py-2 text-xs font-medium transition ${
                   filter === "all"
                     ? "bg-foreground text-background"
                     : "text-muted hover:text-foreground"
@@ -189,7 +189,7 @@ export default function Home() {
               </button>
               <button
                 onClick={() => setFilter("undervalued")}
-                className={`cursor-pointer px-3 py-1 text-xs font-medium transition ${
+                className={`cursor-pointer min-h-[44px] px-3 py-2 text-xs font-medium transition ${
                   filter === "undervalued"
                     ? "bg-accent text-accent-foreground"
                     : "text-muted hover:text-foreground"
