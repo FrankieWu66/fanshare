@@ -323,7 +323,7 @@ export default function TradePage({
                       <button
                         key={v}
                         onClick={() => setChartView(v)}
-                        className={`min-h-[32px] rounded-md px-3 text-xs font-medium capitalize transition-colors ${
+                        className={`min-h-[44px] rounded-md px-3 text-xs font-medium capitalize transition-colors ${
                           chartView === v
                             ? "bg-card text-foreground shadow-sm"
                             : "text-muted hover:text-foreground"
