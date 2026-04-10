@@ -179,7 +179,7 @@ export default function Home() {
             <div className="flex rounded-lg border border-border-low">
               <button
                 onClick={() => setFilter("all")}
-                className={`cursor-pointer min-h-[44px] px-3 py-2 text-xs font-medium transition ${
+                className={`cursor-pointer min-h-[44px] min-w-[44px] px-3 py-2 text-xs font-medium transition ${
                   filter === "all"
                     ? "bg-foreground text-background"
                     : "text-muted hover:text-foreground"
