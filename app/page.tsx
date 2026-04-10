@@ -14,6 +14,8 @@ import { GridBackground } from "./components/grid-background";
 import { ClusterSelect } from "./components/cluster-select";
 import { WalletButton } from "./components/wallet-button";
 import { useCluster } from "./components/cluster-context";
+import { DEVNET_PLAYERS } from "./lib/fanshare-program";
+import Link from "next/link";
 
 export default function Home() {
   const { wallet, status } = useWallet();
@@ -203,11 +205,16 @@ export default function Home() {
           {/* Player Grid */}
           {isLoading ? (
             <div className="grid grid-cols-1 gap-4 pb-20 md:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="h-48 animate-pulse rounded-2xl border border-border-low bg-card"
-                />
+              {DEVNET_PLAYERS.map((config) => (
+                <Link
+                  key={config.id}
+                  href={`/trade/${config.id}`}
+                  className="flex h-48 animate-pulse items-end rounded-2xl border border-border-low bg-card p-5 hover:border-accent/40 transition-colors"
+                >
+                  <span className="text-sm font-medium text-muted">
+                    {config.emoji} {config.displayName}
+                  </span>
+                </Link>
               ))}
             </div>
           ) : (
