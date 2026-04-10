@@ -31,7 +31,7 @@ import {
   calculateTokensForSol,
   currentPrice,
 } from "../../lib/bonding-curve";
-import { type PlayerConfig, DEFAULT_BASE_PRICE, DEFAULT_SLOPE } from "../../lib/fanshare-program";
+import { type PlayerConfig, DEFAULT_BASE_PRICE, DEFAULT_SLOPE, DEVNET_PLAYERS } from "../../lib/fanshare-program";
 
 // Module-level fetcher — stable reference, avoids new function on every render
 const jsonFetcher = (url: string) =>
@@ -210,9 +210,115 @@ export default function TradePage({
 
   // ── Loading / not found ───────────────────────────────────────────────────
   if (isLoading) {
+    const skeletonConfig = DEVNET_PLAYERS.find((p) => p.id === playerId);
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="h-6 w-6 animate-spin rounded-full border-2 border-foreground border-t-transparent" />
+      <div className="relative min-h-screen bg-background text-foreground">
+        <GridBackground />
+        <div className="relative z-10">
+          <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+            <div className="flex items-center gap-3">
+              <Link href="/" className="inline-flex min-h-[44px] items-center text-sm text-muted transition hover:text-foreground">
+                ← Market
+              </Link>
+              {skeletonConfig && (
+                <>
+                  <span className="text-muted">/</span>
+                  <span className="text-sm font-semibold">{skeletonConfig.displayName}</span>
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-3">
+              <ClusterSelect />
+              <WalletButton />
+            </div>
+          </header>
+          <main className="mx-auto max-w-6xl px-6 pb-20">
+            {/* Player hero */}
+            <div className="mb-6 flex items-start">
+              {skeletonConfig ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-5xl">{skeletonConfig.emoji}</span>
+                  <div>
+                    <h1 className="font-display text-4xl font-extrabold tracking-tight">{skeletonConfig.displayName}</h1>
+                    <div className="mt-1 flex items-center gap-2 text-sm text-muted">
+                      <span>{skeletonConfig.position}</span>
+                      <span>·</span>
+                      <span>{skeletonConfig.team}</span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="h-12 w-56 animate-pulse rounded-lg bg-border-low" />
+              )}
+            </div>
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
+              {/* Stats sidebar skeleton */}
+              <div className="order-2 space-y-4 lg:order-1 lg:col-span-3">
+                <div className="rounded-xl border border-border-low bg-card p-5">
+                  <div className="mb-4 h-3 w-28 animate-pulse rounded bg-border-low" />
+                  <div className="space-y-3">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i}>
+                        <div className="mb-1 flex justify-between">
+                          <div className="h-2.5 w-16 animate-pulse rounded bg-border-low" />
+                          <div className="h-2.5 w-8 animate-pulse rounded bg-border-low" />
+                        </div>
+                        <div className="h-1.5 w-full rounded-full bg-border-low" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {/* Chart skeleton */}
+              <div className="order-3 space-y-4 lg:order-2 lg:col-span-5">
+                <div className="rounded-xl border border-border-low bg-card p-5">
+                  <div className="mb-3 h-8 w-36 animate-pulse rounded-lg bg-border-low" />
+                  <div className="h-[164px] animate-pulse rounded-lg bg-border-low" />
+                  <div className="mt-3 h-1.5 w-full rounded-full bg-border-low" />
+                </div>
+              </div>
+              {/* Trade widget — show immediately with tabs active */}
+              <div className="order-1 lg:order-3 lg:col-span-4">
+                <div className="rounded-2xl border border-border-low bg-card p-5">
+                  <div className="mb-5 flex rounded-xl border border-border-low">
+                    <button
+                      onClick={() => setTab("buy")}
+                      className={`flex-1 cursor-pointer rounded-l-xl py-3 text-sm font-medium transition ${tab === "buy" ? "bg-positive text-background" : "text-muted hover:text-foreground"}`}
+                    >
+                      Buy
+                    </button>
+                    <button
+                      onClick={() => setTab("sell")}
+                      className={`flex-1 cursor-pointer rounded-r-xl py-3 text-sm font-medium transition ${tab === "sell" ? "bg-negative text-background" : "text-muted hover:text-foreground"}`}
+                    >
+                      Sell
+                    </button>
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <label htmlFor="trade-input-loading" className="mb-1.5 block text-xs text-muted">
+                        {tab === "buy" ? "SOL to spend" : "Tokens to sell"}
+                      </label>
+                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2">
+                        <input
+                          id="trade-input-loading"
+                          type="number"
+                          min="0"
+                          placeholder="0.00"
+                          disabled
+                          className="w-full bg-transparent font-mono text-sm outline-none placeholder:text-muted"
+                        />
+                        <span className="text-xs text-muted">{tab === "buy" ? "SOL" : "tokens"}</span>
+                      </div>
+                    </div>
+                    <div className="h-10 w-full animate-pulse rounded-xl bg-border-low" />
+                    <p className="text-center text-xs text-muted">Loading market data…</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
       </div>
     );
   }
@@ -524,11 +630,12 @@ export default function TradePage({
                 {tab === "buy" ? (
                   <div className="space-y-4">
                     <div>
-                      <label className="mb-1.5 block text-xs text-muted">
+                      <label htmlFor="buy-sol-input" className="mb-1.5 block text-xs text-muted">
                         SOL to spend
                       </label>
                       <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 focus-within:border-accent">
                         <input
+                          id="buy-sol-input"
                           type="number"
                           min="0"
                           step="0.01"
@@ -576,7 +683,7 @@ export default function TradePage({
                         Connect wallet to buy
                       </div>
                     ) : (
-                      <>
+                      <div aria-live="polite" aria-atomic="true">
                         <button
                           onClick={handleBuy}
                           disabled={isBusy || solLamports === 0n || tokensOut === 0n}
@@ -599,17 +706,18 @@ export default function TradePage({
                             Dismiss
                           </button>
                         )}
-                      </>
+                      </div>
                     )}
                   </div>
                 ) : (
                   <div className="space-y-4">
                     <div>
-                      <label className="mb-1.5 block text-xs text-muted">
+                      <label htmlFor="sell-token-input" className="mb-1.5 block text-xs text-muted">
                         Tokens to sell
                       </label>
                       <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 focus-within:border-accent">
                         <input
+                          id="sell-token-input"
                           type="number"
                           min="0"
                           step="1"
@@ -656,7 +764,7 @@ export default function TradePage({
                         Connect wallet to sell
                       </div>
                     ) : (
-                      <>
+                      <div aria-live="polite" aria-atomic="true">
                         <button
                           onClick={handleSell}
                           disabled={isBusy || tokenAmountIn === 0n || solOut === 0n}
@@ -679,7 +787,7 @@ export default function TradePage({
                             Dismiss
                           </button>
                         )}
-                      </>
+                      </div>
                     )}
                   </div>
                 )}

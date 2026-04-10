@@ -131,6 +131,7 @@ export default function Home() {
                   <span className="text-sm font-medium">Balance</span>
                   <button
                     onClick={handleCopy}
+                    aria-label={copied ? "Address copied" : "Copy wallet address"}
                     className="flex cursor-pointer items-center gap-1.5 font-mono text-xs text-muted transition hover:text-foreground"
                   >
                     {ellipsify(address, 4)}

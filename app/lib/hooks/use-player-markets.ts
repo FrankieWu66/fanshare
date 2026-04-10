@@ -69,7 +69,7 @@ export function usePlayerMarkets(): {
       // Fallback: mock data
       return DEVNET_PLAYERS.map((config, i) => mockPlayerData(config, i));
     },
-    { refreshInterval: 5000 }
+    { refreshInterval: 5000, revalidateOnFocus: false, keepPreviousData: true }
   );
 
   return {

@@ -15,12 +15,17 @@ export function WalletButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   const address = wallet?.account.address;
   const balance = useBalance(address);
 
   const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
+  const close = () => {
+    setIsOpen(false);
+    // Return focus to the trigger button so keyboard users aren't lost
+    setTimeout(() => triggerRef.current?.focus(), 0);
+  };
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -43,14 +48,22 @@ export function WalletButton() {
     return (
       <div className="relative" ref={ref}>
         <button
+          ref={triggerRef}
           onClick={() => (isOpen ? close() : open())}
+          aria-haspopup="dialog"
+          aria-expanded={isOpen}
           className="min-h-[44px] cursor-pointer rounded-lg bg-primary px-4 py-2 text-xs font-medium text-primary-foreground shadow-xs transition hover:bg-primary/90"
         >
           Connect Wallet
         </button>
 
         {isOpen && (
-          <div className="absolute right-0 top-full z-50 mt-2 w-64 rounded-xl border border-border-low bg-card p-3 shadow-lg">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Choose a wallet"
+            className="absolute right-0 top-full z-50 mt-2 w-64 rounded-xl border border-border-low bg-card p-3 shadow-lg"
+          >
             <p className="mb-2 text-xs font-medium text-muted">
               Choose a wallet
             </p>
@@ -97,7 +110,11 @@ export function WalletButton() {
   return (
     <div className="relative" ref={ref}>
       <button
+        ref={triggerRef}
         onClick={() => (isOpen ? close() : open())}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+        aria-label={`Wallet: ${ellipsify(address!, 4)}`}
         className="flex min-h-[44px] cursor-pointer items-center gap-2 rounded-lg border border-border-low bg-card px-3 py-2 text-xs font-medium transition hover:bg-cream"
       >
         <span className="h-2 w-2 rounded-full bg-positive" />
@@ -105,7 +122,12 @@ export function WalletButton() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-72 rounded-xl border border-border-low bg-card p-4 shadow-lg">
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Wallet details"
+          className="absolute right-0 top-full z-50 mt-2 w-72 rounded-xl border border-border-low bg-card p-4 shadow-lg"
+        >
           <div className="mb-3">
             <p className="text-xs text-muted">Balance</p>
             <p className="text-lg font-bold tabular-nums">
