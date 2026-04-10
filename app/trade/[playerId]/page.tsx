@@ -466,7 +466,7 @@ export default function TradePage({
                     onClick={() => setTab("buy")}
                     className={`flex-1 cursor-pointer rounded-l-xl py-3 text-sm font-medium transition ${
                       tab === "buy"
-                        ? "bg-accent text-accent-foreground"
+                        ? "bg-positive text-background"
                         : "text-muted hover:text-foreground"
                     }`}
                   >
@@ -476,7 +476,7 @@ export default function TradePage({
                     onClick={() => setTab("sell")}
                     className={`flex-1 cursor-pointer rounded-r-xl py-3 text-sm font-medium transition ${
                       tab === "sell"
-                        ? "bg-accent text-accent-foreground"
+                        ? "bg-negative text-background"
                         : "text-muted hover:text-foreground"
                     }`}
                   >
