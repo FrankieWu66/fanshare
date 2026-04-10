@@ -45,7 +45,7 @@ export function PlayerCard({ player }: PlayerCardProps) {
             <h3 className="font-semibold text-foreground">
               {config.displayName}
             </h3>
-            <p className="font-mono text-[11px] text-muted">{config.id}</p>
+            <p className="font-mono text-[11px] text-muted">{config.id.replace("Player_", "$")}</p>
           </div>
         </div>
         {spreadBadge && (
