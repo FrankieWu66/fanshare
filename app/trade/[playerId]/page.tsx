@@ -651,7 +651,9 @@ export default function TradePage({
                 <p className="mt-4 text-center text-xs text-muted">
                   {cluster === "localnet"
                     ? "Localnet. Program live on local validator."
-                    : `${cluster.charAt(0).toUpperCase() + cluster.slice(1)}. Program not yet deployed — showing mock data.`}
+                    : cluster === "devnet"
+                      ? "Devnet. Real transactions on Solana devnet."
+                      : `${cluster.charAt(0).toUpperCase() + cluster.slice(1)}. Live on Solana.`}
                 </p>
               </div>
             </div>
