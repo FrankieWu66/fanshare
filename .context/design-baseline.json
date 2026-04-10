@@ -1,0 +1,25 @@
+{
+  "date": "2026-04-09",
+  "url": "https://fanshares.xyz",
+  "designScore": "B+",
+  "aiSlopScore": "A",
+  "categoryGrades": {
+    "hierarchy": "B+",
+    "typography": "A-",
+    "color": "A",
+    "spacing": "B+",
+    "interaction": "B",
+    "responsive": "B-",
+    "motion": "B",
+    "content": "B",
+    "aiSlop": "A",
+    "performance": "A"
+  },
+  "findings": [
+    {"id": "FINDING-003", "title": "Stale deploy banner", "impact": "high", "category": "content", "status": "fixed"},
+    {"id": "FINDING-004", "title": "All button touch target", "impact": "medium", "category": "interaction", "status": "fixed"},
+    {"id": "FINDING-006", "title": "Initial stale spread data", "impact": "medium", "category": "content", "status": "deferred"},
+    {"id": "FINDING-007", "title": "Buy/Sell tabs both amber", "impact": "polish", "category": "color", "status": "fixed"},
+    {"id": "FINDING-008", "title": "Supply bars invisible", "impact": "medium", "category": "spacing", "status": "fixed"}
+  ]
+}
