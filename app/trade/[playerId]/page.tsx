@@ -10,6 +10,14 @@ import { useBalance } from "../../lib/hooks/use-balance";
 import { useTokenBalance } from "../../lib/hooks/use-token-balance";
 import { usePlayerData } from "../../lib/hooks/use-player-markets";
 import { useSendTransaction } from "../../lib/hooks/use-send-transaction";
+import {
+  getBondingCurvePda,
+  getAssociatedTokenAccount,
+  getBuyWithSolInstruction,
+  getCreateAtaIdempotentInstruction,
+  getSellInstruction,
+  applySlippage,
+} from "../../lib/fanshare-instructions";
 import { lamportsToSolString } from "../../lib/lamports";
 import { GridBackground } from "../../components/grid-background";
 import { ClusterSelect } from "../../components/cluster-select";
@@ -44,7 +52,7 @@ export default function TradePage({
   const { playerId } = use(params);
   const { player, isLoading } = usePlayerData(playerId);
   const { wallet, status } = useWallet();
-  useSendTransaction(); // wired post-deploy; hook must run for context
+  const { send } = useSendTransaction();
   const { cluster } = useCluster(); // getExplorerUrl wired post-deploy
 
   const address = wallet?.account.address;
@@ -136,43 +144,69 @@ export default function TradePage({
     if (isBusy || !address || !player || !curve || solLamports === 0n || tokensOut === 0n) return;
     setTxError(null);
     setTxStage("signing");
-
-    // PRE-DEPLOY: Simulate stages so UX is visible
-    await new Promise((r) => setTimeout(r, 1200));
-    setTxStage("confirming");
-    await new Promise((r) => setTimeout(r, 2000));
-    setTxStage("success");
-    toast.success(`Bought ${tokensOut.toLocaleString()} tokens`);
-
-    /* POST-DEPLOY: replace simulation above with real tx
     try {
-      setTxStage("signing");
-      const minTokensOut = (tokensOut * BigInt(100 - SLIPPAGE_PCT)) / 100n;
-      const sig = await send({ instructions: [...] });
-      setTxStage("confirming");
-      // confirmation happens inside send(); on return it's confirmed
+      const mint = curve.mint as Address;
+      const [bondingCurve, buyerTokenAccount] = await Promise.all([
+        getBondingCurvePda(mint),
+        getAssociatedTokenAccount(address, mint),
+      ]);
+      const minTokensOut = applySlippage(tokensOut, SLIPPAGE_PCT);
+      const createAtaIx = getCreateAtaIdempotentInstruction({
+        payer: address,
+        owner: address,
+        mint,
+        ata: buyerTokenAccount,
+      });
+      const ix = getBuyWithSolInstruction({
+        buyer: address,
+        mint,
+        bondingCurve,
+        buyerTokenAccount,
+        solAmount: solLamports,
+        minTokensOut,
+      });
+      const sig = await send({ instructions: [createAtaIx, ix] });
       setTxStage("success");
-      toast.success(`Bought ${tokensOut.toLocaleString()} tokens!`);
+      toast.success(`Bought ${tokensOut.toLocaleString()} tokens!`, {
+        description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
+      });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Transaction failed";
       setTxError(msg);
       setTxStage("failed");
     }
-    */
-  }, [isBusy, address, player, curve, solLamports, tokensOut]);
+  }, [isBusy, address, player, curve, solLamports, tokensOut, send]);
 
   const handleSell = useCallback(async () => {
     if (isBusy || !address || !player || !curve || tokenAmountIn === 0n || solOut === 0n) return;
     setTxError(null);
     setTxStage("signing");
-
-    // PRE-DEPLOY: Simulate stages
-    await new Promise((r) => setTimeout(r, 1200));
-    setTxStage("confirming");
-    await new Promise((r) => setTimeout(r, 2000));
-    setTxStage("success");
-    toast.success(`Sold ${tokenAmountIn.toLocaleString()} tokens for ${formatSol(solOut)} SOL`);
-  }, [isBusy, address, player, curve, tokenAmountIn, solOut]);
+    try {
+      const mint = curve.mint as Address;
+      const [bondingCurve, buyerTokenAccount] = await Promise.all([
+        getBondingCurvePda(mint),
+        getAssociatedTokenAccount(address, mint),
+      ]);
+      const minSolOut = applySlippage(solOut, SLIPPAGE_PCT);
+      const ix = getSellInstruction({
+        buyer: address,
+        mint,
+        bondingCurve,
+        buyerTokenAccount,
+        tokenAmount: tokenAmountIn,
+        minSolOut,
+      });
+      const sig = await send({ instructions: [ix] });
+      setTxStage("success");
+      toast.success(`Sold ${tokenAmountIn.toLocaleString()} tokens for ${formatSol(solOut)} SOL`, {
+        description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
+      });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Transaction failed";
+      setTxError(msg);
+      setTxStage("failed");
+    }
+  }, [isBusy, address, player, curve, tokenAmountIn, solOut, send]);
 
   // ── Loading / not found ───────────────────────────────────────────────────
   if (isLoading) {

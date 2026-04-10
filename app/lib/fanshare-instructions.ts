@@ -6,6 +6,7 @@
 
 import {
   address,
+  getAddressEncoder,
   getProgramDerivedAddress,
   getUtf8Encoder,
   type Address,
@@ -20,9 +21,10 @@ const ASSOCIATED_TOKEN_PROGRAM_ID = address("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efT
 
 /** Derive the BondingCurveAccount PDA for a given mint. */
 export async function getBondingCurvePda(mint: Address): Promise<Address> {
+  const enc = getAddressEncoder();
   const [pda] = await getProgramDerivedAddress({
     programAddress: address(PROGRAM_ID),
-    seeds: [getUtf8Encoder().encode(BONDING_CURVE_SEED), address(mint)],
+    seeds: [getUtf8Encoder().encode(BONDING_CURVE_SEED), enc.encode(address(mint))],
   });
   return pda;
 }
@@ -32,12 +34,13 @@ export async function getAssociatedTokenAccount(
   owner: Address,
   mint: Address
 ): Promise<Address> {
+  const enc = getAddressEncoder();
   const [ata] = await getProgramDerivedAddress({
     programAddress: ASSOCIATED_TOKEN_PROGRAM_ID,
     seeds: [
-      address(owner),
-      TOKEN_PROGRAM_ID,
-      address(mint),
+      enc.encode(address(owner)),
+      enc.encode(TOKEN_PROGRAM_ID),
+      enc.encode(address(mint)),
     ],
   });
   return ata;
@@ -131,6 +134,39 @@ export function getSellInstruction({
     programAddress: address(PROGRAM_ID),
     accounts,
     data,
+  };
+}
+
+/**
+ * Build `createAssociatedTokenAccountIdempotent` instruction.
+ * Instruction discriminator 1 = CreateIdempotent (no-op if account already exists).
+ * Always safe to prepend to buy transactions — costs ~0.002 SOL the first time,
+ * nothing thereafter.
+ */
+export function getCreateAtaIdempotentInstruction({
+  payer,
+  owner,
+  mint,
+  ata,
+}: {
+  payer: Address;
+  owner: Address;
+  mint: Address;
+  ata: Address;
+}): Instruction {
+  const accounts: AccountMeta[] = [
+    { address: payer, role: 3 },       // writable signer (pays rent)
+    { address: ata, role: 1 },         // writable (the ATA to create)
+    { address: owner, role: 0 },       // readonly (wallet address)
+    { address: mint, role: 0 },        // readonly (token mint)
+    { address: SYSTEM_PROGRAM_ID, role: 0 },
+    { address: TOKEN_PROGRAM_ID, role: 0 },
+  ];
+
+  return {
+    programAddress: ASSOCIATED_TOKEN_PROGRAM_ID,
+    accounts,
+    data: new Uint8Array([1]), // 1 = CreateIdempotent
   };
 }
 
