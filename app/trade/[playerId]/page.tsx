@@ -405,11 +405,13 @@ export default function TradePage({
                 </div>
               </div>
 
-              {/* Curve formula */}
-              <div className="rounded-xl border border-border-low bg-card p-5">
-                <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted">
-                  Bonding Curve
-                </p>
+              {/* Curve formula — collapsed on mobile to save space */}
+              <details className="group rounded-xl border border-border-low bg-card">
+                <summary className="flex cursor-pointer items-center justify-between p-5 text-xs font-medium uppercase tracking-wide text-muted [&::-webkit-details-marker]:hidden list-none">
+                  <span>Bonding Curve</span>
+                  <span className="text-muted transition-transform group-open:rotate-180">▾</span>
+                </summary>
+                <div className="px-5 pb-5 -mt-2">
                 <p className="font-mono text-xs text-foreground/60">
                   price = base + slope × tokens_sold
                 </p>
@@ -431,7 +433,8 @@ export default function TradePage({
                 <p className="mt-2 text-xs text-muted">
                   Every buy raises the price. Every sell lowers it.
                 </p>
-              </div>
+                </div>
+              </details>
 
               {/* Trade preview (visible when inputs are filled) */}
               {tab === "buy" && tokensOut > 0n && (

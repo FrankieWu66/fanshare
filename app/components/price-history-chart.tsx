@@ -41,15 +41,18 @@ export function PriceHistoryChart({ data, currentPrice }: PriceHistoryChartProps
     );
   }
 
+  // Single data point: duplicate so recharts draws a visible dot
+  const normalized = data.length === 1 ? [data[0], { ...data[0], t: data[0].t + 1 }] : data;
+
   // Downsample to at most 120 points for performance.
   // Always force-include the last point so the chart end matches the current reference line.
   const sampled =
-    data.length <= 120
-      ? data
+    normalized.length <= 120
+      ? normalized
       : (() => {
-          const step = Math.ceil(data.length / 120);
-          const filtered = data.filter((_, i) => i % step === 0);
-          const last = data[data.length - 1];
+          const step = Math.ceil(normalized.length / 120);
+          const filtered = normalized.filter((_, i) => i % step === 0);
+          const last = normalized[normalized.length - 1];
           if (filtered[filtered.length - 1] !== last) filtered.push(last);
           return filtered;
         })();
