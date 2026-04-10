@@ -177,10 +177,10 @@ export async function GET(request: Request) {
   );
 
   const connection = new Connection(rpcUrl, "confirmed");
-  const cluster = process.env.SOLANA_CLUSTER ?? (rpcUrl.includes("devnet") ? "devnet" : "localnet");
+  const cluster = (process.env.SOLANA_CLUSTER ?? (rpcUrl.includes("devnet") ? "devnet" : "localnet")).trim();
   const mints = PLAYER_MINTS as Record<string, string>;
 
-  const results: Array<{ playerId: string; status: string; indexPrice?: number; tx?: string }> = [];
+  const results: Array<{ playerId: string; status: string; indexPrice?: number; tx?: string; error?: string }> = [];
 
   for (const [playerId, mintAddress] of Object.entries(mints)) {
     const mintPubkey = new PublicKey(mintAddress);
@@ -223,7 +223,8 @@ export async function GET(request: Request) {
 
       results.push({ playerId, status: "updated", indexPrice: Number(indexPrice), tx: sig });
     } catch (err) {
-      results.push({ playerId, status: "failed", indexPrice: Number(indexPrice) });
+      const errMsg = err instanceof Error ? err.message : String(err);
+      results.push({ playerId, status: "failed", indexPrice: Number(indexPrice), error: errMsg.slice(0, 200) });
       console.error(`Oracle update failed for ${playerId}:`, err);
     }
 
@@ -236,6 +237,7 @@ export async function GET(request: Request) {
 
   return NextResponse.json({
     ok: true,
+    authority: authority.publicKey.toString(),
     cluster,
     updated,
     failed,
