@@ -361,11 +361,11 @@ export default function TradePage({
 
         <main className="mx-auto max-w-6xl px-6 pb-20">
           {/* Player Hero */}
-          <div className="mb-6 flex items-start justify-between">
+          <div className="mb-6 flex flex-wrap items-start justify-between gap-y-3">
             <div className="flex items-center gap-3">
-              <span className="text-5xl">{config.emoji}</span>
+              <span className="text-4xl md:text-5xl">{config.emoji}</span>
               <div>
-                <h1 className="font-display text-4xl font-extrabold tracking-tight">
+                <h1 className="font-display text-3xl font-extrabold tracking-tight md:text-4xl">
                   {config.displayName}
                 </h1>
                 <div className="mt-1 flex items-center gap-2 text-sm text-muted">
@@ -687,7 +687,7 @@ export default function TradePage({
                         <button
                           onClick={handleBuy}
                           disabled={isBusy || solLamports === 0n || tokensOut === 0n}
-                          className="w-full cursor-pointer rounded-xl bg-positive py-3 text-sm font-bold text-background transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                          className="w-full cursor-pointer rounded-xl bg-positive py-3 text-sm font-bold text-background transition hover:opacity-90 active:scale-[0.98] active:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           {txStage === "signing" && "Approve in wallet..."}
                           {txStage === "confirming" && "Confirming on Solana..."}
@@ -768,7 +768,7 @@ export default function TradePage({
                         <button
                           onClick={handleSell}
                           disabled={isBusy || tokenAmountIn === 0n || solOut === 0n}
-                          className="w-full cursor-pointer rounded-xl bg-negative py-3 text-sm font-bold text-background transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                          className="w-full cursor-pointer rounded-xl bg-negative py-3 text-sm font-bold text-background transition hover:opacity-90 active:scale-[0.98] active:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           {txStage === "signing" && "Approve in wallet..."}
                           {txStage === "confirming" && "Confirming on Solana..."}
