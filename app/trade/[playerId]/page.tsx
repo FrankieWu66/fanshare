@@ -373,7 +373,7 @@ export default function TradePage({
                   <span>·</span>
                   <span>{config.team}</span>
                   <span>·</span>
-                  <span className="font-mono text-xs">{config.id}</span>
+                  <span className="font-mono text-xs">{config.id.replace("Player_", "$")}</span>
                 </div>
               </div>
             </div>
