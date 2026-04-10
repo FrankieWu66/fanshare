@@ -91,7 +91,7 @@ export function PlayerCard({ player }: PlayerCardProps) {
       <div className="mt-2 h-[3px] w-full overflow-hidden rounded-full bg-border-low">
         <div
           className="h-full rounded-full bg-accent/60 transition-all"
-          style={{ width: `${Math.min(supplyPercent, 100)}%` }}
+          style={{ width: `${Math.max(supplyPercent > 0 ? 1 : 0, Math.min(supplyPercent, 100))}%` }}
         />
       </div>
 

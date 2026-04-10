@@ -365,7 +365,7 @@ export default function TradePage({
                   <div className="h-1.5 w-full overflow-hidden rounded-full bg-border-low">
                     <div
                       className="h-full rounded-full bg-accent/60 transition-all"
-                      style={{ width: `${Math.min(supplyPct, 100)}%` }}
+                      style={{ width: `${Math.max(supplyPct > 0 ? 1 : 0, Math.min(supplyPct, 100))}%` }}
                     />
                   </div>
                 </div>
