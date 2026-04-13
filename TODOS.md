@@ -161,6 +161,37 @@ them atomic: one HTTP call, both commands, all-or-nothing.
 players, continuous oracle) unbounded growth becomes a real issue.
 **Effort:** XS | **Priority:** P2
 
+### [ ] Devnet reset workflow — wipe bonding curves and start fresh
+
+**What:** A repeatable runbook to reset all 15 bonding curves to their initial state
+(tokens_sold=0, treasury_lamports=0) on devnet. Useful before demo sessions or when
+curves have drifted from testing.
+
+**Current state:** No `reset_curve` instruction exists in the Anchor program. The
+`init` constraint on BondingCurveAccount prevents re-initialization if the account
+already exists.
+
+**Workflow (once built):**
+1. Add an admin-only `reset_curve` instruction to the Anchor program:
+   - Authority check: `require!(ctx.accounts.authority.key() == DEPLOY_AUTHORITY)`
+   - Sets `tokens_sold = 0` and `treasury_lamports = 0`
+   - Optionally transfers any remaining SOL in the treasury PDA back to authority
+2. Build + deploy updated program: `anchor build && anchor deploy --url <HELIUS_URL>`
+3. Run reset script: `npm run reset-players` (mirrors init-players.ts pattern,
+   calls reset_curve for all 15 mints from player-mints.json)
+4. Verify: check a player page and confirm price = base_price (~0.000001 SOL)
+
+**Shortcut (no program change needed):** Close the bonding curve accounts via
+`solana account close` if the program supports it, then re-run `npm run init-players`.
+Currently init-players is resume-safe and skips already-initialized players — would
+need to clear player-mints.json entries first.
+
+**Why:** Demo sessions accumulate test trades that shift prices. A clean slate before
+showing to investors or new testers makes the demo more controlled.
+
+**Effort:** M (program change + script) | **Priority:** P2 (pre-demo tooling)
+**Depends on:** Security audit sign-off before adding any new authority instructions on mainnet.
+
 ### [ ] Formula section: collapse on mobile
 
 **What:** The bonding curve formula display on the trade page always-visible on mobile pushes
