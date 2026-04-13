@@ -32,6 +32,7 @@ import {
   currentPrice,
 } from "../../lib/bonding-curve";
 import { type PlayerConfig, DEFAULT_BASE_PRICE, DEFAULT_SLOPE, DEVNET_PLAYERS } from "../../lib/fanshare-program";
+import { parseTransactionError } from "../../lib/errors";
 
 // Module-level fetcher — stable reference, avoids new function on every render
 const jsonFetcher = (url: string) =>
@@ -171,7 +172,7 @@ export default function TradePage({
         description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
       });
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Transaction failed";
+      const msg = parseTransactionError(err);
       setTxError(msg);
       setTxStage("failed");
     }
@@ -202,7 +203,7 @@ export default function TradePage({
         description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
       });
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Transaction failed";
+      const msg = parseTransactionError(err);
       setTxError(msg);
       setTxStage("failed");
     }
