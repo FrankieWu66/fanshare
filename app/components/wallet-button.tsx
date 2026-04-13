@@ -33,18 +33,24 @@ export function WalletButton() {
   const open = () => setIsOpen(true);
   const close = () => {
     setIsOpen(false);
-    setTimeout(() => triggerRef.current?.focus(), 0);
+    // Only steal focus back when the demo modal is NOT open
+    if (!showDemoSignin) {
+      setTimeout(() => triggerRef.current?.focus(), 0);
+    }
   };
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
+      // Don't interfere when demo sign-in modal is open
+      if (showDemoSignin) return;
       if (ref.current && !ref.current.contains(e.target as Node)) {
         close();
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showDemoSignin]);
 
   const handleCopy = async () => {
     if (!address) return;
