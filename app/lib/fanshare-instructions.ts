@@ -17,7 +17,7 @@ import { PROGRAM_ID, BONDING_CURVE_SEED } from "./fanshare-program";
 
 const TOKEN_PROGRAM_ID = address("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
 const SYSTEM_PROGRAM_ID = address("11111111111111111111111111111111");
-const ASSOCIATED_TOKEN_PROGRAM_ID = address("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJe1brs");
+const ASSOCIATED_TOKEN_PROGRAM_ID = address("ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL");
 
 /** Derive the BondingCurveAccount PDA for a given mint. */
 export async function getBondingCurvePda(mint: Address): Promise<Address> {
