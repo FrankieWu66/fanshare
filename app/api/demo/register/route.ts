@@ -45,18 +45,20 @@ export async function POST(req: Request) {
       ? `https://devnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`
       : "https://api.devnet.solana.com");
 
+  // Fire-and-forget airdrop — don't block the response on confirmation.
+  // Vercel serverless + devnet confirmation can take >10s and timeout.
+  // The client will detect 0 balance and auto-request again if needed.
   let airdropSig: string | null = null;
   try {
     const connection = new Connection(rpcUrl, "confirmed");
-    const sig = await connection.requestAirdrop(
+    // requestAirdrop sends the tx to the network immediately.
+    // We intentionally skip confirmTransaction to avoid Vercel timeouts.
+    airdropSig = await connection.requestAirdrop(
       keypair.publicKey,
       AIRDROP_SOL * LAMPORTS_PER_SOL
     );
-    // Wait up to 30s for confirmation
-    await connection.confirmTransaction(sig, "confirmed");
-    airdropSig = sig;
+    console.log("[demo/register] airdrop sent:", airdropSig, "→", address);
   } catch (err) {
-    // Non-fatal: wallet is created, user can hit airdrop button manually
     console.error("[demo/register] airdrop failed:", err instanceof Error ? err.message : err);
   }
 
