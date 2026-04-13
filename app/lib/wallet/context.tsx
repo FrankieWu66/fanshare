@@ -11,6 +11,7 @@ import {
   type PropsWithChildren,
 } from "react";
 import type { TransactionSigner } from "@solana/kit";
+import { createKeyPairSignerFromBytes } from "@solana/kit";
 import type { WalletConnector, WalletSession } from "./types";
 import { discoverWallets, watchWallets } from "./standard";
 import { createWalletSigner } from "./signer";
@@ -25,6 +26,11 @@ const WALLET_STATUS = {
 
 type WalletStatus = (typeof WALLET_STATUS)[keyof typeof WALLET_STATUS];
 
+/** Key stored in localStorage for persisted demo sessions. */
+const DEMO_STORAGE_KEY = "fanshare_demo";
+/** Key stored in localStorage for the last real wallet connector. */
+const STORAGE_KEY = "solana:last-connector";
+
 type WalletContextValue = {
   connectors: WalletConnector[];
   status: WalletStatus;
@@ -34,11 +40,13 @@ type WalletContextValue = {
   connect: (connectorId: string) => Promise<void>;
   disconnect: () => Promise<void>;
   isReady: boolean;
+  // Demo wallet
+  isDemoMode: boolean;
+  connectDemo: (displayName: string) => Promise<void>;
+  disconnectDemo: () => void;
 };
 
 const WalletContext = createContext<WalletContextValue | null>(null);
-
-const STORAGE_KEY = "solana:last-connector";
 
 export function WalletProvider({ children }: PropsWithChildren) {
   const { cluster } = useCluster();
@@ -54,12 +62,54 @@ export function WalletProvider({ children }: PropsWithChildren) {
   const [error, setError] = useState<unknown>();
   const isReady = typeof window !== "undefined";
 
+  // Demo wallet state
+  const [demoSession, setDemoSession] = useState<WalletSession | undefined>();
+  const [demoSigner, setDemoSigner] = useState<TransactionSigner | undefined>();
+
   const connectorsRef = useRef<WalletConnector[]>(connectors);
   const autoConnectAttempted = useRef(false);
 
   const handleWalletsChanged = useCallback((updated: WalletConnector[]) => {
     connectorsRef.current = updated;
     setConnectors(updated);
+  }, []);
+
+  // Restore demo session from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem(DEMO_STORAGE_KEY);
+    if (!stored) return;
+
+    let parsed: { secretKey: number[]; displayName: string; address: string } | null = null;
+    try {
+      parsed = JSON.parse(stored);
+    } catch {
+      localStorage.removeItem(DEMO_STORAGE_KEY);
+      return;
+    }
+    if (!parsed?.secretKey || !parsed?.address) {
+      localStorage.removeItem(DEMO_STORAGE_KEY);
+      return;
+    }
+
+    createKeyPairSignerFromBytes(Uint8Array.from(parsed.secretKey))
+      .then((signer) => {
+        setDemoSigner(signer);
+        setDemoSession({
+          account: {
+            address: signer.address,
+            publicKey: Uint8Array.from(parsed!.secretKey.slice(32)),
+            label: `Demo: ${parsed!.displayName}`,
+          },
+          connector: { id: "demo", name: "Demo Mode" },
+          disconnect: async () => {
+            // handled below in disconnectDemo
+          },
+        });
+      })
+      .catch(() => {
+        localStorage.removeItem(DEMO_STORAGE_KEY);
+      });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const runAutoConnect = useCallback(async (connector: WalletConnector) => {
@@ -121,23 +171,104 @@ export function WalletProvider({ children }: PropsWithChildren) {
     localStorage.removeItem(STORAGE_KEY);
   }, [session]);
 
-  const signer = useMemo(
-    () => (session ? createWalletSigner(session, chain) : undefined),
-    [session, chain]
-  );
+  /**
+   * Create a demo wallet: calls /api/demo/register, stores the keypair
+   * in localStorage, and activates demo mode.
+   */
+  const connectDemo = useCallback(async (displayName: string) => {
+    const res = await fetch("/api/demo/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ displayName }),
+    });
+
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error((body as { error?: string }).error ?? "Registration failed");
+    }
+
+    const data = (await res.json()) as {
+      address: string;
+      secretKey: number[];
+      displayName: string;
+      airdropFailed?: boolean;
+    };
+
+    // Persist to localStorage for reload recovery
+    localStorage.setItem(
+      DEMO_STORAGE_KEY,
+      JSON.stringify({
+        secretKey: data.secretKey,
+        displayName: data.displayName,
+        address: data.address,
+      })
+    );
+
+    const signer = await createKeyPairSignerFromBytes(Uint8Array.from(data.secretKey));
+
+    setDemoSigner(signer);
+    setDemoSession({
+      account: {
+        address: signer.address,
+        publicKey: Uint8Array.from(data.secretKey.slice(32)),
+        label: `Demo: ${data.displayName}`,
+      },
+      connector: { id: "demo", name: "Demo Mode" },
+      disconnect: async () => {
+        // handled by disconnectDemo
+      },
+    });
+  }, []);
+
+  /** Clear demo session and return to disconnected state. */
+  const disconnectDemo = useCallback(() => {
+    localStorage.removeItem(DEMO_STORAGE_KEY);
+    setDemoSession(undefined);
+    setDemoSigner(undefined);
+  }, []);
+
+  // When demo is active, it takes precedence over real wallet for display
+  const effectiveSession = demoSession ?? session;
+  const isDemoMode = !!demoSession;
+
+  // Signer: prefer demoSigner, then real wallet signer
+  const signer = useMemo<TransactionSigner | undefined>(() => {
+    if (demoSigner) return demoSigner;
+    return session ? createWalletSigner(session, chain) : undefined;
+  }, [demoSigner, session, chain]);
+
+  // Status: demo counts as connected
+  const effectiveStatus: WalletStatus = isDemoMode
+    ? WALLET_STATUS.CONNECTED
+    : status;
 
   const value = useMemo<WalletContextValue>(
     () => ({
       connectors,
-      status,
-      wallet: session,
+      status: effectiveStatus,
+      wallet: effectiveSession,
       signer,
       error,
       connect,
       disconnect,
       isReady,
+      isDemoMode,
+      connectDemo,
+      disconnectDemo,
     }),
-    [connectors, status, session, signer, error, connect, disconnect, isReady]
+    [
+      connectors,
+      effectiveStatus,
+      effectiveSession,
+      signer,
+      error,
+      connect,
+      disconnect,
+      isReady,
+      isDemoMode,
+      connectDemo,
+      disconnectDemo,
+    ]
   );
 
   return (
