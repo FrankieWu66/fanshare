@@ -33,6 +33,8 @@ import {
 } from "../../lib/bonding-curve";
 import { type PlayerConfig, DEFAULT_BASE_PRICE, DEFAULT_SLOPE, DEVNET_PLAYERS } from "../../lib/fanshare-program";
 import { parseTransactionError } from "../../lib/errors";
+import { recordTrade, loadTradesForPlayer, type TradeRecord } from "../../lib/trade-history";
+import { recordLocalPrice, loadLocalPriceHistory, mergePriceHistory } from "../../lib/local-price-history";
 
 // Module-level fetcher — stable reference, avoids new function on every render
 const jsonFetcher = (url: string) =>
@@ -52,7 +54,7 @@ export default function TradePage({
 }) {
   const { playerId } = use(params);
   const { player, isLoading } = usePlayerData(playerId);
-  const { wallet, status } = useWallet();
+  const { wallet, status, isDemoMode } = useWallet();
   const { send } = useSendTransaction();
   const { cluster } = useCluster(); // getExplorerUrl wired post-deploy
 
@@ -67,6 +69,8 @@ export default function TradePage({
   const [tokenInput, setTokenInput] = useState("");
   const [txStage, setTxStage] = useState<TxStage>("idle");
   const [txError, setTxError] = useState<string | null>(null);
+  const [localTrades, setLocalTrades] = useState<TradeRecord[]>(() => loadTradesForPlayer(playerId));
+  const [localPrices, setLocalPrices] = useState(() => loadLocalPriceHistory(playerId));
   const txTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { data: priceHistory = [] } = useSWR(
     chartView === "history" ? `/api/price-history/${playerId}?cluster=${cluster}` : null,
@@ -127,7 +131,7 @@ export default function TradePage({
       : marketPrice;
 
   // Supply bar
-  const supplyPct = Number((tokensSold * 100n) / totalSupply);
+  const supplyPct = totalSupply > 0n ? (Number(tokensSold) / Number(totalSupply)) * 100 : 0;
 
   // Spread signal
   const spread = player?.spreadPercent ?? 0;
@@ -167,6 +171,18 @@ export default function TradePage({
         minTokensOut,
       });
       const sig = await send({ instructions: [createAtaIx, ix] });
+      recordTrade({
+        playerId,
+        playerName: player.config.displayName,
+        type: "buy",
+        solAmount: Number(solLamports) / 1e9,
+        tokenAmount: Number(tokensOut),
+        signature: sig ?? "",
+        timestamp: Date.now(),
+      });
+      recordLocalPrice(playerId, priceAfterBuy);
+      setLocalTrades(loadTradesForPlayer(playerId));
+      setLocalPrices(loadLocalPriceHistory(playerId));
       setTxStage("success");
       toast.success(`Bought ${tokensOut.toLocaleString()} tokens!`, {
         description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
@@ -176,7 +192,7 @@ export default function TradePage({
       setTxError(msg);
       setTxStage("failed");
     }
-  }, [isBusy, address, player, curve, solLamports, tokensOut, send]);
+  }, [isBusy, address, player, curve, solLamports, tokensOut, send, playerId]);
 
   const handleSell = useCallback(async () => {
     if (isBusy || !address || !player || !curve || tokenAmountIn === 0n || solOut === 0n) return;
@@ -198,6 +214,18 @@ export default function TradePage({
         minSolOut,
       });
       const sig = await send({ instructions: [ix] });
+      recordTrade({
+        playerId,
+        playerName: player.config.displayName,
+        type: "sell",
+        solAmount: Number(solOut) / 1e9,
+        tokenAmount: Number(tokenAmountIn),
+        signature: sig ?? "",
+        timestamp: Date.now(),
+      });
+      recordLocalPrice(playerId, priceAfterSell);
+      setLocalTrades(loadTradesForPlayer(playerId));
+      setLocalPrices(loadLocalPriceHistory(playerId));
       setTxStage("success");
       toast.success(`Sold ${tokenAmountIn.toLocaleString()} tokens for ${formatSol(solOut)} SOL`, {
         description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
@@ -207,7 +235,7 @@ export default function TradePage({
       setTxError(msg);
       setTxStage("failed");
     }
-  }, [isBusy, address, player, curve, tokenAmountIn, solOut, send]);
+  }, [isBusy, address, player, curve, tokenAmountIn, solOut, send, playerId]);
 
   // ── Loading / not found ───────────────────────────────────────────────────
   if (isLoading) {
@@ -475,7 +503,7 @@ export default function TradePage({
                     ))}
                   </div>
                   <span className="font-mono text-xs text-muted">
-                    {supplyPct.toFixed(1)}% sold
+                    {supplyPct < 1 && supplyPct > 0 ? supplyPct.toFixed(2) : supplyPct.toFixed(1)}% sold
                   </span>
                 </div>
 
@@ -490,7 +518,7 @@ export default function TradePage({
                   />
                 ) : (
                   <PriceHistoryChart
-                    data={priceHistory}
+                    data={mergePriceHistory(priceHistory, localPrices)}
                     currentPrice={indexPrice > 0n ? Number(indexPrice) : undefined}
                   />
                 )}
@@ -797,14 +825,76 @@ export default function TradePage({
                 <p className="mt-4 text-center text-xs text-muted">
                   {cluster === "localnet"
                     ? "Localnet. Program live on local validator."
-                    : cluster === "devnet"
-                      ? "Devnet. Real transactions on Solana devnet."
-                      : `${cluster.charAt(0).toUpperCase() + cluster.slice(1)}. Live on Solana.`}
+                    : cluster === "devnet" && isDemoMode
+                      ? "Demo mode — fake SOL, nothing is real."
+                      : cluster === "devnet"
+                        ? "Devnet. Real transactions on Solana devnet."
+                        : `${cluster.charAt(0).toUpperCase() + cluster.slice(1)}. Live on Solana.`}
                 </p>
               </div>
             </div>
 
           </div>
+
+          {/* Recent Trades */}
+          {localTrades.length > 0 && (
+            <div className="mt-8">
+              <h2 className="mb-3 text-sm font-semibold text-muted uppercase tracking-wider">
+                Your Recent Trades
+              </h2>
+              <div className="overflow-hidden rounded-xl border border-border bg-card">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-xs text-muted">
+                      <th className="px-4 py-2 text-left font-medium">Type</th>
+                      <th className="px-4 py-2 text-right font-medium">Tokens</th>
+                      <th className="px-4 py-2 text-right font-medium">SOL</th>
+                      <th className="px-4 py-2 text-right font-medium hidden sm:table-cell">Time</th>
+                      <th className="px-4 py-2 text-right font-medium hidden md:table-cell">Tx</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {localTrades.slice(0, 10).map((trade) => (
+                      <tr key={trade.id} className="border-b border-border last:border-0 hover:bg-accent-subtle/30">
+                        <td className="px-4 py-3">
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
+                            trade.type === "buy"
+                              ? "bg-accent-subtle text-accent"
+                              : "bg-negative/10 text-negative"
+                          }`}>
+                            {trade.type === "buy" ? "Buy" : "Sell"}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-right font-mono">
+                          {trade.tokenAmount.toLocaleString()}
+                        </td>
+                        <td className="px-4 py-3 text-right font-mono">
+                          {trade.solAmount.toFixed(4)}
+                        </td>
+                        <td className="px-4 py-3 text-right text-muted hidden sm:table-cell">
+                          {new Date(trade.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        </td>
+                        <td className="px-4 py-3 text-right hidden md:table-cell">
+                          {trade.signature ? (
+                            <a
+                              href={`https://explorer.solana.com/tx/${trade.signature}?cluster=devnet`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-mono text-xs text-muted underline hover:text-foreground"
+                            >
+                              {trade.signature.slice(0, 8)}…
+                            </a>
+                          ) : (
+                            <span className="text-muted">—</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </main>
       </div>
     </div>

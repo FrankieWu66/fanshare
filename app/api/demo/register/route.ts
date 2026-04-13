@@ -2,20 +2,35 @@
  * POST /api/demo/register
  *
  * Creates a demo devnet wallet for non-crypto users.
- * Generates a fresh keypair, airdrops 2 SOL, and returns the secret key
- * so the browser can sign transactions directly without Phantom.
+ * Generates a fresh keypair, transfers SOL from the deploy wallet,
+ * and returns the secret key so the browser can sign transactions
+ * directly without Phantom.
+ *
+ * SOL funding strategy:
+ *   - Transfer 0.05 SOL from the deploy wallet (ORACLE_SECRET_KEY) to the new wallet.
+ *   - This is reliable and instant — no airdrop rate limits.
+ *   - The deploy wallet is topped up daily by /api/cron/faucet (1 SOL/day via Helius).
+ *   - 1 SOL supports ~20 new demo users per day. More than enough for a demo app.
  *
  * Request body: { displayName: string }
- * Response:     { address: string, secretKey: number[], displayName: string }
+ * Response:     { address, secretKey, displayName, fundingTx?, fundingFailed? }
  *
  * The secretKey is 64 bytes (seed[0:32] + pubkey[32:64]) — compatible with
  * @solana/kit's createKeyPairSignerFromBytes on the client side.
  */
 
 import { NextResponse } from "next/server";
-import { Keypair, Connection, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import {
+  Connection,
+  Keypair,
+  LAMPORTS_PER_SOL,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+  sendAndConfirmTransaction,
+} from "@solana/web3.js";
 
-const AIRDROP_SOL = 2;
+const FUND_SOL = 0.05; // SOL to send to each new demo wallet
 
 export async function POST(req: Request) {
   let displayName: string | undefined;
@@ -33,40 +48,60 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "displayName too long (max 32 chars)" }, { status: 400 });
   }
 
-  // Generate a fresh devnet keypair
-  const keypair = Keypair.generate();
-  const address = keypair.publicKey.toBase58();
-  const secretKey = Array.from(keypair.secretKey); // 64 bytes
-
-  // Airdrop via our Helius RPC (more reliable than public faucet)
   const rpcUrl =
     process.env.SOLANA_RPC_URL ||
     (process.env.NEXT_PUBLIC_HELIUS_API_KEY
       ? `https://devnet.helius-rpc.com/?api-key=${process.env.NEXT_PUBLIC_HELIUS_API_KEY}`
       : "https://api.devnet.solana.com");
 
-  // Fire-and-forget airdrop — don't block the response on confirmation.
-  // Vercel serverless + devnet confirmation can take >10s and timeout.
-  // The client will detect 0 balance and auto-request again if needed.
-  let airdropSig: string | null = null;
-  try {
-    const connection = new Connection(rpcUrl, "confirmed");
-    // requestAirdrop sends the tx to the network immediately.
-    // We intentionally skip confirmTransaction to avoid Vercel timeouts.
-    airdropSig = await connection.requestAirdrop(
-      keypair.publicKey,
-      AIRDROP_SOL * LAMPORTS_PER_SOL
-    );
-    console.log("[demo/register] airdrop sent:", airdropSig, "→", address);
-  } catch (err) {
-    console.error("[demo/register] airdrop failed:", err instanceof Error ? err.message : err);
+  // Generate a fresh devnet keypair for this demo user
+  const keypair = Keypair.generate();
+  const address = keypair.publicKey.toBase58();
+  const secretKey = Array.from(keypair.secretKey); // 64 bytes
+
+  // Fund the new wallet from the deploy wallet
+  // This is a server-to-user transfer — no airdrop rate limits apply.
+  let fundingTx: string | null = null;
+  let fundingFailed = false;
+
+  const secretKeyEnv = process.env.ORACLE_SECRET_KEY;
+  if (secretKeyEnv) {
+    try {
+      const deployKeypair = Keypair.fromSecretKey(
+        Uint8Array.from(JSON.parse(secretKeyEnv) as number[])
+      );
+      const connection = new Connection(rpcUrl, "confirmed");
+
+      const tx = new Transaction().add(
+        SystemProgram.transfer({
+          fromPubkey: deployKeypair.publicKey,
+          toPubkey: new PublicKey(address),
+          lamports: FUND_SOL * LAMPORTS_PER_SOL,
+        })
+      );
+
+      // Race with 8s timeout — Helius devnet is fast, but give it room
+      const transferPromise = sendAndConfirmTransaction(connection, tx, [deployKeypair]);
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("transfer timeout")), 8000)
+      );
+
+      fundingTx = await Promise.race([transferPromise, timeout]);
+      console.log(`[demo/register] funded ${address} with ${FUND_SOL} SOL — tx: ${fundingTx}`);
+    } catch (err) {
+      console.error("[demo/register] funding failed:", err instanceof Error ? err.message : err);
+      fundingFailed = true;
+    }
+  } else {
+    console.warn("[demo/register] ORACLE_SECRET_KEY not set — skipping funding");
+    fundingFailed = true;
   }
 
   return NextResponse.json({
     address,
     secretKey,
     displayName,
-    airdropSig,
-    airdropFailed: airdropSig === null,
+    airdropSig: fundingTx,   // keep field name for client compatibility
+    airdropFailed: fundingFailed,
   });
 }

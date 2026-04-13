@@ -4,6 +4,10 @@
     {
       "path": "/api/cron/oracle",
       "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/faucet",
+      "schedule": "0 6 * * *"
     }
   ]
 }

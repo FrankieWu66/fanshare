@@ -62,7 +62,7 @@ KV_REST_API_READ_ONLY_TOKEN=  # Optional read-only token for API route
 ```
 Without these, `/api/price-history/[playerId]` returns `[]` (safe fallback — chart shows empty state).
 
-Required for oracle cron job (/api/cron/oracle):
+Required for oracle cron job (/api/cron/oracle) and faucet cron (/api/cron/faucet):
 ```
 ORACLE_SECRET_KEY=       # JSON array from oracle-keypair.json e.g. [1,2,3,...]
 SOLANA_RPC_URL=          # Helius devnet URL (see RPC Provider section above)
@@ -70,6 +70,24 @@ SOLANA_CLUSTER=          # "devnet"
 CRON_SECRET=             # Random secret — Vercel injects as Authorization: Bearer <secret>
 BALLDONTLIE_API_KEY=     # Optional — improves balldontlie.io rate limits
 ```
+
+## Demo Wallet SOL Architecture
+
+Demo registration no longer uses airdrop (Vercel IPs are rate-limited by all faucets).
+Instead, the server transfers SOL directly from the deploy wallet to each new demo user.
+
+Flow:
+```
+Helius faucet (1 SOL/day) → deploy wallet (CsGh5T7...) → new demo users (0.05 SOL each)
+```
+
+- `/api/cron/faucet` — Vercel cron, runs daily at 06:00 UTC. Calls Helius `requestAirdrop`
+  to top up the deploy wallet. Only fires if balance < 0.3 SOL. Helius paid plan: 1 SOL/day.
+- `/api/demo/register` — transfers 0.05 SOL from deploy wallet to each new demo user.
+  No faucet rate limits. Instant. Supports ~20 new users per 1 SOL of deploy wallet balance.
+- Deploy wallet needs ORACLE_SECRET_KEY set in Vercel env vars (same key as oracle cron).
+
+If deploy wallet ever runs dry: `solana transfer <deploy-wallet> 0.5 --keypair ~/.config/solana/id.json --url <HELIUS_URL> --allow-unfunded-recipient`
 
 ## Design System
 Always read DESIGN_SYSTEM.md before making any visual or UI decisions.

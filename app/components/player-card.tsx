@@ -12,7 +12,7 @@ export function PlayerCard({ player }: PlayerCardProps) {
   const { config, currentPrice, spreadPercent, curve, oracle } = player;
   const tokensSold = curve?.tokensSold ?? 0n;
   const totalSupply = curve?.totalSupply ?? 1000000n;
-  const supplyPercent = Number((tokensSold * 100n) / totalSupply);
+  const supplyPercent = totalSupply > 0n ? (Number(tokensSold) / Number(totalSupply)) * 100 : 0;
   const indexPrice = oracle?.indexPriceLamports ?? 0n;
 
   const isUndervalued = spreadPercent < 0;
@@ -82,7 +82,7 @@ export function PlayerCard({ player }: PlayerCardProps) {
         <div>
           <p className="text-[11px] text-muted">Supply</p>
           <p className="font-mono text-sm font-medium tabular-nums">
-            {supplyPercent.toFixed(1)}%
+            {supplyPercent < 1 && supplyPercent > 0 ? supplyPercent.toFixed(2) : supplyPercent.toFixed(1)}%
           </p>
         </div>
       </div>

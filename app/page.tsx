@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { lamports as sol } from "@solana/kit";
 import { toast } from "sonner";
 import { useWallet } from "./lib/wallet/context";
@@ -27,33 +27,8 @@ export default function Home() {
   const balance = useBalance(address);
   const [copied, setCopied] = useState(false);
   const [filter, setFilter] = useState<"all" | "undervalued">("all");
-  const autoAirdropFired = useRef(false);
-
-  // Auto-airdrop for demo users who land with 0 SOL (server-side airdrop
-  // may have been a fire-and-forget that hasn't confirmed yet, or failed).
-  useEffect(() => {
-    if (
-      !isDemoMode ||
-      !address ||
-      autoAirdropFired.current ||
-      balance.lamports == null || // still loading
-      balance.lamports > 0n      // already has SOL
-    ) return;
-
-    autoAirdropFired.current = true;
-    // Small delay to let server-side airdrop confirm first
-    const timer = setTimeout(async () => {
-      try {
-        toast.info("Getting your demo credits…");
-        await client.airdrop(address, sol(2_000_000_000n)); // 2 SOL
-        toast.success("Demo credits ready! You have 2 SOL to trade.");
-      } catch {
-        toast.error("Auto-airdrop failed. Tap the Airdrop button to try again.");
-      }
-    }, 2000);
-    return () => clearTimeout(timer);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isDemoMode, address, balance.lamports]);
+  // Demo users are funded on registration from the deploy wallet.
+  // Client-side requestAirdrop is rate-limited from shared IPs — not used.
 
   const filteredPlayers =
     filter === "undervalued"
@@ -190,7 +165,7 @@ export default function Home() {
                       : "\u2014"}
                     <span className="ml-1 text-sm font-normal text-muted">SOL</span>
                   </p>
-                  {cluster !== "mainnet" && (
+                  {cluster !== "mainnet" && !isDemoMode && (
                     <button
                       onClick={handleAirdrop}
                       className="cursor-pointer rounded-lg border border-border-low px-3 py-1.5 text-xs font-medium transition hover:bg-cream"

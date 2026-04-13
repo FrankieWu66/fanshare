@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import { useWallet } from "../lib/wallet/context";
 import { useBalance } from "../lib/hooks/use-balance";
 import { lamportsToSolString } from "../lib/lamports";
@@ -226,6 +227,17 @@ export function WalletButton() {
 
           <div className="mb-3 rounded-lg border border-border-low bg-cream/50 px-3 py-2">
             <p className="break-all font-mono text-xs">{address}</p>
+          </div>
+
+          <div className="mb-2">
+            <Link
+              href="/portfolio"
+              onClick={close}
+              className="flex w-full items-center gap-2 rounded-lg border border-border-low bg-card px-3 py-2 text-xs font-medium transition hover:bg-cream"
+            >
+              <span>📊</span>
+              <span>My Portfolio</span>
+            </Link>
           </div>
 
           <div className="flex gap-2">
