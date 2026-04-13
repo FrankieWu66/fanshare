@@ -32,11 +32,21 @@ function formatTime(ts: number): string {
   return d.toLocaleDateString([], { month: "short", day: "numeric" });
 }
 
+const LAMPORTS_PER_SOL = 1_000_000_000;
+
 export function PriceHistoryChart({ data, currentPrice }: PriceHistoryChartProps) {
   if (data.length === 0) {
     return (
-      <div className="flex h-[164px] items-center justify-center">
-        <p className="font-mono text-xs text-muted">No price history yet</p>
+      <div className="flex h-[164px] flex-col items-center justify-center gap-2">
+        {currentPrice !== undefined && (
+          <p className="font-mono text-xl font-bold tabular-nums">
+            {(currentPrice / LAMPORTS_PER_SOL).toFixed(6)}
+            <span className="ml-1 text-sm font-normal text-muted">SOL</span>
+          </p>
+        )}
+        <p className="font-mono text-xs text-muted">
+          Price history records after oracle updates
+        </p>
       </div>
     );
   }

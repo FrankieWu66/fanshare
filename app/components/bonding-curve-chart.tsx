@@ -3,6 +3,11 @@
 import { calculateTokensForSol } from "../lib/bonding-curve";
 import { formatLamports } from "../lib/format";
 
+const LAMPORTS_PER_SOL = 1_000_000_000;
+function formatPriceSol(lamports: number): string {
+  return (lamports / LAMPORTS_PER_SOL).toFixed(6);
+}
+
 interface BondingCurveChartProps {
   basePrice: bigint;
   slope: bigint;
@@ -73,10 +78,14 @@ export function BondingCurveChart({
     [xOf(sold), yOf(minPrice)], // bottom-right of sold region
   ];
 
-  // Current price marker
+  // Current price marker — always show, even when sold = 0 (shows base price)
   const currentPrice = priceAt(sold);
   const dotX = xOf(sold);
   const dotY = yOf(currentPrice);
+  const currentPriceSolLabel = formatPriceSol(currentPrice);
+  // Position the price label: right-of-dot when sold < 50%, left-of-dot when > 50%
+  const labelAnchor = sold / supply < 0.5 ? "start" : "end";
+  const labelX = sold / supply < 0.5 ? dotX + 8 : dotX - 8;
 
   // Preview dot — shows projected position when user is typing a trade amount
   const previewTokens = inputLamports && inputLamports > 0n
@@ -175,27 +184,34 @@ export function BondingCurveChart({
           </>
         )}
 
-        {/* Current position vertical line */}
-        {sold > 0 && (
-          <line
-            x1={dotX}
-            y1={PAD.top}
-            x2={dotX}
-            y2={PAD.top + INNER_H}
-            stroke="var(--color-accent)"
-            strokeWidth="1"
-            strokeDasharray="3 3"
-            opacity="0.5"
-          />
-        )}
+        {/* Current position vertical line — always visible */}
+        <line
+          x1={dotX}
+          y1={PAD.top}
+          x2={dotX}
+          y2={PAD.top + INNER_H}
+          stroke="var(--color-accent)"
+          strokeWidth="1"
+          strokeDasharray="3 3"
+          opacity="0.5"
+        />
 
-        {/* Current price dot */}
-        {sold > 0 && (
-          <>
-            <circle cx={dotX} cy={dotY} r="5" fill="var(--color-accent)" opacity="0.25" />
-            <circle cx={dotX} cy={dotY} r="3" fill="var(--color-accent)" />
-          </>
-        )}
+        {/* Current price dot — always visible */}
+        <circle cx={dotX} cy={dotY} r="5" fill="var(--color-accent)" opacity="0.25" />
+        <circle cx={dotX} cy={dotY} r="3" fill="var(--color-accent)" />
+
+        {/* Current price label in SOL */}
+        <text
+          x={labelX}
+          y={dotY - 7}
+          textAnchor={labelAnchor}
+          fontSize="9"
+          fill="var(--color-accent)"
+          fontFamily="var(--font-mono)"
+          fontWeight="600"
+        >
+          {currentPriceSolLabel} SOL
+        </text>
 
         {/* Y-axis labels */}
         {yTicks.map((t, i) => (
