@@ -71,7 +71,7 @@ export default function Home() {
     if (!address) return;
     try {
       toast.info("Requesting airdrop...");
-      const sig = await client.airdrop(address, sol(1_000_000_000n));
+      const sig = await client.airdrop(address, sol(2_000_000_000n));
       toast.success("Airdrop received!", {
         description: sig ? (
           <a

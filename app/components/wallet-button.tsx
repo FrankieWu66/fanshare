@@ -33,15 +33,18 @@ export function WalletButton() {
   const open = () => setIsOpen(true);
   const close = () => {
     setIsOpen(false);
-    // Only steal focus back when the demo modal is NOT open
-    if (!showDemoSignin) {
+    // Return focus to trigger only when closing an open dropdown (keyboard a11y)
+    // Never steal focus if the demo modal is open or the dropdown was already closed
+    if (isOpen && !showDemoSignin) {
       setTimeout(() => triggerRef.current?.focus(), 0);
     }
   };
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      // Don't interfere when demo sign-in modal is open
+      // Only act when the dropdown is actually open — avoids stealing focus
+      // from inputs on the rest of the page on every click
+      if (!isOpen) return;
       if (showDemoSignin) return;
       if (ref.current && !ref.current.contains(e.target as Node)) {
         close();
@@ -50,7 +53,7 @@ export function WalletButton() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showDemoSignin]);
+  }, [isOpen, showDemoSignin]);
 
   const handleCopy = async () => {
     if (!address) return;
