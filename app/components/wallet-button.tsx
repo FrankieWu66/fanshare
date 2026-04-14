@@ -229,7 +229,7 @@ export function WalletButton() {
             <p className="break-all font-mono text-xs">{address}</p>
           </div>
 
-          <div className="mb-2">
+          <div className="mb-2 space-y-1">
             <Link
               href="/portfolio"
               onClick={close}
@@ -237,6 +237,14 @@ export function WalletButton() {
             >
               <span>📊</span>
               <span>My Portfolio</span>
+            </Link>
+            <Link
+              href="/leaderboard"
+              onClick={close}
+              className="flex w-full items-center gap-2 rounded-lg border border-border-low bg-card px-3 py-2 text-xs font-medium transition hover:bg-cream"
+            >
+              <span>🏆</span>
+              <span>Leaderboard</span>
             </Link>
           </div>
 

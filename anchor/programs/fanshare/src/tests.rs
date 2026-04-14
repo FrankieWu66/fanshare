@@ -242,6 +242,119 @@ mod tests {
         assert!(tokens < min_tokens_too_high, "Should fail if min_tokens_out > tokens received");
     }
 
+    // ========================================================================
+    // Unit tests — fee calculation
+    // ========================================================================
+
+    #[test]
+    fn test_fee_split_basic() {
+        // 100_000 lamports → 1.5% = 1500
+        // protocol (2/3) = 1000, treasury (1/3) = 500
+        let (total, protocol, treasury) = calculate_fee_split(100_000);
+        assert_eq!(total, 1500);
+        assert_eq!(protocol, 1000);
+        assert_eq!(treasury, 500);
+        assert_eq!(protocol + treasury, total);
+    }
+
+    #[test]
+    fn test_fee_split_large() {
+        // 1 SOL = 1_000_000_000 lamports → 15_000_000 fee
+        let (total, protocol, treasury) = calculate_fee_split(1_000_000_000);
+        assert_eq!(total, 15_000_000);
+        assert_eq!(protocol, 10_000_000);
+        assert_eq!(treasury, 5_000_000);
+    }
+
+    #[test]
+    fn test_fee_split_dust() {
+        // 66 lamports → fee = 66 * 15 / 1000 = 0 (below dust threshold)
+        let (total, protocol, treasury) = calculate_fee_split(66);
+        assert_eq!(total, 0);
+        assert_eq!(protocol, 0);
+        assert_eq!(treasury, 0);
+    }
+
+    #[test]
+    fn test_fee_split_minimum_nonzero() {
+        // 67 lamports → fee = 67 * 15 / 1000 = 1005 / 1000 = 1
+        let (total, protocol, treasury) = calculate_fee_split(67);
+        assert_eq!(total, 1);
+        assert_eq!(protocol, 0); // 1 * 2 / 3 = 0
+        assert_eq!(treasury, 1); // remainder
+    }
+
+    #[test]
+    fn test_fee_split_no_rounding_loss() {
+        // For any amount, protocol + treasury must equal total
+        for amount in [1, 100, 1000, 12345, 999_999, 1_000_000_000u64] {
+            let (total, protocol, treasury) = calculate_fee_split(amount);
+            assert_eq!(protocol + treasury, total,
+                "Fee split rounding loss for amount {}", amount);
+        }
+    }
+
+    #[test]
+    fn test_buy_with_fee_budget() {
+        // Simulate buy_with_sol fee budget calculation:
+        // sol_amount = 1_000_000 (user wants to spend 1M lamports)
+        // effective_sol = 1_000_000 * 1000 / 1015 = 985_221
+        let sol_amount = 1_000_000u64;
+        let effective_sol = ((sol_amount as u128) * 1000 / 1015) as u64;
+
+        // Tokens affordable with effective_sol
+        let tokens = calculate_tokens_for_sol(1000, 10, 0, effective_sol, 1_000_000).unwrap();
+        assert!(tokens > 0);
+
+        // Exact cost for those tokens
+        let exact_cost = calculate_buy_cost(1000, 10, 0, tokens).unwrap();
+
+        // Fee on exact cost
+        let (fee_total, _, _) = calculate_fee_split(exact_cost);
+        let total = exact_cost + fee_total;
+
+        // Total must not exceed user's budget
+        assert!(total <= sol_amount,
+            "Total {} (cost {} + fee {}) exceeds budget {}",
+            total, exact_cost, fee_total, sol_amount);
+    }
+
+    // ========================================================================
+    // Unit tests — spread calculation
+    // ========================================================================
+
+    #[test]
+    fn test_spread_undervalued() {
+        // market_price = 800, index_price = 1000 → spread = -2000 bps (-20%)
+        let spread = compute_spread(800, 1000);
+        assert_eq!(spread, -2000);
+    }
+
+    #[test]
+    fn test_spread_overvalued() {
+        // market_price = 1200, index_price = 1000 → spread = 2000 bps (+20%)
+        let spread = compute_spread(1200, 1000);
+        assert_eq!(spread, 2000);
+    }
+
+    #[test]
+    fn test_spread_fair_value() {
+        // market_price = index_price → spread = 0
+        let spread = compute_spread(1000, 1000);
+        assert_eq!(spread, 0);
+    }
+
+    #[test]
+    fn test_spread_zero_index() {
+        // index_price = 0 → spread = 0 (division by zero guard)
+        let spread = compute_spread(1000, 0);
+        assert_eq!(spread, 0);
+    }
+
+    // ========================================================================
+    // Cross-language parity vectors
+    // ========================================================================
+
     #[test]
     fn test_cross_language_parity_vectors() {
         // These test vectors must be replicated exactly in TypeScript.

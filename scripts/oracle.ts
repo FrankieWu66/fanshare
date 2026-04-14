@@ -17,6 +17,7 @@
 
 import * as fs from "fs";
 import * as path from "path";
+import * as crypto from "crypto";
 import { fileURLToPath } from "url";
 import {
   Connection,
@@ -35,8 +36,17 @@ dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), ".
 // ── Constants ──────────────────────────────────────────────────────────────
 const PROGRAM_ID = new PublicKey("B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz");
 
+// Anchor discriminator helper: first 8 bytes of sha256("global:<method_name>")
+function anchorDiscriminator(methodName: string): Buffer {
+  const hash = crypto.createHash("sha256").update(`global:${methodName}`).digest();
+  return hash.subarray(0, 8);
+}
+
 // update_oracle discriminator from IDL
 const UPDATE_ORACLE_DISCRIMINATOR = Buffer.from([112, 41, 209, 18, 248, 226, 252, 188]);
+
+// freeze_market discriminator for inactive player detection
+const FREEZE_MARKET_DISCRIMINATOR = anchorDiscriminator("freeze_market");
 
 // Stat weights — single source of truth in app/lib/oracle-weights.ts
 // index = (PPG × 1000 + RPG × 500 + APG × 700 + SPG × 800 + BPG × 800) lamports
@@ -80,6 +90,30 @@ function getStatsOraclePda(mintPubkey: PublicKey): [PublicKey, number] {
     [Buffer.from("stats-oracle"), mintPubkey.toBuffer()],
     PROGRAM_ID
   );
+}
+
+function getMarketStatusPda(mintPubkey: PublicKey): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("market-status"), mintPubkey.toBuffer()],
+    PROGRAM_ID
+  );
+}
+
+function buildFreezeMarketInstruction(
+  authority: PublicKey,
+  marketStatusPda: PublicKey,
+): TransactionInstruction {
+  // No args — just the discriminator
+  const data = Buffer.from(FREEZE_MARKET_DISCRIMINATOR);
+
+  return new TransactionInstruction({
+    programId: PROGRAM_ID,
+    keys: [
+      { pubkey: authority,       isSigner: true,  isWritable: false },
+      { pubkey: marketStatusPda, isSigner: false, isWritable: true  },
+    ],
+    data,
+  });
 }
 
 interface PlayerStats {
@@ -195,6 +229,125 @@ function buildUpdateOracleInstruction(
     ],
     data,
   });
+}
+
+// ── Inactive Player Detection ─────────────────────────────────────────────
+
+/**
+ * Check each player for inactivity (0 games in last 30 days).
+ * If inactive and market not already frozen, call freeze_market.
+ */
+async function checkInactivePlayers(
+  connection: Connection,
+  authority: Keypair,
+  mints: Record<string, string>,
+): Promise<void> {
+  console.log(`\n── Inactive Player Detection ──`);
+
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const startDate = thirtyDaysAgo.toISOString().split("T")[0]; // YYYY-MM-DD
+  const endDate = new Date().toISOString().split("T")[0];
+
+  const headers: Record<string, string> = process.env.BALLDONTLIE_API_KEY
+    ? { Authorization: process.env.BALLDONTLIE_API_KEY }
+    : {};
+
+  let frozen = 0;
+  let skipped = 0;
+
+  for (const [playerId, mintAddress] of Object.entries(mints)) {
+    const apiInfo = PLAYER_API_MAP[playerId];
+    if (!apiInfo) {
+      console.log(`  ${playerId}: no API mapping — skipping`);
+      skipped++;
+      continue;
+    }
+
+    try {
+      // 1. Look up player ID from balldontlie
+      const searchRes = await fetch(
+        `https://api.balldontlie.io/v1/players?search=${encodeURIComponent(apiInfo.name)}`,
+        { headers }
+      );
+      if (!searchRes.ok) {
+        console.warn(`  ${playerId}: player search failed (${searchRes.status}) — skipping`);
+        skipped++;
+        continue;
+      }
+
+      const searchData = await searchRes.json();
+      const player = searchData.data?.[0];
+      if (!player) {
+        console.warn(`  ${playerId}: player not found on API — skipping`);
+        skipped++;
+        continue;
+      }
+
+      // 2. Fetch games in the last 30 days
+      const gamesUrl =
+        `https://api.balldontlie.io/v1/stats?player_ids[]=${player.id}` +
+        `&start_date=${startDate}&end_date=${endDate}&per_page=1`;
+      const gamesRes = await fetch(gamesUrl, { headers });
+      if (!gamesRes.ok) {
+        console.warn(`  ${playerId}: games fetch failed (${gamesRes.status}) — skipping`);
+        skipped++;
+        continue;
+      }
+
+      const gamesData = await gamesRes.json();
+      const gamesPlayed = gamesData.meta?.total_count ?? gamesData.data?.length ?? 0;
+
+      if (gamesPlayed > 0) {
+        // Player is active — nothing to do
+        continue;
+      }
+
+      // Player has 0 games in last 30 days — check if market already frozen
+      const mintPubkey = new PublicKey(mintAddress);
+      const [marketStatusPda] = getMarketStatusPda(mintPubkey);
+      const marketInfo = await connection.getAccountInfo(marketStatusPda);
+
+      if (!marketInfo) {
+        console.warn(`  ${playerId}: no MarketStatus account — skipping freeze`);
+        skipped++;
+        continue;
+      }
+
+      // MarketStatus account layout: 8-byte discriminator, then fields.
+      // Check if already frozen by inspecting the account data.
+      // The "frozen" flag is a bool stored after the discriminator + other fields.
+      // For safety, we attempt the freeze and let the program reject if already frozen.
+      console.log(`  ${playerId} inactive for 30+ days (0 games since ${startDate}) — freezing market`);
+
+      try {
+        const ix = buildFreezeMarketInstruction(authority.publicKey, marketStatusPda);
+        const tx = new Transaction().add(ix);
+        const sig = await sendAndConfirmTransaction(connection, tx, [authority], {
+          commitment: "confirmed",
+        });
+        console.log(`  ✓ ${playerId} market frozen (tx: ${sig})`);
+        frozen++;
+      } catch (freezeErr: unknown) {
+        const msg = freezeErr instanceof Error ? freezeErr.message : String(freezeErr);
+        // If already frozen, the program will reject — that's fine
+        if (msg.includes("already") || msg.includes("frozen")) {
+          console.log(`  ${playerId}: market already frozen — skipping`);
+        } else {
+          console.error(`  ✗ ${playerId}: freeze failed — ${msg}`);
+        }
+        skipped++;
+      }
+    } catch (err) {
+      console.warn(`  ${playerId}: error checking inactivity — skipping`, err);
+      skipped++;
+    }
+
+    // Rate limit kindness
+    await new Promise((r) => setTimeout(r, 500));
+  }
+
+  console.log(`\n  Inactive check done: ${frozen} frozen, ${skipped} skipped`);
 }
 
 // ── Main ───────────────────────────────────────────────────────────────────
@@ -325,7 +478,14 @@ async function main() {
     await new Promise((r) => setTimeout(r, 500));
   }
 
-  console.log(`\n✅ Done: ${updated} updated, ${skipped} skipped`);
+  console.log(`\n✅ Oracle update done: ${updated} updated, ${skipped} skipped`);
+
+  // Phase 2-4: check for inactive players and freeze their markets
+  if (!useMock) {
+    await checkInactivePlayers(connection, authority, mints);
+  } else {
+    console.log("\n⚠ Mock mode — skipping inactive player detection");
+  }
 }
 
 main().catch((err) => {

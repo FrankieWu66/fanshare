@@ -5,6 +5,7 @@
     "anchor-deploy": "cd anchor && anchor deploy",
     "anchor-test": "cd anchor && anchor test --skip-deploy",
     "init-players": "tsx scripts/init-players.ts",
+    "init-tokenomics": "tsx scripts/init-tokenomics.ts",
     "oracle": "tsx scripts/oracle.ts",
     "oracle:mock": "tsx scripts/oracle.ts --mock",
     "build": "next build",

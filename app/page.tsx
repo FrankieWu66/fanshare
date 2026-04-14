@@ -93,12 +93,20 @@ export default function Home() {
       <div className="relative z-10">
         {/* Header */}
         <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <span className="text-sm font-bold tracking-tight">
-            FanShare
-            <span className="ml-1 rounded bg-accent-subtle px-1.5 py-0.5 text-[10px] font-medium text-accent">
-              {cluster}
+          <div className="flex items-center gap-4">
+            <span className="text-sm font-bold tracking-tight">
+              FanShare
+              <span className="ml-1 rounded bg-accent-subtle px-1.5 py-0.5 text-[10px] font-medium text-accent">
+                {cluster}
+              </span>
             </span>
-          </span>
+            <Link
+              href="/leaderboard"
+              className="text-xs font-medium text-muted transition hover:text-foreground"
+            >
+              Leaderboard
+            </Link>
+          </div>
           <div className="flex items-center gap-3">
             <ClusterSelect />
             <WalletButton />

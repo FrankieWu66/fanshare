@@ -13,7 +13,7 @@ import {
   type Instruction,
   type AccountMeta,
 } from "@solana/kit";
-import { PROGRAM_ID, BONDING_CURVE_SEED } from "./fanshare-program";
+import { PROGRAM_ID, BONDING_CURVE_SEED, STATS_ORACLE_SEED, EXIT_TREASURY_SEED, MARKET_STATUS_SEED, LEADERBOARD_SEED, SHARP_CALLS_TYPE, PROTOCOL_WALLET } from "./fanshare-program";
 
 const TOKEN_PROGRAM_ID = address("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
 const SYSTEM_PROGRAM_ID = address("11111111111111111111111111111111");
@@ -25,6 +25,44 @@ export async function getBondingCurvePda(mint: Address): Promise<Address> {
   const [pda] = await getProgramDerivedAddress({
     programAddress: address(PROGRAM_ID),
     seeds: [getUtf8Encoder().encode(BONDING_CURVE_SEED), enc.encode(address(mint))],
+  });
+  return pda;
+}
+
+/** Derive the StatsOracleAccount PDA for a given mint. */
+export async function getStatsOraclePda(mint: Address): Promise<Address> {
+  const enc = getAddressEncoder();
+  const [pda] = await getProgramDerivedAddress({
+    programAddress: address(PROGRAM_ID),
+    seeds: [getUtf8Encoder().encode(STATS_ORACLE_SEED), enc.encode(address(mint))],
+  });
+  return pda;
+}
+
+/** Derive the GlobalExitTreasury PDA (singleton). */
+export async function getExitTreasuryPda(): Promise<Address> {
+  const [pda] = await getProgramDerivedAddress({
+    programAddress: address(PROGRAM_ID),
+    seeds: [getUtf8Encoder().encode(EXIT_TREASURY_SEED)],
+  });
+  return pda;
+}
+
+/** Derive the MarketStatus PDA for a given mint (per-player freeze guard). */
+export async function getMarketStatusPda(mint: Address): Promise<Address> {
+  const enc = getAddressEncoder();
+  const [pda] = await getProgramDerivedAddress({
+    programAddress: address(PROGRAM_ID),
+    seeds: [getUtf8Encoder().encode(MARKET_STATUS_SEED), enc.encode(address(mint))],
+  });
+  return pda;
+}
+
+/** Derive the Sharp Calls LeaderboardAnchor PDA (global singleton). */
+export async function getSharpLeaderboardPda(): Promise<Address> {
+  const [pda] = await getProgramDerivedAddress({
+    programAddress: address(PROGRAM_ID),
+    seeds: [getUtf8Encoder().encode(LEADERBOARD_SEED), new Uint8Array([SHARP_CALLS_TYPE])],
   });
   return pda;
 }
@@ -60,12 +98,18 @@ function encodeU64LE(value: bigint): Uint8Array {
 /**
  * Build `buy_with_sol` instruction.
  * User specifies SOL amount to spend; program calculates tokens received.
+ * Fee (1.5%) is deducted from sol budget on-chain.
  */
 export function getBuyWithSolInstruction({
   buyer,
   mint,
   bondingCurve,
   buyerTokenAccount,
+  exitTreasury,
+  protocolWallet,
+  statsOracle,
+  marketStatus,
+  sharpLeaderboard,
   solAmount,
   minTokensOut,
 }: {
@@ -73,6 +117,11 @@ export function getBuyWithSolInstruction({
   mint: Address;
   bondingCurve: Address;
   buyerTokenAccount: Address;
+  exitTreasury: Address;
+  protocolWallet: Address;
+  statsOracle: Address;
+  marketStatus: Address;
+  sharpLeaderboard: Address;
   solAmount: bigint;
   minTokensOut: bigint;
 }): Instruction {
@@ -88,6 +137,11 @@ export function getBuyWithSolInstruction({
     { address: buyerTokenAccount, role: 1 },// writable ATA
     { address: SYSTEM_PROGRAM_ID, role: 0 },
     { address: TOKEN_PROGRAM_ID, role: 0 },
+    { address: exitTreasury, role: 1 },     // writable PDA (treasury fee)
+    { address: protocolWallet, role: 1 },   // writable (protocol fee)
+    { address: statsOracle, role: 0 },      // readonly (spread calc)
+    { address: marketStatus, role: 0 },     // readonly (freeze guard)
+    { address: sharpLeaderboard, role: 0 }, // readonly (early access check)
   ];
 
   return {
@@ -100,12 +154,18 @@ export function getBuyWithSolInstruction({
 /**
  * Build `sell` instruction.
  * User specifies token amount to sell; program calculates SOL received.
+ * Fee (1.5%) is deducted from SOL return on-chain.
  */
 export function getSellInstruction({
   buyer: seller,
   mint,
   bondingCurve,
   buyerTokenAccount: sellerTokenAccount,
+  exitTreasury,
+  protocolWallet,
+  statsOracle,
+  marketStatus,
+  sharpLeaderboard,
   tokenAmount,
   minSolOut,
 }: {
@@ -113,6 +173,11 @@ export function getSellInstruction({
   mint: Address;
   bondingCurve: Address;
   buyerTokenAccount: Address;
+  exitTreasury: Address;
+  protocolWallet: Address;
+  statsOracle: Address;
+  marketStatus: Address;
+  sharpLeaderboard: Address;
   tokenAmount: bigint;
   minSolOut: bigint;
 }): Instruction {
@@ -128,6 +193,11 @@ export function getSellInstruction({
     { address: sellerTokenAccount, role: 1 },
     { address: SYSTEM_PROGRAM_ID, role: 0 },
     { address: TOKEN_PROGRAM_ID, role: 0 },
+    { address: exitTreasury, role: 1 },     // writable PDA (treasury fee)
+    { address: protocolWallet, role: 1 },   // writable (protocol fee)
+    { address: statsOracle, role: 0 },      // readonly (spread calc)
+    { address: marketStatus, role: 0 },     // readonly (freeze guard)
+    { address: sharpLeaderboard, role: 0 }, // readonly (early access check)
   ];
 
   return {

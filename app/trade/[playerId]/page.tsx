@@ -13,6 +13,10 @@ import { useSendTransaction } from "../../lib/hooks/use-send-transaction";
 import {
   getBondingCurvePda,
   getAssociatedTokenAccount,
+  getStatsOraclePda,
+  getExitTreasuryPda,
+  getMarketStatusPda,
+  getSharpLeaderboardPda,
   getBuyWithSolInstruction,
   getCreateAtaIdempotentInstruction,
   getSellInstruction,
@@ -31,10 +35,13 @@ import {
   calculateTokensForSol,
   currentPrice,
 } from "../../lib/bonding-curve";
-import { type PlayerConfig, DEFAULT_BASE_PRICE, DEFAULT_SLOPE, DEVNET_PLAYERS } from "../../lib/fanshare-program";
+import { type PlayerConfig, DEFAULT_BASE_PRICE, DEFAULT_SLOPE, DEVNET_PLAYERS, PROTOCOL_WALLET, FEE_NUMERATOR, FEE_DENOMINATOR } from "../../lib/fanshare-program";
+import { address as toAddress } from "@solana/kit";
 import { parseTransactionError } from "../../lib/errors";
 import { recordTrade, loadTradesForPlayer, type TradeRecord } from "../../lib/trade-history";
 import { recordLocalPrice, loadLocalPriceHistory, mergePriceHistory } from "../../lib/local-price-history";
+import { useMarketStatus } from "../../lib/hooks/use-market-status";
+import { FrozenMarketBanner } from "../../components/frozen-market-banner";
 
 // Module-level fetcher — stable reference, avoids new function on every render
 const jsonFetcher = (url: string) =>
@@ -62,6 +69,7 @@ export default function TradePage({
   const balance = useBalance(address);
   const mintAddress = player?.curve?.mint as Address | undefined;
   const tokenBalance = useTokenBalance(address, mintAddress);
+  const { marketStatus } = useMarketStatus(player?.curve?.mint);
 
   const [tab, setTab] = useState<"buy" | "sell">("buy");
   const [chartView, setChartView] = useState<"curve" | "history">("curve");
@@ -144,16 +152,26 @@ export default function TradePage({
           ? { text: "Overvalued", color: "text-negative", bg: "bg-negative/10" }
           : { text: "Fair value", color: "text-muted", bg: "bg-cream" };
 
+  // Frozen market state
+  const isFrozen = marketStatus?.isFrozen ?? false;
+  const isClosed = isFrozen && Number(marketStatus?.closeTimestamp ?? 0) <= Math.floor(Date.now() / 1000);
+  const buyDisabledByFreeze = isFrozen; // buy disabled when frozen (sell-only or closed)
+  const sellDisabledByFreeze = isClosed; // sell disabled only when fully closed
+
   // ── Handlers ─────────────────────────────────────────────────────────────
   const handleBuy = useCallback(async () => {
-    if (isBusy || !address || !player || !curve || solLamports === 0n || tokensOut === 0n) return;
+    if (isBusy || buyDisabledByFreeze || !address || !player || !curve || solLamports === 0n || tokensOut === 0n) return;
     setTxError(null);
     setTxStage("signing");
     try {
       const mint = curve.mint as Address;
-      const [bondingCurve, buyerTokenAccount] = await Promise.all([
+      const [bondingCurve, buyerTokenAccount, statsOracle, exitTreasury, marketStatus, sharpLeaderboard] = await Promise.all([
         getBondingCurvePda(mint),
         getAssociatedTokenAccount(address, mint),
+        getStatsOraclePda(mint),
+        getExitTreasuryPda(),
+        getMarketStatusPda(mint),
+        getSharpLeaderboardPda(),
       ]);
       const minTokensOut = applySlippage(tokensOut, SLIPPAGE_PCT);
       const createAtaIx = getCreateAtaIdempotentInstruction({
@@ -167,6 +185,11 @@ export default function TradePage({
         mint,
         bondingCurve,
         buyerTokenAccount,
+        exitTreasury,
+        protocolWallet: toAddress(PROTOCOL_WALLET),
+        statsOracle,
+        marketStatus,
+        sharpLeaderboard,
         solAmount: solLamports,
         minTokensOut,
       });
@@ -192,24 +215,35 @@ export default function TradePage({
       setTxError(msg);
       setTxStage("failed");
     }
-  }, [isBusy, address, player, curve, solLamports, tokensOut, send, playerId]);
+  }, [isBusy, buyDisabledByFreeze, address, player, curve, solLamports, tokensOut, send, playerId]);
 
   const handleSell = useCallback(async () => {
-    if (isBusy || !address || !player || !curve || tokenAmountIn === 0n || solOut === 0n) return;
+    if (isBusy || sellDisabledByFreeze || !address || !player || !curve || tokenAmountIn === 0n || solOut === 0n) return;
     setTxError(null);
     setTxStage("signing");
     try {
       const mint = curve.mint as Address;
-      const [bondingCurve, buyerTokenAccount] = await Promise.all([
+      const [bondingCurve, buyerTokenAccount, statsOracle, exitTreasury, marketStatus, sharpLeaderboard] = await Promise.all([
         getBondingCurvePda(mint),
         getAssociatedTokenAccount(address, mint),
+        getStatsOraclePda(mint),
+        getExitTreasuryPda(),
+        getMarketStatusPda(mint),
+        getSharpLeaderboardPda(),
       ]);
-      const minSolOut = applySlippage(solOut, SLIPPAGE_PCT);
+      // min_sol_out must account for fee: on-chain, seller gets sol_return - 1.5% fee
+      const afterFee = solOut - solOut * FEE_NUMERATOR / FEE_DENOMINATOR;
+      const minSolOut = applySlippage(afterFee, SLIPPAGE_PCT);
       const ix = getSellInstruction({
         buyer: address,
         mint,
         bondingCurve,
         buyerTokenAccount,
+        exitTreasury,
+        protocolWallet: toAddress(PROTOCOL_WALLET),
+        statsOracle,
+        marketStatus,
+        sharpLeaderboard,
         tokenAmount: tokenAmountIn,
         minSolOut,
       });
@@ -235,7 +269,7 @@ export default function TradePage({
       setTxError(msg);
       setTxStage("failed");
     }
-  }, [isBusy, address, player, curve, tokenAmountIn, solOut, send, playerId]);
+  }, [isBusy, sellDisabledByFreeze, address, player, curve, tokenAmountIn, solOut, send, playerId]);
 
   // ── Loading / not found ───────────────────────────────────────────────────
   if (isLoading) {
@@ -421,6 +455,11 @@ export default function TradePage({
             )}
           </div>
 
+          {/* Frozen market banner */}
+          {marketStatus?.isFrozen && (
+            <FrozenMarketBanner marketStatus={marketStatus} />
+          )}
+
           {/* 3-column layout */}
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
 
@@ -572,7 +611,9 @@ export default function TradePage({
               </details>
 
               {/* Trade preview (visible when inputs are filled) */}
-              {tab === "buy" && tokensOut > 0n && (
+              {tab === "buy" && tokensOut > 0n && (() => {
+                const feeLamports = solLamports * FEE_NUMERATOR / FEE_DENOMINATOR;
+                return (
                 <div className="rounded-xl border border-border-low bg-card p-5">
                   <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
                     Trade Preview
@@ -587,6 +628,10 @@ export default function TradePage({
                       <span className="font-mono font-medium">{tokensOut.toLocaleString()} tokens</span>
                     </div>
                     <div className="flex justify-between">
+                      <span className="text-muted">Fee (1.5%)</span>
+                      <span className="font-mono text-xs text-muted">{formatSol(feeLamports)} SOL</span>
+                    </div>
+                    <div className="flex justify-between">
                       <span className="text-muted">Price after</span>
                       <span className="font-mono font-medium text-foreground/60">
                         {formatSol(priceAfterBuy)} SOL
@@ -598,9 +643,13 @@ export default function TradePage({
                     </div>
                   </div>
                 </div>
-              )}
+                );
+              })()}
 
-              {tab === "sell" && solOut > 0n && (
+              {tab === "sell" && solOut > 0n && (() => {
+                const feeLamports = solOut * FEE_NUMERATOR / FEE_DENOMINATOR;
+                const afterFee = solOut - feeLamports;
+                return (
                 <div className="rounded-xl border border-border-low bg-card p-5">
                   <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted">
                     Trade Preview
@@ -612,7 +661,11 @@ export default function TradePage({
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted">You receive</span>
-                      <span className="font-mono font-medium">{formatSol(solOut)} SOL</span>
+                      <span className="font-mono font-medium">{formatSol(afterFee)} SOL</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted">Fee (1.5%)</span>
+                      <span className="font-mono text-xs text-muted">{formatSol(feeLamports)} SOL</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted">Price after</span>
@@ -626,7 +679,8 @@ export default function TradePage({
                     </div>
                   </div>
                 </div>
-              )}
+                );
+              })()}
             </div>
 
             {/* ── Col 3: Trade widget (first on mobile for primary action) ── */}
@@ -711,6 +765,15 @@ export default function TradePage({
                       <div className="text-center text-sm text-muted">
                         Connect wallet to buy
                       </div>
+                    ) : buyDisabledByFreeze ? (
+                      <div className="text-center">
+                        <button
+                          disabled
+                          className="w-full cursor-not-allowed rounded-xl bg-muted/30 py-3 text-sm font-bold text-muted opacity-60"
+                        >
+                          {isClosed ? "Market Closed" : "Market Frozen — Sell Only"}
+                        </button>
+                      </div>
                     ) : (
                       <div aria-live="polite" aria-atomic="true">
                         <button
@@ -791,6 +854,15 @@ export default function TradePage({
                     {status !== "connected" ? (
                       <div className="text-center text-sm text-muted">
                         Connect wallet to sell
+                      </div>
+                    ) : sellDisabledByFreeze ? (
+                      <div className="text-center">
+                        <button
+                          disabled
+                          className="w-full cursor-not-allowed rounded-xl bg-muted/30 py-3 text-sm font-bold text-muted opacity-60"
+                        >
+                          Market Closed — Claim Exit Instead
+                        </button>
                       </div>
                     ) : (
                       <div aria-live="polite" aria-atomic="true">

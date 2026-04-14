@@ -11,6 +11,19 @@ export const PROGRAM_ID = "B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz" as cons
 // PDA seed prefixes (must match Rust seeds exactly)
 export const BONDING_CURVE_SEED = "bonding-curve";
 export const STATS_ORACLE_SEED = "stats-oracle";
+export const EXIT_TREASURY_SEED = "exit-treasury";
+export const ORACLE_CONFIG_SEED = "oracle-config";
+export const MARKET_STATUS_SEED = "market-status";
+export const LEADERBOARD_SEED = "leaderboard";
+export const SHARP_CALLS_TYPE = 1;
+
+// Protocol wallet — receives 1.0% fee from every trade.
+// Must match the value stored in GlobalExitTreasury on-chain.
+export const PROTOCOL_WALLET = "CsGh5T7EzTUW3hmdpjMrJyzBVq1RPnDXMr9VYuHyXa83" as const;
+
+// Fee constants (must match on-chain: FEE_NUMERATOR / FEE_DENOMINATOR = 1.5%)
+export const FEE_NUMERATOR = 15n;
+export const FEE_DENOMINATOR = 1000n;
 
 // Default bonding curve parameters — floor fallback for incomplete stats
 export const DEFAULT_BASE_PRICE = 10_000n; // floor for players with missing stats
@@ -122,6 +135,16 @@ export interface StatsOracleData {
   bump: number;
 }
 
+export interface MarketStatusData {
+  mint: string;
+  isFrozen: boolean;
+  freezeTimestamp: bigint;
+  closeTimestamp: bigint;
+  openTime: bigint;
+  authority: string;
+  bump: number;
+}
+
 // Combined view for the market screen
 export interface PlayerMarketData {
   config: PlayerConfig;
@@ -137,6 +160,7 @@ export interface PlayerMarketData {
  */
 export const BONDING_CURVE_DISCRIMINATOR = new Uint8Array([143, 100, 193, 40, 52, 254, 111, 103]);
 export const STATS_ORACLE_DISCRIMINATOR = new Uint8Array([244, 15, 171, 62, 225, 182, 102, 103]);
+export const MARKET_STATUS_DISCRIMINATOR = new Uint8Array([101, 43, 127, 201, 100, 221, 208, 188]);
 
 /**
  * Deserialize a BondingCurveAccount from raw account data.
@@ -219,6 +243,41 @@ export function deserializeStatsOracle(data: Uint8Array): StatsOracleData {
   const bump = data[offset];
 
   return { mint, indexPriceLamports, lastUpdated, authority, bump };
+}
+
+/**
+ * Deserialize a MarketStatus account from raw account data.
+ * Layout (after 8-byte discriminator):
+ *   32 bytes: mint (Pubkey)
+ *   1 byte: is_frozen (bool)
+ *   8 bytes: freeze_timestamp (i64 LE)
+ *   8 bytes: close_timestamp (i64 LE)
+ *   8 bytes: open_time (i64 LE)
+ *   32 bytes: authority (Pubkey)
+ *   1 byte: bump (u8)
+ */
+export function deserializeMarketStatus(data: Uint8Array): MarketStatusData {
+  const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+  let offset = 8; // skip discriminator
+
+  const mintBytes = data.slice(offset, offset + 32);
+  const mint = bytesToBase58(mintBytes);
+  offset += 32;
+
+  const isFrozen = data[offset] !== 0;
+  offset += 1;
+
+  const freezeTimestamp = view.getBigInt64(offset, true); offset += 8;
+  const closeTimestamp = view.getBigInt64(offset, true); offset += 8;
+  const openTime = view.getBigInt64(offset, true); offset += 8;
+
+  const authorityBytes = data.slice(offset, offset + 32);
+  const authority = bytesToBase58(authorityBytes);
+  offset += 32;
+
+  const bump = data[offset];
+
+  return { mint, isFrozen, freezeTimestamp, closeTimestamp, openTime, authority, bump };
 }
 
 // Simple base58 encoder (no dependency needed for display)

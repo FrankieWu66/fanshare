@@ -52,6 +52,36 @@ function getStatsOraclePda(mint: PublicKey): [PublicKey, number] {
   );
 }
 
+function getExitTreasuryPda(): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("exit-treasury")],
+    PROGRAM_ID
+  );
+}
+
+function getOracleConfigPda(): [PublicKey, number] {
+  return PublicKey.findProgramAddressSync(
+    [Buffer.from("oracle-config")],
+    PROGRAM_ID
+  );
+}
+
+function getMarketStatusPda(mint: PublicKey): PublicKey {
+  const [pda] = PublicKey.findProgramAddressSync(
+    [Buffer.from("market-status"), mint.toBuffer()],
+    PROGRAM_ID
+  );
+  return pda;
+}
+
+function getLeaderboardPda(type: number): PublicKey {
+  const [pda] = PublicKey.findProgramAddressSync(
+    [Buffer.from("leaderboard"), Buffer.from([type])],
+    PROGRAM_ID
+  );
+  return pda;
+}
+
 /** Linear bonding curve cost: n*base + slope*n*(2s+n-1)/2 */
 function calculateBuyCost(basePrice: bigint, slope: bigint, tokensSold: bigint, amount: bigint): bigint {
   const n = amount;
@@ -87,6 +117,10 @@ let bondingCurveBump: number;
 let statsOraclePda: PublicKey;
 let buyerKeypair: Keypair;
 let buyerTokenAccount: PublicKey;
+let exitTreasuryPda: PublicKey;
+let oracleConfigPda: PublicKey;
+let marketStatusPda: PublicKey;
+let sharpLeaderboardPda: PublicKey;
 
 // ── Setup ───────────────────────────────────────────────────────────────────
 
@@ -150,6 +184,70 @@ beforeAll(async () => {
     )
   );
   await provider.sendAndConfirm(createAtaTx, [buyerKeypair]);
+
+  // Initialize Phase 1 tokenomics accounts
+  [exitTreasuryPda] = getExitTreasuryPda();
+  [oracleConfigPda] = getOracleConfigPda();
+
+  // Initialize GlobalExitTreasury (protocol wallet = authority for tests)
+  await program.methods
+    .initializeExitTreasury(authority.publicKey)
+    .accounts({
+      authority: authority.publicKey,
+      exitTreasury: exitTreasuryPda,
+      systemProgram: SystemProgram.programId,
+    })
+    .signers([authority])
+    .rpc();
+
+  // Initialize OracleConfig with test weights
+  await program.methods
+    .initializeOracleConfig(
+      new BN(1000), new BN(500), new BN(700),
+      new BN(800), new BN(800), new BN(0),
+    )
+    .accounts({
+      authority: authority.publicKey,
+      oracleConfig: oracleConfigPda,
+      systemProgram: SystemProgram.programId,
+    })
+    .signers([authority])
+    .rpc();
+
+  // Initialize MarketStatus for the test mint (open_time = 0 = open immediately)
+  marketStatusPda = getMarketStatusPda(mint);
+  await program.methods
+    .initializeMarketStatus(new BN(0))
+    .accounts({
+      authority: authority.publicKey,
+      mint,
+      marketStatus: marketStatusPda,
+      systemProgram: SystemProgram.programId,
+    })
+    .signers([authority])
+    .rpc();
+
+  // Initialize both Leaderboard anchors (type 0 = Top Traders, type 1 = Sharp Calls)
+  sharpLeaderboardPda = getLeaderboardPda(1);
+  await program.methods
+    .initializeLeaderboard(0)
+    .accounts({
+      authority: authority.publicKey,
+      leaderboard: getLeaderboardPda(0),
+      systemProgram: SystemProgram.programId,
+    })
+    .signers([authority])
+    .rpc();
+
+  await program.methods
+    .initializeLeaderboard(1)
+    .accounts({
+      authority: authority.publicKey,
+      leaderboard: sharpLeaderboardPda,
+      systemProgram: SystemProgram.programId,
+    })
+    .signers([authority])
+    .rpc();
 });
 
 // ── initialize_curve ────────────────────────────────────────────────────────
@@ -310,7 +408,7 @@ describe("buy", () => {
     const curveBefore = await getLamports(provider.connection,bondingCurvePda);
 
     await program.methods
-      .buy(BUY_AMOUNT, new BN(expectedCost.toString()).add(new BN(100_000))) // generous max
+      .buy(BUY_AMOUNT, new BN(expectedCost.toString()).add(new BN(200_000))) // generous max (includes 1.5% fee)
       .accounts({
         buyer: buyerKeypair.publicKey,
         mint,
@@ -318,6 +416,11 @@ describe("buy", () => {
         buyerTokenAccount,
         systemProgram: SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
+        exitTreasury: exitTreasuryPda,
+        protocolWallet: authority.publicKey,
+        statsOracle: statsOraclePda,
+        marketStatus: marketStatusPda,
+        sharpLeaderboard: sharpLeaderboardPda,
       })
       .signers([buyerKeypair])
       .rpc();
@@ -361,6 +464,11 @@ describe("buy", () => {
           buyerTokenAccount,
           systemProgram: SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: statsOraclePda,
+          marketStatus: marketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
         })
         .signers([buyerKeypair])
         .rpc();
@@ -383,6 +491,11 @@ describe("buy", () => {
           buyerTokenAccount,
           systemProgram: SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: statsOraclePda,
+          marketStatus: marketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
         })
         .signers([buyerKeypair])
         .rpc();
@@ -405,6 +518,11 @@ describe("buy", () => {
           buyerTokenAccount,
           systemProgram: SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: statsOraclePda,
+          marketStatus: marketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
         })
         .signers([buyerKeypair])
         .rpc();
@@ -435,6 +553,11 @@ describe("buy_with_sol", () => {
         buyerTokenAccount,
         systemProgram: SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
+        exitTreasury: exitTreasuryPda,
+        protocolWallet: authority.publicKey,
+        statsOracle: statsOraclePda,
+        marketStatus: marketStatusPda,
+        sharpLeaderboard: sharpLeaderboardPda,
       })
       .signers([buyerKeypair])
       .rpc();
@@ -457,6 +580,11 @@ describe("buy_with_sol", () => {
           buyerTokenAccount,
           systemProgram: SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: statsOraclePda,
+          marketStatus: marketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
         })
         .signers([buyerKeypair])
         .rpc();
@@ -479,6 +607,11 @@ describe("buy_with_sol", () => {
           buyerTokenAccount,
           systemProgram: SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: statsOraclePda,
+          marketStatus: marketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
         })
         .signers([buyerKeypair])
         .rpc();
@@ -501,6 +634,11 @@ describe("buy_with_sol", () => {
           buyerTokenAccount,
           systemProgram: SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: statsOraclePda,
+          marketStatus: marketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
         })
         .signers([buyerKeypair])
         .rpc();
@@ -533,6 +671,11 @@ describe("sell", () => {
         buyerTokenAccount,
         systemProgram: SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
+        exitTreasury: exitTreasuryPda,
+        protocolWallet: authority.publicKey,
+        statsOracle: statsOraclePda,
+        marketStatus: marketStatusPda,
+        sharpLeaderboard: sharpLeaderboardPda,
       })
       .signers([buyerKeypair])
       .rpc();
@@ -559,6 +702,11 @@ describe("sell", () => {
           buyerTokenAccount,
           systemProgram: SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: statsOraclePda,
+          marketStatus: marketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
         })
         .signers([buyerKeypair])
         .rpc();
@@ -581,6 +729,11 @@ describe("sell", () => {
           buyerTokenAccount,
           systemProgram: SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: statsOraclePda,
+          marketStatus: marketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
         })
         .signers([buyerKeypair])
         .rpc();
@@ -603,6 +756,11 @@ describe("sell", () => {
           buyerTokenAccount,
           systemProgram: SystemProgram.programId,
           tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: statsOraclePda,
+          marketStatus: marketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
         })
         .signers([buyerKeypair])
         .rpc();
@@ -624,7 +782,7 @@ describe("sell", () => {
     const expectedBuyCost = calculateBuyCost(10_000n, 10n, BigInt(tokensSoldPre), 10n);
 
     await program.methods
-      .buy(buyAmt, new BN(expectedBuyCost.toString()).add(new BN(100_000)))
+      .buy(buyAmt, new BN(expectedBuyCost.toString()).add(new BN(200_000))) // includes fee
       .accounts({
         buyer: buyerKeypair.publicKey,
         mint,
@@ -632,6 +790,11 @@ describe("sell", () => {
         buyerTokenAccount,
         systemProgram: SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
+        exitTreasury: exitTreasuryPda,
+        protocolWallet: authority.publicKey,
+        statsOracle: statsOraclePda,
+        marketStatus: marketStatusPda,
+        sharpLeaderboard: sharpLeaderboardPda,
       })
       .signers([buyerKeypair])
       .rpc();
@@ -650,6 +813,11 @@ describe("sell", () => {
         buyerTokenAccount,
         systemProgram: SystemProgram.programId,
         tokenProgram: TOKEN_PROGRAM_ID,
+        exitTreasury: exitTreasuryPda,
+        protocolWallet: authority.publicKey,
+        statsOracle: statsOraclePda,
+        marketStatus: marketStatusPda,
+        sharpLeaderboard: sharpLeaderboardPda,
       })
       .signers([buyerKeypair])
       .rpc();
@@ -727,5 +895,373 @@ describe("update_oracle", () => {
 
     const oracle = await program.account.statsOracleAccount.fetch(statsOraclePda);
     expect(oracle.indexPriceLamports.toNumber()).toBe(0);
+  });
+});
+
+// ── Phase 2: freeze_market, sell on frozen, process_exit ─────────────────────
+
+describe("freeze_market", () => {
+  // Use a separate mint/player for freeze tests to avoid polluting main test state
+  let freezeMint: PublicKey;
+  let freezeMintKeypair: Keypair;
+  let freezeBondingCurvePda: PublicKey;
+  let freezeStatsOraclePda: PublicKey;
+  let freezeMarketStatusPda: PublicKey;
+  let freezeBuyerTokenAccount: PublicKey;
+
+  beforeAll(async () => {
+    freezeMintKeypair = Keypair.generate();
+    freezeMint = freezeMintKeypair.publicKey;
+    const [bcPda] = getBondingCurvePda(freezeMint);
+    freezeBondingCurvePda = bcPda;
+    [freezeStatsOraclePda] = getStatsOraclePda(freezeMint);
+    freezeMarketStatusPda = getMarketStatusPda(freezeMint);
+
+    // Create the SPL mint
+    const mintRent = await provider.connection.getMinimumBalanceForRentExemption(MINT_SIZE);
+    const createMintTx = new Transaction().add(
+      SystemProgram.createAccount({
+        fromPubkey: authority.publicKey,
+        newAccountPubkey: freezeMint,
+        lamports: mintRent,
+        space: MINT_SIZE,
+        programId: TOKEN_PROGRAM_ID,
+      }),
+      createInitializeMintInstruction(
+        freezeMint,
+        0,
+        freezeBondingCurvePda, // mint authority = bonding curve PDA
+        null
+      )
+    );
+    await provider.sendAndConfirm(createMintTx, [authority, freezeMintKeypair]);
+
+    // Initialize bonding curve
+    await program.methods
+      .initializeCurve("Freeze_Test", BASE_PRICE, SLOPE, TOTAL_SUPPLY)
+      .accounts({
+        authority: authority.publicKey,
+        mint: freezeMint,
+        bondingCurve: freezeBondingCurvePda,
+        statsOracle: freezeStatsOraclePda,
+        systemProgram: SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      })
+      .signers([authority])
+      .rpc();
+
+    // Initialize market status
+    await program.methods
+      .initializeMarketStatus(new BN(0))
+      .accounts({
+        authority: authority.publicKey,
+        mint: freezeMint,
+        marketStatus: freezeMarketStatusPda,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([authority])
+      .rpc();
+
+    // Create buyer's ATA for freeze mint
+    freezeBuyerTokenAccount = getAssociatedTokenAddressSync(freezeMint, buyerKeypair.publicKey);
+    const createAtaTx = new Transaction().add(
+      createAssociatedTokenAccountInstruction(
+        buyerKeypair.publicKey,
+        freezeBuyerTokenAccount,
+        buyerKeypair.publicKey,
+        freezeMint
+      )
+    );
+    await provider.sendAndConfirm(createAtaTx, [buyerKeypair]);
+
+    // Buy some tokens so there's something to sell/exit later
+    const buyCost = calculateBuyCost(10_000n, 10n, 0n, 50n);
+    await program.methods
+      .buy(new BN(50), new BN(buyCost.toString()).add(new BN(200_000)))
+      .accounts({
+        buyer: buyerKeypair.publicKey,
+        mint: freezeMint,
+        bondingCurve: freezeBondingCurvePda,
+        buyerTokenAccount: freezeBuyerTokenAccount,
+        systemProgram: SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        exitTreasury: exitTreasuryPda,
+        protocolWallet: authority.publicKey,
+        statsOracle: freezeStatsOraclePda,
+        marketStatus: freezeMarketStatusPda,
+        sharpLeaderboard: sharpLeaderboardPda,
+      })
+      .signers([buyerKeypair])
+      .rpc();
+  });
+
+  it("authority can freeze a market", async () => {
+    await program.methods
+      .freezeMarket()
+      .accounts({
+        authority: authority.publicKey,
+        marketStatus: freezeMarketStatusPda,
+      })
+      .signers([authority])
+      .rpc();
+
+    const status = await program.account.marketStatus.fetch(freezeMarketStatusPda);
+    expect(status.isFrozen).toBe(true);
+    expect(status.freezeTimestamp.toNumber()).toBeGreaterThan(0);
+    expect(status.closeTimestamp.toNumber()).toBeGreaterThan(status.freezeTimestamp.toNumber());
+  });
+
+  it("rejects buy on frozen market with MarketFrozen error", async () => {
+    try {
+      await program.methods
+        .buy(new BN(10), new BN(Number.MAX_SAFE_INTEGER))
+        .accounts({
+          buyer: buyerKeypair.publicKey,
+          mint: freezeMint,
+          bondingCurve: freezeBondingCurvePda,
+          buyerTokenAccount: freezeBuyerTokenAccount,
+          systemProgram: SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: freezeStatsOraclePda,
+          marketStatus: freezeMarketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
+        })
+        .signers([buyerKeypair])
+        .rpc();
+      expect.fail("Should have thrown MarketFrozen");
+    } catch (err) {
+      if (err instanceof AnchorError) {
+        expect(err.error.errorCode.code).toBe("MarketFrozen");
+      }
+    }
+  });
+
+  it("rejects buy_with_sol on frozen market with MarketFrozen error", async () => {
+    try {
+      await program.methods
+        .buyWithSol(new BN(100_000), new BN(0))
+        .accounts({
+          buyer: buyerKeypair.publicKey,
+          mint: freezeMint,
+          bondingCurve: freezeBondingCurvePda,
+          buyerTokenAccount: freezeBuyerTokenAccount,
+          systemProgram: SystemProgram.programId,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          exitTreasury: exitTreasuryPda,
+          protocolWallet: authority.publicKey,
+          statsOracle: freezeStatsOraclePda,
+          marketStatus: freezeMarketStatusPda,
+          sharpLeaderboard: sharpLeaderboardPda,
+        })
+        .signers([buyerKeypair])
+        .rpc();
+      expect.fail("Should have thrown MarketFrozen");
+    } catch (err) {
+      if (err instanceof AnchorError) {
+        expect(err.error.errorCode.code).toBe("MarketFrozen");
+      }
+    }
+  });
+
+  it("allows sell on frozen market during 30-day window", async () => {
+    const curveBefore = await program.account.bondingCurveAccount.fetch(freezeBondingCurvePda);
+    const tokensBefore = curveBefore.tokensSold.toNumber();
+
+    await program.methods
+      .sell(new BN(10), new BN(0))
+      .accounts({
+        buyer: buyerKeypair.publicKey,
+        mint: freezeMint,
+        bondingCurve: freezeBondingCurvePda,
+        buyerTokenAccount: freezeBuyerTokenAccount,
+        systemProgram: SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        exitTreasury: exitTreasuryPda,
+        protocolWallet: authority.publicKey,
+        statsOracle: freezeStatsOraclePda,
+        marketStatus: freezeMarketStatusPda,
+        sharpLeaderboard: sharpLeaderboardPda,
+      })
+      .signers([buyerKeypair])
+      .rpc();
+
+    const curveAfter = await program.account.bondingCurveAccount.fetch(freezeBondingCurvePda);
+    expect(curveAfter.tokensSold.toNumber()).toBe(tokensBefore - 10);
+  });
+
+  it("rejects double-freeze with MarketAlreadyFrozen error", async () => {
+    try {
+      await program.methods
+        .freezeMarket()
+        .accounts({
+          authority: authority.publicKey,
+          marketStatus: freezeMarketStatusPda,
+        })
+        .signers([authority])
+        .rpc();
+      expect.fail("Should have thrown MarketAlreadyFrozen");
+    } catch (err) {
+      if (err instanceof AnchorError) {
+        expect(err.error.errorCode.code).toBe("MarketAlreadyFrozen");
+      }
+    }
+  });
+});
+
+describe("process_exit", () => {
+  // Use yet another separate mint for process_exit tests
+  let exitMint: PublicKey;
+  let exitMintKeypair: Keypair;
+  let exitBondingCurvePda: PublicKey;
+  let exitStatsOraclePda: PublicKey;
+  let exitMarketStatusPda: PublicKey;
+  let exitBuyerTokenAccount: PublicKey;
+
+  beforeAll(async () => {
+    exitMintKeypair = Keypair.generate();
+    exitMint = exitMintKeypair.publicKey;
+    const [bcPda] = getBondingCurvePda(exitMint);
+    exitBondingCurvePda = bcPda;
+    [exitStatsOraclePda] = getStatsOraclePda(exitMint);
+    exitMarketStatusPda = getMarketStatusPda(exitMint);
+
+    // Create the SPL mint
+    const mintRent = await provider.connection.getMinimumBalanceForRentExemption(MINT_SIZE);
+    const createMintTx = new Transaction().add(
+      SystemProgram.createAccount({
+        fromPubkey: authority.publicKey,
+        newAccountPubkey: exitMint,
+        lamports: mintRent,
+        space: MINT_SIZE,
+        programId: TOKEN_PROGRAM_ID,
+      }),
+      createInitializeMintInstruction(
+        exitMint,
+        0,
+        exitBondingCurvePda,
+        null
+      )
+    );
+    await provider.sendAndConfirm(createMintTx, [authority, exitMintKeypair]);
+
+    // Initialize bonding curve
+    await program.methods
+      .initializeCurve("Exit_Test", BASE_PRICE, SLOPE, TOTAL_SUPPLY)
+      .accounts({
+        authority: authority.publicKey,
+        mint: exitMint,
+        bondingCurve: exitBondingCurvePda,
+        statsOracle: exitStatsOraclePda,
+        systemProgram: SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      })
+      .signers([authority])
+      .rpc();
+
+    // Initialize market status (open_time = 0)
+    await program.methods
+      .initializeMarketStatus(new BN(0))
+      .accounts({
+        authority: authority.publicKey,
+        mint: exitMint,
+        marketStatus: exitMarketStatusPda,
+        systemProgram: SystemProgram.programId,
+      })
+      .signers([authority])
+      .rpc();
+
+    // Create buyer's ATA
+    exitBuyerTokenAccount = getAssociatedTokenAddressSync(exitMint, buyerKeypair.publicKey);
+    const createAtaTx = new Transaction().add(
+      createAssociatedTokenAccountInstruction(
+        buyerKeypair.publicKey,
+        exitBuyerTokenAccount,
+        buyerKeypair.publicKey,
+        exitMint
+      )
+    );
+    await provider.sendAndConfirm(createAtaTx, [buyerKeypair]);
+
+    // Buy some tokens
+    const buyCost = calculateBuyCost(10_000n, 10n, 0n, 50n);
+    await program.methods
+      .buy(new BN(50), new BN(buyCost.toString()).add(new BN(200_000)))
+      .accounts({
+        buyer: buyerKeypair.publicKey,
+        mint: exitMint,
+        bondingCurve: exitBondingCurvePda,
+        buyerTokenAccount: exitBuyerTokenAccount,
+        systemProgram: SystemProgram.programId,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        exitTreasury: exitTreasuryPda,
+        protocolWallet: authority.publicKey,
+        statsOracle: exitStatsOraclePda,
+        marketStatus: exitMarketStatusPda,
+        sharpLeaderboard: sharpLeaderboardPda,
+      })
+      .signers([buyerKeypair])
+      .rpc();
+
+    // Freeze the market
+    await program.methods
+      .freezeMarket()
+      .accounts({
+        authority: authority.publicKey,
+        marketStatus: exitMarketStatusPda,
+      })
+      .signers([authority])
+      .rpc();
+  });
+
+  it("rejects process_exit before close_timestamp (MarketNotClosed)", async () => {
+    // Market is frozen but close_timestamp is 30 days in the future
+    try {
+      await program.methods
+        .processExit()
+        .accounts({
+          holder: buyerKeypair.publicKey,
+          mint: exitMint,
+          bondingCurve: exitBondingCurvePda,
+          holderTokenAccount: exitBuyerTokenAccount,
+          marketStatus: exitMarketStatusPda,
+          exitTreasury: exitTreasuryPda,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([buyerKeypair])
+        .rpc();
+      expect.fail("Should have thrown MarketNotClosed");
+    } catch (err) {
+      if (err instanceof AnchorError) {
+        expect(err.error.errorCode.code).toBe("MarketNotClosed");
+      }
+    }
+  });
+
+  it("rejects process_exit on unfrozen market (MarketNotFrozen)", async () => {
+    // Use the main test mint which is NOT frozen
+    try {
+      await program.methods
+        .processExit()
+        .accounts({
+          holder: buyerKeypair.publicKey,
+          mint,
+          bondingCurve: bondingCurvePda,
+          holderTokenAccount: buyerTokenAccount,
+          marketStatus: marketStatusPda,
+          exitTreasury: exitTreasuryPda,
+          tokenProgram: TOKEN_PROGRAM_ID,
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([buyerKeypair])
+        .rpc();
+      expect.fail("Should have thrown MarketNotFrozen");
+    } catch (err) {
+      if (err instanceof AnchorError) {
+        expect(err.error.errorCode.code).toBe("MarketNotFrozen");
+      }
+    }
   });
 });
