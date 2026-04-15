@@ -10,6 +10,7 @@
     "oracle:mock": "tsx scripts/oracle.ts --mock",
     "reclaim-demo": "tsx scripts/reclaim-demo-kv.ts",
     "freeze-market": "tsx scripts/freeze-market.ts",
+    "setup-webhook": "tsx scripts/setup-helius-webhook.ts",
     "build": "next build",
     "test": "vitest run",
     "test:watch": "vitest",

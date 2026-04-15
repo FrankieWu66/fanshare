@@ -42,6 +42,9 @@ Key routing rules:
 ## Scripts
 - `npm run init-players` — initializes all 15 player bonding curves on devnet. Loads env from `.env.local`. Saves mint addresses to `app/lib/player-mints.json`. Resume-safe (skips already-initialized players by checking the json file).
 - `npm run oracle` — fetches live NBA stats from balldontlie.io and updates on-chain StatsOracle. Use `npm run oracle:mock` for offline testing.
+- `npm run reclaim-demo` — reads demo wallets from KV, sells tokens, transfers SOL back to deploy wallet.
+- `npm run freeze-market Player_XX` — freezes a player market on-chain (sell-only for 30 days).
+- `npm run setup-webhook` — registers (or lists/deletes) the Helius webhook for trade event indexing.
 - Both scripts load env from `.env.local` (not `.env`) via explicit `dotenv.config({ path: '.env.local' })`.
 
 ### Oracle authority note
@@ -70,6 +73,22 @@ SOLANA_CLUSTER=          # "devnet"
 CRON_SECRET=             # Random secret — Vercel injects as Authorization: Bearer <secret>
 BALLDONTLIE_API_KEY=     # Optional — improves balldontlie.io rate limits
 ```
+
+## Helius Webhook
+
+A rawDevnet webhook is registered to receive all transactions touching our program.
+- Webhook ID: `060531bd-e13e-4a58-9b5b-aa5d7066b6eb`
+- Endpoint: `POST /api/webhook/helius`
+- Monitors: program `B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz`
+- Parses `TradeEvent` from Anchor program logs (base64 borsh in `Program data:` lines)
+- Records price history to KV and forwards to `/api/indexer/trade-event` for leaderboard
+- Auth: `HELIUS_WEBHOOK_SECRET` env var — Helius sends it as the Authorization header
+
+```
+HELIUS_WEBHOOK_SECRET=   # Shared secret — set in both .env.local and Vercel env vars
+```
+
+Manage: `npm run setup-webhook` (create), `npm run setup-webhook -- --list`, `npm run setup-webhook -- --delete <id>`
 
 ## Demo Wallet SOL Architecture
 
