@@ -425,7 +425,7 @@ export default function TradePage({
                       <label htmlFor="trade-input-loading" className="mb-1.5 block text-xs text-muted">
                         {tab === "buy" ? "SOL to spend" : "Tokens to sell"}
                       </label>
-                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2">
+                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-3">
                         <input
                           id="trade-input-loading"
                           type="number"
@@ -779,7 +779,7 @@ export default function TradePage({
                       <label htmlFor="buy-sol-input" className="mb-1.5 block text-xs text-muted">
                         SOL to spend
                       </label>
-                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 focus-within:border-accent">
+                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-3 focus-within:border-accent">
                         <input
                           id="buy-sol-input"
                           type="number"
@@ -870,7 +870,7 @@ export default function TradePage({
                       <label htmlFor="sell-token-input" className="mb-1.5 block text-xs text-muted">
                         Tokens to sell
                       </label>
-                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2 focus-within:border-accent">
+                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-3 focus-within:border-accent">
                         <input
                           id="sell-token-input"
                           type="number"
