@@ -102,13 +102,15 @@ export default function Home() {
             </span>
             <Link
               href="/leaderboard"
-              className="text-xs font-medium text-muted transition hover:text-foreground"
+              className="inline-flex min-h-[44px] items-center text-xs font-medium text-muted transition hover:text-foreground"
             >
               Leaderboard
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <ClusterSelect />
+            <span className="max-sm:hidden">
+              <ClusterSelect />
+            </span>
             <WalletButton />
           </div>
         </header>
