@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { type Address } from "@solana/kit";
 import { GridBackground } from "../components/grid-background";
@@ -17,6 +17,7 @@ export default function PortfolioPage() {
   const address = wallet?.account.address as Address | undefined;
 
   const { balances, isLoading: balancesLoading } = usePortfolioBalances(address);
+  const [search, setSearch] = useState("");
 
   // Cross-reference player mints with token balances
   const holdings = useMemo(() => {
@@ -31,6 +32,16 @@ export default function PortfolioPage() {
       }))
       .sort((a, b) => (a.player.config.displayName < b.player.config.displayName ? -1 : 1));
   }, [players, balances]);
+
+  const filteredHoldings = useMemo(() => {
+    if (!search.trim()) return holdings;
+    const q = search.toLowerCase();
+    return holdings.filter(
+      ({ player }) =>
+        player.config.displayName.toLowerCase().includes(q) ||
+        player.config.team.toLowerCase().includes(q)
+    );
+  }, [holdings, search]);
 
   const isLoading = marketsLoading || balancesLoading;
 
@@ -82,6 +93,18 @@ export default function PortfolioPage() {
             )}
           </div>
 
+          {holdings.length > 0 && (
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Search players…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm placeholder:text-muted focus:border-accent focus:outline-none sm:w-64"
+              />
+            </div>
+          )}
+
           {isLoading ? (
             <div className="rounded-xl border border-border bg-card p-8 text-center text-sm text-muted">
               Loading holdings…
@@ -104,13 +127,20 @@ export default function PortfolioPage() {
                   <tr className="border-b border-border text-xs text-muted">
                     <th className="px-4 py-3 text-left font-medium">Player</th>
                     <th className="px-4 py-3 text-right font-medium">Tokens</th>
-                    <th className="px-4 py-3 text-right font-medium hidden sm:table-cell">Price</th>
+                    <th className="px-4 py-3 text-right font-medium max-sm:hidden">Price</th>
                     <th className="px-4 py-3 text-right font-medium">Est. Value</th>
                     <th className="px-4 py-3 text-right font-medium"></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {holdings.map(({ player, tokenAmount }) => {
+                  {filteredHoldings.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="px-4 py-8 text-center text-sm text-muted">
+                        No players match &ldquo;{search}&rdquo;
+                      </td>
+                    </tr>
+                  ) : null}
+                  {filteredHoldings.map(({ player, tokenAmount }) => {
                     // Est. value: tokens * current price in lamports / 1e9 = SOL
                     // But tokens are whole units, price is lamports per token
                     const valueLamports = (tokenAmount * player.currentPrice) / 1_000_000_000n;
@@ -129,7 +159,7 @@ export default function PortfolioPage() {
                         <td className="px-4 py-3 text-right font-mono">
                           {tokenAmount.toLocaleString()}
                         </td>
-                        <td className="px-4 py-3 text-right font-mono text-muted hidden sm:table-cell">
+                        <td className="px-4 py-3 text-right font-mono text-muted max-sm:hidden">
                           {formatSol(player.currentPrice)}
                         </td>
                         <td className="px-4 py-3 text-right font-mono font-semibold">

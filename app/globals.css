@@ -102,6 +102,26 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+@keyframes price-flash-up {
+  0%   { color: var(--positive); }
+  60%  { color: var(--positive); }
+  100% { color: inherit; }
+}
+
+@keyframes price-flash-down {
+  0%   { color: var(--negative); }
+  60%  { color: var(--negative); }
+  100% { color: inherit; }
+}
+
+.price-flash-up {
+  animation: price-flash-up 600ms ease-out forwards;
+}
+
+.price-flash-down {
+  animation: price-flash-down 600ms ease-out forwards;
+}
+
 @layer base {
   * {
     @apply border-border outline-transparent;

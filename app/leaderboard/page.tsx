@@ -127,7 +127,7 @@ export default function LeaderboardPage() {
           {/* Tabs */}
           <div className="mb-6 flex rounded-xl border border-border-low">
             <button
-              onClick={() => setTab("top-traders")}
+              onClick={() => { setIsLoading(true); setTab("top-traders"); }}
               className={`flex-1 cursor-pointer rounded-l-xl py-3 text-sm font-medium transition ${
                 tab === "top-traders"
                   ? "bg-accent text-accent-foreground"
@@ -137,7 +137,7 @@ export default function LeaderboardPage() {
               Top Traders
             </button>
             <button
-              onClick={() => setTab("sharp-calls")}
+              onClick={() => { setIsLoading(true); setTab("sharp-calls"); }}
               className={`flex-1 cursor-pointer rounded-r-xl py-3 text-sm font-medium transition ${
                 tab === "sharp-calls"
                   ? "bg-accent text-accent-foreground"

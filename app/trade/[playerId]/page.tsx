@@ -137,6 +137,20 @@ export default function TradePage({
   const indexPrice = player?.oracle?.indexPriceLamports ?? 0n;
   const marketPrice = currentPrice(basePrice, slope, tokensSold);
 
+  // Price flash animation on market price change
+  const prevMarketPrice = useRef<bigint | null>(null);
+  const [priceFlashClass, setPriceFlashClass] = useState("");
+  useEffect(() => {
+    if (prevMarketPrice.current !== null && prevMarketPrice.current !== marketPrice) {
+      const cls = marketPrice > prevMarketPrice.current ? "price-flash-up" : "price-flash-down";
+      setPriceFlashClass(cls);
+      const t = setTimeout(() => setPriceFlashClass(""), 650);
+      prevMarketPrice.current = marketPrice;
+      return () => clearTimeout(t);
+    }
+    prevMarketPrice.current = marketPrice;
+  }, [marketPrice]);
+
   // How many tokens would buying X SOL get you?
   // Guard against NaN/Infinity from scientific notation inputs (e.g. "1e308")
   const _parsedSol = parseFloat(solInput || "0") * 1e9;
@@ -567,7 +581,7 @@ export default function TradePage({
                 <div className="space-y-3">
                   <div>
                     <p className="text-xs text-muted">Market Price</p>
-                    <p className="mt-0.5 font-mono text-xl font-bold tabular-nums">
+                    <p className={`mt-0.5 font-mono text-xl font-bold tabular-nums transition-colors ${priceFlashClass}`}>
                       {formatSol(marketPrice)}
                       <span className="ml-1 text-sm font-normal text-muted">SOL</span>
                     </p>
