@@ -29,9 +29,11 @@ function formatScore(score: number, tab: Tab): string {
   if (tab === "top-traders") {
     // Score is in lamports — convert to SOL
     const sol = score / 1e9;
-    if (Math.abs(sol) >= 1) return `${sol >= 0 ? "+" : ""}${sol.toFixed(4)}`;
-    if (Math.abs(sol) >= 0.001) return `${sol >= 0 ? "+" : ""}${sol.toFixed(6)}`;
-    return `${sol >= 0 ? "+" : ""}${sol.toFixed(9)}`;
+    const sign = sol >= 0 ? "+" : "";
+    if (Math.abs(sol) >= 1) return `${sign}${sol.toFixed(2)}`;
+    if (Math.abs(sol) >= 0.01) return `${sign}${sol.toFixed(3)}`;
+    if (Math.abs(sol) >= 0.001) return `${sign}${sol.toFixed(4)}`;
+    return `${sign}${sol.toFixed(6)}`;
   }
   // Sharp calls — just show the score with 1 decimal
   return score.toFixed(1);
@@ -188,7 +190,7 @@ export default function LeaderboardPage() {
                     <th className="px-4 py-2.5 text-right font-medium">
                       {tab === "top-traders" ? "PnL (SOL)" : "Score"}
                     </th>
-                    <th className="px-4 py-2.5 text-right font-medium hidden sm:table-cell">
+                    <th className="px-4 py-2.5 text-right font-medium">
                       {tab === "top-traders" ? "Trades" : "Calls"}
                     </th>
                   </tr>
@@ -253,8 +255,8 @@ export default function LeaderboardPage() {
                             </span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-right font-mono text-muted hidden sm:table-cell">
-                          {count}
+                        <td className="px-4 py-3 text-right font-mono text-muted">
+                          {count ?? "—"}
                         </td>
                       </tr>
                     );
