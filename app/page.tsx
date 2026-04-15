@@ -196,7 +196,7 @@ export default function Home() {
                 onClick={() => setFilter("all")}
                 className={`cursor-pointer min-h-[44px] min-w-[44px] px-3 py-2 text-xs font-medium transition ${
                   filter === "all"
-                    ? "bg-foreground text-background"
+                    ? "bg-accent text-accent-foreground"
                     : "text-muted hover:text-foreground"
                 } rounded-l-lg`}
               >
