@@ -54,6 +54,34 @@ type TxStage = "idle" | "signing" | "confirming" | "success" | "failed";
 
 const SLIPPAGE_PCT = 1; // 1% slippage tolerance
 
+/** Fire-and-forget: record price + trade data to KV for charts and leaderboard */
+function recordPriceToServer(opts: {
+  playerId: string;
+  price: number;
+  tradeData?: {
+    signature: string;
+    mint: string;
+    player_id: string;
+    trader: string;
+    token_amount: number;
+    sol_amount: number;
+    is_buy: boolean;
+    fee_lamports: number;
+    spread_at_buy: number;
+  };
+}) {
+  fetch("/api/price-history/record", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      playerId: opts.playerId,
+      price: opts.price,
+      cluster: "devnet",
+      tradeData: opts.tradeData,
+    }),
+  }).catch(() => {/* non-fatal */});
+}
+
 export default function TradePage({
   params,
 }: {
@@ -113,11 +141,14 @@ export default function TradePage({
   // Guard against NaN/Infinity from scientific notation inputs (e.g. "1e308")
   const _parsedSol = parseFloat(solInput || "0") * 1e9;
   const solLamports = Number.isFinite(_parsedSol) ? BigInt(Math.floor(_parsedSol)) : 0n;
+  // Deduct 1.5% fee before estimating tokens — matches on-chain buy_with_sol logic:
+  //   effective_sol = sol_amount * FEE_DENOMINATOR / (FEE_DENOMINATOR + FEE_NUMERATOR)
+  const effectiveSolForBuy = solLamports * FEE_DENOMINATOR / (FEE_DENOMINATOR + FEE_NUMERATOR);
   const tokensOut = calculateTokensForSol(
     basePrice,
     slope,
     tokensSold,
-    solLamports,
+    effectiveSolForBuy,
     totalSupply
   );
 
@@ -210,12 +241,28 @@ export default function TradePage({
       toast.success(`Bought ${tokensOut.toLocaleString()} tokens!`, {
         description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
       });
+      // Record to server KV (price chart + leaderboard indexing)
+      recordPriceToServer({
+        playerId,
+        price: Number(priceAfterBuy),
+        tradeData: sig ? {
+          signature: sig,
+          mint: String(mint),
+          player_id: playerId,
+          trader: String(address),
+          token_amount: Number(tokensOut),
+          sol_amount: Number(solLamports),
+          is_buy: true,
+          fee_lamports: Number(solLamports * FEE_NUMERATOR / FEE_DENOMINATOR),
+          spread_at_buy: player.spreadPercent,
+        } : undefined,
+      });
     } catch (err: unknown) {
       const msg = parseTransactionError(err);
       setTxError(msg);
       setTxStage("failed");
     }
-  }, [isBusy, buyDisabledByFreeze, address, player, curve, solLamports, tokensOut, send, playerId]);
+  }, [isBusy, buyDisabledByFreeze, address, player, curve, solLamports, tokensOut, send, playerId, priceAfterBuy]);
 
   const handleSell = useCallback(async () => {
     if (isBusy || sellDisabledByFreeze || !address || !player || !curve || tokenAmountIn === 0n || solOut === 0n) return;
@@ -264,12 +311,28 @@ export default function TradePage({
       toast.success(`Sold ${tokenAmountIn.toLocaleString()} tokens for ${formatSol(solOut)} SOL`, {
         description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
       });
+      // Record to server KV (price chart + leaderboard indexing)
+      recordPriceToServer({
+        playerId,
+        price: Number(priceAfterSell),
+        tradeData: sig ? {
+          signature: sig,
+          mint: curve.mint as string,
+          player_id: playerId,
+          trader: String(address),
+          token_amount: Number(tokenAmountIn),
+          sol_amount: Number(solOut),
+          is_buy: false,
+          fee_lamports: Number(solOut * FEE_NUMERATOR / FEE_DENOMINATOR),
+          spread_at_buy: player.spreadPercent,
+        } : undefined,
+      });
     } catch (err: unknown) {
       const msg = parseTransactionError(err);
       setTxError(msg);
       setTxStage("failed");
     }
-  }, [isBusy, sellDisabledByFreeze, address, player, curve, tokenAmountIn, solOut, send, playerId]);
+  }, [isBusy, sellDisabledByFreeze, address, player, curve, tokenAmountIn, solOut, send, playerId, priceAfterSell]);
 
   // ── Loading / not found ───────────────────────────────────────────────────
   if (isLoading) {

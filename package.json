@@ -8,6 +8,8 @@
     "init-tokenomics": "tsx scripts/init-tokenomics.ts",
     "oracle": "tsx scripts/oracle.ts",
     "oracle:mock": "tsx scripts/oracle.ts --mock",
+    "reclaim-demo": "tsx scripts/reclaim-demo-kv.ts",
+    "freeze-market": "tsx scripts/freeze-market.ts",
     "build": "next build",
     "test": "vitest run",
     "test:watch": "vitest",
