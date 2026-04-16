@@ -197,3 +197,36 @@ showing to investors or new testers makes the demo more controlled.
 **What:** The bonding curve formula display on the trade page always-visible on mobile pushes
 the trade widget down. Add a disclosure `<details>` or accordion: "How is price calculated?"
 **Effort:** XS | **Priority:** P3
+
+---
+
+## From QA Pass 2026-04-16
+
+### [x] Leaderboard negative P&L missing minus sign (ISSUE-001)
+Fixed `699883c`. Formatter stripped sign via `Math.abs()` combined with empty-string sign for
+negatives. Extracted to pure util `app/lib/leaderboard-format.ts` + 8-test regression suite.
+
+### [x] Trade inputs accept negative values with no feedback (ISSUE-002)
+Fixed `f6c418d`. Both buy SOL and sell token inputs now clamp at 0, show red border,
+`aria-invalid`, and `role="alert"` error text when a negative is entered.
+
+### [x] deserializeStatsOracle bump test broken
+Fixed `297b2e9`. Test helper wasn't writing the `stats_source_date: i64` field that was added
+to the account layout, so the bump byte sat past the end of the buffer.
+
+### [ ] Price history cliff between pre-reinit and post-reinit eras (ISSUE-003)
+**Severity:** Informational / self-healing
+**What:** `/trade/Player_LD` chart shows a visible discontinuity between the old $0.002 era
+(before the 4-pillar reinit on 2026-04-15) and the new $6.18 era. KV is player-ID-keyed so
+old entries survived the reinit.
+**Action:** None required. Ring buffer caps at 500 points; old entries age out as new oracle
+ticks + trades land. Will self-smooth over ~48h.
+**Effort:** 0 | **Priority:** P3 (monitor only)
+
+### [ ] Anchor integration tests require running localnet
+**What:** `anchor/tests/fanshare.test.ts` has 3 `update_oracle` tests that fail in `npm run test`
+because they need a running `solana-test-validator`. Also ~15 pre-existing TypeScript errors
+around `bondingCurveAccount` / `statsOracleAccount` on the IDL namespace type.
+**Why:** Blocks green CI. Either split anchor tests into a separate script (e.g. `npm run
+test:anchor` that requires localnet) or fix the IDL typing so vitest can typecheck the files.
+**Effort:** S | **Priority:** P2
