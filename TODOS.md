@@ -56,7 +56,12 @@ across `SOLANA_RPC_URL`, init-players, oracle, anchor-deploy. See CLAUDE.md for 
 
 ## Pre-Mainnet (not blocking devnet)
 
-### [ ] Legal review — token issuance structure, player names, NBA data license
+### ~~[ ] Legal review — token issuance structure, player names, NBA data license~~
+
+**DECISION 2026-04-16 (CEO):** At small scale, using NBA player **names without images**
+is fine under commercial rights. No full legal review needed for launch. Revisit only if
+we add photos/logos or scale up. Token issuance structure still needs review before mainnet
+if the issuance is framed as investment-like — but names alone are not a blocker.
 
 ### [ ] Solana program security audit (~$20-50k, 4-6 week lead time)
 
@@ -77,20 +82,29 @@ Core to pump.fun model. Intentionally skipped for devnet — not needed to valid
 ### [ ] Real-time oracle daemon — mainnet
 
 **What:** Oracle ticks every ~5 minutes during live NBA games (vs per-game cron on devnet).
-Stats update while users are watching → prices move in real-time → engagement flywheel.
+Stats update while users are watching → the displayed **fair value / index price** updates
+in real time. This does NOT mutate the bonding curve's base_price (see decision 2026-04-16
+above) — it just keeps the informational reference fresh so the market price vs. fair
+value spread tells a live story.
 
-**Why:** Per-game oracle is sufficient for devnet. Real-time is the mainnet engagement story.
+**Why:** Per-game cron is sufficient for devnet. Real-time is the mainnet engagement
+story — live spread widens/narrows during games, drives trading.
 
 **Effort:** M (always-on daemon, WebSocket NBA stats feed, retry logic)
 
-### [ ] Stats-anchored initial price for mainnet token launches
+### [x] Stats-anchored initial price at launch
 
-**What:** When a new player token is initialized on mainnet, set `base_price` from their
-composite stats score rather than a fixed default. More defensible — price is grounded in data.
+**DECISION 2026-04-16 (CEO):** Every market — devnet AND mainnet — launches with
+**one** `base_price` computed from the 4-pillar index price at a chosen season-start
+moment. No per-game mutations, no mid-season re-pricing of the curve. After launch,
+only `tokens_sold` and the AMM drive price; `stats_oracle.index_price_lamports` is
+surfaced as an informational "fair value" reference, not a curve input.
 
-**Formula:** `base_price = composite_score × 10,000 lamports`
-**Why deferred:** Oracle must be live before initialization. Adds dependency for devnet.
-For devnet, uniform pricing is sufficient.
+**Current state:** Already implemented for the 15-player devnet cohort. Re-init on
+2026-04-15 set each basePrice from 4-pillar formula (see `fix(pricing): unify on
+4-pillar formula as basePrice at launch` — commit `6259b8d`).
+
+**For mainnet:** Do the same — freeze a season-start snapshot, compute pillars, launch.
 
 ### [ ] Frontend search and filter for 20+ player roster
 
@@ -125,13 +139,22 @@ states. Current `disabled={isSending}` may not cover the wallet approval gap.
 **Why:** Without this, a user can click Buy twice and send two transactions.
 **Effort:** XS | **Priority:** P1 (security/correctness)
 
-### [ ] Oracle base_price mutations — mainnet
+### ~~[ ] Oracle base_price mutations — mainnet~~
 
-**What:** After each game, oracle calls a new `update_base_price` Rust instruction that
-mutates `bonding_curve.base_price` based on performance. Formula: `new_base = tier_base × (score / league_avg)`.
-**Why:** The mainnet engagement story — prices tick with game events. Deferred from devnet
-because it requires a new Rust instruction, rebuild, and holder fairness UX treatment.
-**Effort:** L | **Priority:** P2 (mainnet only) | **Depends on:** security audit, Squads multisig
+**CANCELLED 2026-04-16 (CEO):** We are NOT going to mutate `bonding_curve.base_price`
+over time. Every market has exactly ONE base_price, set at launch from the 4-pillar
+index price at a chosen season-start snapshot. This rule applies to devnet AND mainnet
+equally — no special "mainnet mutation" story.
+
+**Why cancelled:** Mutating base_price is a holder-fairness minefield (value shifts
+under existing holders without their consent) and requires a new Rust instruction +
+audit. The cleaner model: one fixed curve + `stats_oracle` as an informational
+"fair value" reference beside the market price. Users see both, the spread tells the
+story. No per-game re-anchoring needed.
+
+**Supersedes:** the "Real-time oracle daemon — mainnet" TODO's *engagement* rationale
+(live oracle ticks are still nice-to-have for the displayed fair value, just not
+mutating the curve).
 
 ### [x] Price history chart: 1-data-point edge case
 Resolved. `PriceHistoryChart` at [app/components/price-history-chart.tsx:55](app/components/price-history-chart.tsx:55)
