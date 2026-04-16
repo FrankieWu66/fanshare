@@ -30,7 +30,7 @@ export async function GET(
   }
 
   // Cluster query param — determines which KV namespace to read from
-  const clusterParam = req.nextUrl.searchParams.get("cluster") ?? "localnet";
+  const clusterParam = req.nextUrl.searchParams.get("cluster") ?? "devnet";
   const cluster: ClusterMoniker = (VALID_CLUSTERS as readonly string[]).includes(clusterParam)
     ? (clusterParam as ClusterMoniker)
     : "localnet";
@@ -61,7 +61,11 @@ export async function GET(
   const points: PricePoint[] = rawEntries
     .map((raw) => {
       try {
-        const parsed = JSON.parse(raw);
+        let parsed = JSON.parse(raw);
+        // Handle legacy double-wrapped entries: ["{...}"] → parse inner string
+        if (Array.isArray(parsed) && parsed.length === 1 && typeof parsed[0] === "string") {
+          parsed = JSON.parse(parsed[0]);
+        }
         if (typeof parsed?.t !== "number" || typeof parsed?.p !== "number") return null;
         return parsed as PricePoint;
       } catch {

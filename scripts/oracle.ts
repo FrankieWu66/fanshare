@@ -465,10 +465,9 @@ async function main() {
              rpcUrl.includes("mainnet") ? "mainnet" :
              rpcUrl.includes("testnet") ? "testnet" : "localnet");
           const key = `price-history:${cluster}:${playerId}`;
-          await fetch(`${kvUrl}/rpush/${encodeURIComponent(key)}`, {
+          await fetch(`${kvUrl}/rpush/${encodeURIComponent(key)}/${encodeURIComponent(entry)}`, {
             method: "POST",
-            headers: { Authorization: `Bearer ${kvToken}`, "Content-Type": "application/json" },
-            body: JSON.stringify([entry]),
+            headers: { Authorization: `Bearer ${kvToken}` },
           });
           await fetch(`${kvUrl}/ltrim/${encodeURIComponent(key)}/-500/-1`, {
             method: "POST",
