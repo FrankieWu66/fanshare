@@ -8,6 +8,7 @@ import { WalletButton } from "../components/wallet-button";
 import { Badge } from "../components/badge";
 import { useWallet } from "../lib/wallet/context";
 import { ellipsify } from "../lib/explorer";
+import { formatLeaderboardScore } from "../lib/leaderboard-format";
 
 type Tab = "top-traders" | "sharp-calls";
 
@@ -25,18 +26,6 @@ interface SharpCallEntry {
   qualifying_calls: number;
 }
 
-const SOL_REFERENCE_RATE = 150;
-
-function formatScore(score: number, tab: Tab): string {
-  if (tab === "top-traders") {
-    // Score is in lamports — convert to USD via $150/SOL
-    const usd = (score / 1e9) * SOL_REFERENCE_RATE;
-    const sign = usd >= 0 ? "+" : "";
-    return `${sign}$${Math.abs(usd).toFixed(2)}`;
-  }
-  // Sharp calls — just show the score with 1 decimal
-  return score.toFixed(1);
-}
 
 export default function LeaderboardPage() {
   const { wallet } = useWallet();
@@ -242,7 +231,7 @@ export default function LeaderboardPage() {
                         <td
                           className={`px-4 py-3 text-right font-mono font-medium tabular-nums ${scoreColor}`}
                         >
-                          {formatScore(entry.score, tab)}
+                          {formatLeaderboardScore(entry.score, tab)}
                           {tab === "sharp-calls" && (
                             <span className="ml-1 text-xs font-normal text-muted">
                               pts
