@@ -152,8 +152,11 @@ export default function TradePage({
 
   // How many tokens would buying X SOL get you?
   // Guard against NaN/Infinity from scientific notation inputs (e.g. "1e308")
+  // and clamp negatives to 0 (type="number" lets users type/paste "-5").
   const _parsedSol = parseFloat(solInput || "0") * 1e9;
-  const solLamports = Number.isFinite(_parsedSol) ? BigInt(Math.floor(_parsedSol)) : 0n;
+  const _parsedSolClamped = Number.isFinite(_parsedSol) ? Math.max(0, _parsedSol) : 0;
+  const solLamports = BigInt(Math.floor(_parsedSolClamped));
+  const buyInputInvalid = solInput.trim() !== "" && (Number.isNaN(_parsedSol) || _parsedSol < 0);
   // Deduct 1.5% fee before estimating tokens — matches on-chain buy_with_sol logic:
   //   effective_sol = sol_amount * FEE_DENOMINATOR / (FEE_DENOMINATOR + FEE_NUMERATOR)
   const effectiveSolForBuy = solLamports * FEE_DENOMINATOR / (FEE_DENOMINATOR + FEE_NUMERATOR);
@@ -166,7 +169,11 @@ export default function TradePage({
   );
 
   // How much SOL would selling X tokens return?
-  const tokenAmountIn = BigInt(Math.floor(parseFloat(tokenInput || "0")));
+  // Same negative-clamp + NaN-guard story as the buy input.
+  const _parsedTokens = parseFloat(tokenInput || "0");
+  const _parsedTokensClamped = Number.isFinite(_parsedTokens) ? Math.max(0, _parsedTokens) : 0;
+  const tokenAmountIn = BigInt(Math.floor(_parsedTokensClamped));
+  const sellInputInvalid = tokenInput.trim() !== "" && (Number.isNaN(_parsedTokens) || _parsedTokens < 0);
   const solOut =
     tokenAmountIn > 0n && tokenAmountIn <= tokensSold
       ? calculateSellReturn(basePrice, slope, tokensSold, tokenAmountIn)
@@ -818,7 +825,7 @@ export default function TradePage({
                       <label htmlFor="buy-sol-input" className="mb-1.5 block text-xs text-muted">
                         Amount to spend (SOL)
                       </label>
-                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-3 focus-within:border-accent">
+                      <div className={`flex items-center gap-2 rounded-xl border bg-background px-3 py-3 focus-within:border-accent ${buyInputInvalid ? "border-negative" : "border-border"}`}>
                         <input
                           id="buy-sol-input"
                           type="number"
@@ -827,10 +834,17 @@ export default function TradePage({
                           placeholder="0.00"
                           value={solInput}
                           onChange={(e) => setSolInput(e.target.value)}
+                          aria-invalid={buyInputInvalid || undefined}
+                          aria-describedby={buyInputInvalid ? "buy-sol-error" : undefined}
                           className="w-full bg-transparent font-mono text-sm outline-none placeholder:text-muted"
                         />
                         <span className="text-xs text-muted">SOL</span>
                       </div>
+                      {buyInputInvalid && (
+                        <p id="buy-sol-error" role="alert" className="mt-1 text-xs text-negative">
+                          Enter a positive amount.
+                        </p>
+                      )}
                       {balance.lamports != null && (
                         <div className="mt-1 flex justify-between text-xs text-muted">
                           <span>Balance: {formatUsd(balance.lamports)}</span>
@@ -909,7 +923,7 @@ export default function TradePage({
                       <label htmlFor="sell-token-input" className="mb-1.5 block text-xs text-muted">
                         Tokens to sell
                       </label>
-                      <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-3 focus-within:border-accent">
+                      <div className={`flex items-center gap-2 rounded-xl border bg-background px-3 py-3 focus-within:border-accent ${sellInputInvalid ? "border-negative" : "border-border"}`}>
                         <input
                           id="sell-token-input"
                           type="number"
@@ -918,10 +932,17 @@ export default function TradePage({
                           placeholder="0"
                           value={tokenInput}
                           onChange={(e) => setTokenInput(e.target.value)}
+                          aria-invalid={sellInputInvalid || undefined}
+                          aria-describedby={sellInputInvalid ? "sell-token-error" : undefined}
                           className="w-full bg-transparent font-mono text-sm outline-none placeholder:text-muted"
                         />
                         <span className="text-xs text-muted">tokens</span>
                       </div>
+                      {sellInputInvalid && (
+                        <p id="sell-token-error" role="alert" className="mt-1 text-xs text-negative">
+                          Enter a positive number of tokens.
+                        </p>
+                      )}
                     </div>
 
                     {tokenBalance.tokenAmount !== null && (
