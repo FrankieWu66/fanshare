@@ -77,15 +77,3 @@ export function formatUsd(lamports: bigint): string {
   if (usd < 0.01) return `$${usd.toFixed(4)}`;
   return `$${usd.toFixed(2)}`;
 }
-
-// ── Legacy compatibility: simple 5-stat weights for init-players base_price ──
-// Used ONLY for initial bonding curve base_price calculation (not oracle updates).
-export const STAT_WEIGHTS = {
-  ppg: 1000,
-  rpg: 500,
-  apg: 700,
-  spg: 800,
-  bpg: 800,
-} as const;
-
-export type StatWeights = typeof STAT_WEIGHTS;

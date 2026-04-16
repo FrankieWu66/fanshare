@@ -22,7 +22,7 @@ import {
   getSellInstruction,
   applySlippage,
 } from "../../lib/fanshare-instructions";
-import { formatUsd, SOL_REFERENCE_RATE, calculatePillarBreakdown, type AdvancedPlayerStats } from "../../lib/oracle-weights";
+import { formatUsd, SOL_REFERENCE_RATE, calculatePillarBreakdown } from "../../lib/oracle-weights";
 import { GridBackground } from "../../components/grid-background";
 import { ClusterSelect } from "../../components/cluster-select";
 import { useCluster } from "../../components/cluster-context";
@@ -593,15 +593,10 @@ export default function TradePage({
                       </p>
                     </div>
                   )}
-                  {/* Pillar breakdown — computed from player config stats */}
+                  {/* Pillar breakdown — 4-pillar formula from config stats */}
                   {(() => {
-                    const s = config.stats;
-                    // Only show breakdown if we have enough stats fields for the 4-pillar formula
-                    const advStats: AdvancedPlayerStats | null = ('ppg' in s && 'rpg' in s && 'apg' in s && 'spg' in s && 'bpg' in s)
-                      ? { ppg: s.ppg, rpg: s.rpg, apg: s.apg, spg: s.spg, bpg: s.bpg, tov: 0, ortg: 113, drtg: 113, usg: 20, ts: 56, netRtg: 0 }
-                      : null;
-                    if (!advStats || indexPrice === 0n) return null;
-                    const pillars = calculatePillarBreakdown(advStats);
+                    if (indexPrice === 0n) return null;
+                    const pillars = calculatePillarBreakdown(config.stats);
                     const pillarItems = [
                       { label: "Scoring", value: pillars.scoring * 0.12 },
                       { label: "Playmaking", value: pillars.playmaking * 0.12 },
@@ -708,17 +703,9 @@ export default function TradePage({
                   = {basePrice.toLocaleString()} + {slope.toLocaleString()} x {tokensSold.toLocaleString()}
                   {" "}= <span className="font-semibold text-foreground">{formatUsd(marketPrice)}</span>
                 </p>
-                {config.priceFormula.type === "veteran" && (
-                  <p className="mt-2 font-mono text-xs text-foreground/40">
-                    base = round({stats.ppg}×1k + {stats.rpg}×500 + {stats.apg}×700 + {stats.spg}×800 + {stats.bpg}×800) × 0.5
-                    {" "}= {config.priceFormula.score.toLocaleString()} × 0.5 = {Math.round(config.priceFormula.score * 0.5).toLocaleString()}
-                  </p>
-                )}
-                {config.priceFormula.type === "rookie" && (
-                  <p className="mt-2 font-mono text-xs text-foreground/40">
-                    base = 18,000 × (61 − {config.priceFormula.draftPick}) / 60 = {Math.round(18000 * (61 - config.priceFormula.draftPick) / 60).toLocaleString()}
-                  </p>
-                )}
+                <p className="mt-2 font-mono text-xs text-foreground/40">
+                  base = stats index price at launch (4-pillar formula)
+                </p>
                 <p className="mt-2 text-xs text-muted">
                   Every buy raises the price. Every sell lowers it.
                 </p>

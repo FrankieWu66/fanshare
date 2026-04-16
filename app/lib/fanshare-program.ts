@@ -3,7 +3,7 @@
  * Works with @solana/kit (new SDK).
  */
 
-import { STAT_WEIGHTS } from "./oracle-weights";
+import type { AdvancedPlayerStats } from "./oracle-weights";
 
 // Program ID from anchor build
 export const PROGRAM_ID = "FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F" as const;
@@ -25,93 +25,44 @@ export const PROTOCOL_WALLET = "CsGh5T7EzTUW3hmdpjMrJyzBVq1RPnDXMr9VYuHyXa83" as
 export const FEE_NUMERATOR = 15n;
 export const FEE_DENOMINATOR = 1000n;
 
-// Default bonding curve parameters — floor fallback for incomplete stats
-export const DEFAULT_BASE_PRICE = 10_000n; // floor for players with missing stats
-export const DEFAULT_SLOPE = 8n;
+// Default bonding curve parameters — pre-init fallback only.
+// Real curves are init'd with basePrice = 4-pillar index price (see scripts/init-players.ts).
+// Slope + totalSupply are AMM parameters, tuned later once trading is live.
+export const DEFAULT_BASE_PRICE = 10_000n;
+export const DEFAULT_SLOPE = 1n; // placeholder — AMM tuning deferred
 export const DEFAULT_TOTAL_SUPPLY = 1_000_000n;
 
 // Devnet player roster
-// 15-player roster locked by CEO review 2026-03-31
-// Pricing: stats-anchored at init (CEO review 2026-04-06). base_price is set once, never mutated.
-export interface PlayerStats {
-  ppg: number; // points per game
-  rpg: number; // rebounds per game
-  apg: number; // assists per game
-  spg: number; // steals per game
-  bpg: number; // blocks per game
-}
-
-/** How base_price was derived — shown on trade page formula section. */
-export type PriceFormula =
-  | { type: "veteran"; score: number }
-  | { type: "rookie"; draftPick: number }
-  | { type: "floor" }; // incomplete stats
-
+// 15-player roster locked by CEO review 2026-03-31.
+// Pricing: basePrice = 4-pillar index price (Jerry's spec) at launch. AMM moves from there.
 export interface PlayerConfig {
   id: string;
   displayName: string;
   emoji: string; // visual identifier for devnet
   position: "PG" | "SG" | "SF" | "PF" | "C";
   team: string; // abbreviated team for display
-  stats: PlayerStats; // season averages (mirrors oracle mock data)
-  priceFormula: PriceFormula;
+  stats: AdvancedPlayerStats; // full 4-pillar inputs — single source of truth
 }
 
-/** Weighted stat score used to anchor base_price. Weights defined in oracle-weights.ts. */
-export function oracleScore(stats: PlayerStats): number {
-  const score =
-    stats.ppg * STAT_WEIGHTS.ppg +
-    stats.rpg * STAT_WEIGHTS.rpg +
-    stats.apg * STAT_WEIGHTS.apg +
-    stats.spg * STAT_WEIGHTS.spg +
-    stats.bpg * STAT_WEIGHTS.bpg;
-  if (!isFinite(score))
-    throw new TypeError(`oracleScore: invalid stats (NaN/Infinity) — check API response`);
-  return score;
-}
-
-/** Tier parameters derived from oracle score. */
-export function tierParams(score: number): { slope: bigint; totalSupply: bigint } {
-  if (score >= 40_000) return { slope: 50n, totalSupply: 500_000n };
-  if (score >= 25_000) return { slope: 20n, totalSupply: 750_000n };
-  return { slope: 8n, totalSupply: 1_000_000n };
-}
-
-/** base_price in lamports from veteran stats formula: round(score × 0.5). */
-export function veteranBasePrice(stats: PlayerStats): bigint {
-  const score = oracleScore(stats); // throws if stats contain NaN/Infinity
-  return BigInt(Math.round(score * 0.5));
-}
-
-/** base_price in lamports from draft pick (rookies with no stats). Max 18,000L. */
-export function rookieBasePrice(draftPick: number): bigint {
-  if (draftPick < 1 || draftPick > 60)
-    throw new RangeError(`Draft pick must be 1–60, got ${draftPick}`);
-  return BigInt(Math.round(18_000 * (61 - draftPick) / 60));
-}
-
-function vf(stats: PlayerStats): PriceFormula {
-  return { type: "veteran", score: oracleScore(stats) };
-}
-
+// Advanced stats for each player — mirror of MOCK_STATS in cron/oracle/route.ts.
+// Used for: (1) init-players basePrice calc, (2) trade page pillar breakdown display.
+// Shape matches AdvancedPlayerStats from oracle-weights.ts.
 export const DEVNET_PLAYERS: PlayerConfig[] = [
-  // Stars tier (oracle_score ≥ 40,000) — slope=50, supply=500k
-  { id: "Player_LD",  displayName: "Luka Dončić",              emoji: "⚡",  position: "PG", team: "DAL", stats: { ppg: 33.9, rpg: 9.2,  apg: 9.8,  spg: 1.4, bpg: 0.5 }, priceFormula: vf({ ppg: 33.9, rpg: 9.2,  apg: 9.8,  spg: 1.4, bpg: 0.5 }) },
-  { id: "Player_JE",  displayName: "Joel Embiid",              emoji: "🔨",  position: "C",  team: "PHI", stats: { ppg: 34.7, rpg: 11.0, apg: 5.6,  spg: 1.2, bpg: 1.7 }, priceFormula: vf({ ppg: 34.7, rpg: 11.0, apg: 5.6,  spg: 1.2, bpg: 1.7 }) },
-  { id: "Player_GA",  displayName: "Giannis Antetokounmpo",    emoji: "🦌",  position: "PF", team: "MIL", stats: { ppg: 30.4, rpg: 11.5, apg: 6.5,  spg: 1.2, bpg: 1.1 }, priceFormula: vf({ ppg: 30.4, rpg: 11.5, apg: 6.5,  spg: 1.2, bpg: 1.1 }) },
-  { id: "Player_NJ",  displayName: "Nikola Jokić",             emoji: "🃏",  position: "C",  team: "DEN", stats: { ppg: 26.4, rpg: 12.4, apg: 9.0,  spg: 1.4, bpg: 0.9 }, priceFormula: vf({ ppg: 26.4, rpg: 12.4, apg: 9.0,  spg: 1.4, bpg: 0.9 }) },
-  // Second tier (oracle_score 25,000–39,999) — slope=20, supply=750k
-  { id: "Player_SGA", displayName: "Shai Gilgeous-Alexander",  emoji: "🌩",  position: "PG", team: "OKC", stats: { ppg: 30.1, rpg: 5.5,  apg: 6.2,  spg: 2.0, bpg: 0.7 }, priceFormula: vf({ ppg: 30.1, rpg: 5.5,  apg: 6.2,  spg: 2.0, bpg: 0.7 }) },
-  { id: "Player_LBJ", displayName: "LeBron James",             emoji: "👑",  position: "SF", team: "LAL", stats: { ppg: 25.7, rpg: 7.3,  apg: 8.3,  spg: 1.3, bpg: 0.5 }, priceFormula: vf({ ppg: 25.7, rpg: 7.3,  apg: 8.3,  spg: 1.3, bpg: 0.5 }) },
-  { id: "Player_AD",  displayName: "Anthony Davis",            emoji: "🦾",  position: "PF", team: "LAL", stats: { ppg: 24.7, rpg: 12.6, apg: 3.5,  spg: 1.2, bpg: 2.3 }, priceFormula: vf({ ppg: 24.7, rpg: 12.6, apg: 3.5,  spg: 1.2, bpg: 2.3 }) },
-  { id: "Player_KD",  displayName: "Kevin Durant",             emoji: "🪄",  position: "SF", team: "PHX", stats: { ppg: 27.1, rpg: 6.6,  apg: 5.0,  spg: 0.9, bpg: 1.4 }, priceFormula: vf({ ppg: 27.1, rpg: 6.6,  apg: 5.0,  spg: 0.9, bpg: 1.4 }) },
-  { id: "Player_JT",  displayName: "Jayson Tatum",             emoji: "🦅",  position: "SF", team: "BOS", stats: { ppg: 26.9, rpg: 8.1,  apg: 4.9,  spg: 1.0, bpg: 0.6 }, priceFormula: vf({ ppg: 26.9, rpg: 8.1,  apg: 4.9,  spg: 1.0, bpg: 0.6 }) },
-  { id: "Player_DB",  displayName: "Devin Booker",             emoji: "📖",  position: "SG", team: "PHX", stats: { ppg: 27.1, rpg: 4.5,  apg: 6.9,  spg: 0.9, bpg: 0.3 }, priceFormula: vf({ ppg: 27.1, rpg: 4.5,  apg: 6.9,  spg: 0.9, bpg: 0.3 }) },
-  { id: "Player_SC",  displayName: "Stephen Curry",            emoji: "🍛",  position: "PG", team: "GSW", stats: { ppg: 26.4, rpg: 4.5,  apg: 6.1,  spg: 0.7, bpg: 0.4 }, priceFormula: vf({ ppg: 26.4, rpg: 4.5,  apg: 6.1,  spg: 0.7, bpg: 0.4 }) },
-  { id: "Player_TH",  displayName: "Tyrese Haliburton",        emoji: "💧",  position: "PG", team: "IND", stats: { ppg: 20.7, rpg: 3.7,  apg: 10.9, spg: 1.2, bpg: 0.7 }, priceFormula: vf({ ppg: 20.7, rpg: 3.7,  apg: 10.9, spg: 1.2, bpg: 0.7 }) },
-  { id: "Player_CC",  displayName: "Cade Cunningham",          emoji: "🎯",  position: "PG", team: "DET", stats: { ppg: 22.7, rpg: 4.3,  apg: 7.5,  spg: 0.9, bpg: 0.3 }, priceFormula: vf({ ppg: 22.7, rpg: 4.3,  apg: 7.5,  spg: 0.9, bpg: 0.3 }) },
-  { id: "Player_VW",  displayName: "Victor Wembanyama",        emoji: "👽",  position: "C",  team: "SAS", stats: { ppg: 21.4, rpg: 10.6, apg: 3.9,  spg: 1.2, bpg: 3.6 }, priceFormula: vf({ ppg: 21.4, rpg: 10.6, apg: 3.9,  spg: 1.2, bpg: 3.6 }) },
-  { id: "Player_JB",  displayName: "Jaylen Brown",             emoji: "✈️",  position: "SG", team: "BOS", stats: { ppg: 23.0, rpg: 5.5,  apg: 3.6,  spg: 1.2, bpg: 0.5 }, priceFormula: vf({ ppg: 23.0, rpg: 5.5,  apg: 3.6,  spg: 1.2, bpg: 0.5 }) },
+  { id: "Player_LD",  displayName: "Luka Dončić",             emoji: "⚡",  position: "PG", team: "DAL", stats: { ppg: 33.9, rpg: 9.2,  apg: 9.8,  spg: 1.4, bpg: 0.5, tov: 4.0, ortg: 118, drtg: 112, usg: 37, ts: 58, netRtg: 6  } },
+  { id: "Player_JE",  displayName: "Joel Embiid",             emoji: "🔨",  position: "C",  team: "PHI", stats: { ppg: 34.7, rpg: 11.0, apg: 5.6,  spg: 1.2, bpg: 1.7, tov: 3.5, ortg: 120, drtg: 108, usg: 38, ts: 64, netRtg: 12 } },
+  { id: "Player_GA",  displayName: "Giannis Antetokounmpo",   emoji: "🦌",  position: "PF", team: "MIL", stats: { ppg: 30.4, rpg: 11.5, apg: 6.5,  spg: 1.2, bpg: 1.1, tov: 3.4, ortg: 119, drtg: 107, usg: 34, ts: 61, netRtg: 12 } },
+  { id: "Player_NJ",  displayName: "Nikola Jokić",            emoji: "🃏",  position: "C",  team: "DEN", stats: { ppg: 26.4, rpg: 12.4, apg: 9.0,  spg: 1.4, bpg: 0.9, tov: 3.0, ortg: 126, drtg: 112, usg: 28, ts: 63, netRtg: 12 } },
+  { id: "Player_SGA", displayName: "Shai Gilgeous-Alexander", emoji: "🌩",  position: "PG", team: "OKC", stats: { ppg: 30.1, rpg: 5.5,  apg: 6.2,  spg: 2.0, bpg: 0.7, tov: 2.5, ortg: 121, drtg: 109, usg: 32, ts: 63, netRtg: 12 } },
+  { id: "Player_LBJ", displayName: "LeBron James",            emoji: "👑",  position: "SF", team: "LAL", stats: { ppg: 25.7, rpg: 7.3,  apg: 8.3,  spg: 1.3, bpg: 0.5, tov: 3.5, ortg: 118, drtg: 111, usg: 30, ts: 60, netRtg: 7  } },
+  { id: "Player_AD",  displayName: "Anthony Davis",           emoji: "🦾",  position: "PF", team: "LAL", stats: { ppg: 24.7, rpg: 12.6, apg: 3.5,  spg: 1.2, bpg: 2.3, tov: 2.0, ortg: 116, drtg: 105, usg: 28, ts: 58, netRtg: 11 } },
+  { id: "Player_KD",  displayName: "Kevin Durant",            emoji: "🪄",  position: "SF", team: "PHX", stats: { ppg: 27.1, rpg: 6.6,  apg: 5.0,  spg: 0.9, bpg: 1.4, tov: 2.8, ortg: 119, drtg: 111, usg: 31, ts: 62, netRtg: 8  } },
+  { id: "Player_JT",  displayName: "Jayson Tatum",            emoji: "🦅",  position: "SF", team: "BOS", stats: { ppg: 26.9, rpg: 8.1,  apg: 4.9,  spg: 1.0, bpg: 0.6, tov: 2.7, ortg: 118, drtg: 108, usg: 31, ts: 59, netRtg: 10 } },
+  { id: "Player_DB",  displayName: "Devin Booker",            emoji: "📖",  position: "SG", team: "PHX", stats: { ppg: 27.1, rpg: 4.5,  apg: 6.9,  spg: 0.9, bpg: 0.3, tov: 3.2, ortg: 116, drtg: 113, usg: 31, ts: 57, netRtg: 3  } },
+  { id: "Player_SC",  displayName: "Stephen Curry",           emoji: "🍛",  position: "PG", team: "GSW", stats: { ppg: 26.4, rpg: 4.5,  apg: 6.1,  spg: 0.7, bpg: 0.4, tov: 3.0, ortg: 117, drtg: 113, usg: 30, ts: 61, netRtg: 4  } },
+  { id: "Player_TH",  displayName: "Tyrese Haliburton",       emoji: "💧",  position: "PG", team: "IND", stats: { ppg: 20.7, rpg: 3.7,  apg: 10.9, spg: 1.2, bpg: 0.7, tov: 2.8, ortg: 117, drtg: 112, usg: 25, ts: 59, netRtg: 5  } },
+  { id: "Player_CC",  displayName: "Cade Cunningham",         emoji: "🎯",  position: "PG", team: "DET", stats: { ppg: 22.7, rpg: 4.3,  apg: 7.5,  spg: 0.9, bpg: 0.3, tov: 3.2, ortg: 113, drtg: 115, usg: 29, ts: 55, netRtg: -2 } },
+  { id: "Player_VW",  displayName: "Victor Wembanyama",       emoji: "👽",  position: "C",  team: "SAS", stats: { ppg: 21.4, rpg: 10.6, apg: 3.9,  spg: 1.2, bpg: 3.6, tov: 3.0, ortg: 115, drtg: 104, usg: 28, ts: 57, netRtg: 11 } },
+  { id: "Player_JB",  displayName: "Jaylen Brown",            emoji: "✈️",  position: "SG", team: "BOS", stats: { ppg: 23.0, rpg: 5.5,  apg: 3.6,  spg: 1.2, bpg: 0.5, tov: 2.5, ortg: 117, drtg: 109, usg: 29, ts: 58, netRtg: 8  } },
 ];
 
 // On-chain account types (deserialized from BondingCurveAccount)
