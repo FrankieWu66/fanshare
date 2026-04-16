@@ -223,10 +223,10 @@ old entries survived the reinit.
 ticks + trades land. Will self-smooth over ~48h.
 **Effort:** 0 | **Priority:** P3 (monitor only)
 
-### [ ] Anchor integration tests require running localnet
-**What:** `anchor/tests/fanshare.test.ts` has 3 `update_oracle` tests that fail in `npm run test`
-because they need a running `solana-test-validator`. Also ~15 pre-existing TypeScript errors
-around `bondingCurveAccount` / `statsOracleAccount` on the IDL namespace type.
-**Why:** Blocks green CI. Either split anchor tests into a separate script (e.g. `npm run
-test:anchor` that requires localnet) or fix the IDL typing so vitest can typecheck the files.
-**Effort:** S | **Priority:** P2
+### [x] Separate anchor integration tests from vitest run
+Fixed by excluding `anchor/**` from vitest (`vitest.config.ts`) and tsconfig.
+`npm run test` now runs only the 48 unit tests (3 files) and stays green. Anchor
+integration tests still live at `anchor/tests/fanshare.test.ts` — run them manually
+with a local validator: `npm run anchor-test` (starts validator, deploys, runs tests).
+IDL typing errors in those files are pre-existing and only matter for the anchor-test
+flow.
