@@ -192,16 +192,36 @@ export default function TradePage({
   // Supply bar
   const supplyPct = totalSupply > 0n ? (Number(tokensSold) / Number(totalSupply)) * 100 : 0;
 
-  // Spread signal
+  // Spread signal — the core thesis of the product ("market price vs fair
+  // value"), so it needs visual weight. Styled as a 2-line mini-card, not
+  // a footnote pill.
   const spread = player?.spreadPercent ?? 0;
   const spreadLabel =
     indexPrice === 0n
       ? null
       : spread < -5
-        ? { text: "Undervalued", color: "text-accent", bg: "bg-accent-subtle" }
+        ? {
+            text: "Undervalued",
+            color: "text-accent",
+            border: "border-accent/40",
+            bg: "bg-accent-subtle",
+            pctColor: "text-accent",
+          }
         : spread > 5
-          ? { text: "Overvalued", color: "text-negative", bg: "bg-negative/10" }
-          : { text: "Fair value", color: "text-muted", bg: "bg-cream" };
+          ? {
+              text: "Overvalued",
+              color: "text-negative",
+              border: "border-negative/40",
+              bg: "bg-negative/10",
+              pctColor: "text-negative",
+            }
+          : {
+              text: "Fair value",
+              color: "text-foreground",
+              border: "border-border",
+              bg: "bg-card",
+              pctColor: "text-foreground",
+            };
 
   // Frozen market state
   const isFrozen = marketStatus?.isFrozen ?? false;
@@ -525,17 +545,21 @@ export default function TradePage({
               </div>
             </div>
             {spreadLabel && (
-              <span
-                className={`rounded-full px-3 py-1 text-sm font-medium ${spreadLabel.color} ${spreadLabel.bg}`}
+              <div
+                className={`flex min-w-[128px] flex-col items-end rounded-xl border ${spreadLabel.border} ${spreadLabel.bg} px-4 py-2.5`}
+                aria-label={`${spreadLabel.text}: market price is ${spread >= 0 ? "+" : ""}${spread.toFixed(1)}% vs fair value`}
               >
-                {spreadLabel.text}
-                {indexPrice > 0n && (
-                  <span className="ml-1 opacity-70">
-                    {spread > 0 ? "+" : ""}
-                    {spread.toFixed(1)}%
-                  </span>
-                )}
-              </span>
+                <span className={`text-[10px] font-semibold uppercase tracking-wider ${spreadLabel.color}`}>
+                  {spreadLabel.text}
+                </span>
+                <span className={`font-mono text-xl font-bold tabular-nums leading-tight ${spreadLabel.pctColor}`}>
+                  {spread >= 0 ? "+" : ""}
+                  {spread.toFixed(1)}%
+                </span>
+                <span className="mt-0.5 text-[10px] text-muted">
+                  vs {formatUsd(indexPrice)} fair value
+                </span>
+              </div>
             )}
           </div>
 
@@ -696,26 +720,30 @@ export default function TradePage({
                 </div>
               </div>
 
-              {/* Curve formula — collapsed on mobile to save space */}
+              {/* Curve formula — collapsed on mobile to save space.
+                  Shown in USD (not raw lamports) for demo readability. */}
               <details className="group rounded-xl border border-border-low bg-card">
                 <summary className="flex cursor-pointer items-center justify-between p-5 text-xs font-medium uppercase tracking-wide text-muted [&::-webkit-details-marker]:hidden list-none">
                   <span>Bonding Curve</span>
                   <span className="text-muted transition-transform group-open:rotate-180">▾</span>
                 </summary>
-                <div className="px-5 pb-5 -mt-2">
-                <p className="font-mono text-xs text-foreground/60">
-                  price = base + slope × tokens_sold
-                </p>
-                <p className="mt-1 font-mono text-xs text-foreground/60">
-                  = {basePrice.toLocaleString()} + {slope.toLocaleString()} x {tokensSold.toLocaleString()}
-                  {" "}= <span className="font-semibold text-foreground">{formatUsd(marketPrice)}</span>
-                </p>
-                <p className="mt-2 font-mono text-xs text-foreground/40">
-                  base = stats index price at launch (4-pillar formula)
-                </p>
-                <p className="mt-2 text-xs text-muted">
-                  Every buy raises the price. Every sell lowers it.
-                </p>
+                <div className="space-y-2 px-5 pb-5 -mt-2">
+                  <p className="font-mono text-xs text-foreground/60">
+                    price = launch price + trade impact
+                  </p>
+                  <p className="font-mono text-xs text-foreground/60">
+                    = <span className="text-foreground">{formatUsd(basePrice)}</span>
+                    {" "}+ <span className="text-foreground">{formatUsd(slope * tokensSold)}</span>
+                    {" "}= <span className="font-semibold text-foreground">{formatUsd(marketPrice)}</span>
+                  </p>
+                  <p className="font-mono text-[11px] text-foreground/40">
+                    launch price = 4-pillar stats index at market open
+                  </p>
+                  <p className="text-xs text-muted">
+                    {tokensSold.toLocaleString()} tokens traded. Each 1M bought adds{" "}
+                    <span className="text-foreground">{formatUsd(slope * 1_000_000n)}</span>
+                    {" "}to the price. Every sell reverses it.
+                  </p>
                 </div>
               </details>
 

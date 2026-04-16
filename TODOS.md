@@ -226,6 +226,39 @@ Fixed `f6c418d`. Both buy SOL and sell token inputs now clamp at 0, show red bor
 Fixed `297b2e9`. Test helper wasn't writing the `stats_source_date: i64` field that was added
 to the account layout, so the bump byte sat past the end of the buffer.
 
+### [ ] Tune AMM slope so spread mechanic is demo-visible (BLOCKS demo pre-seeding)
+
+**Problem (identified 2026-04-16):** current placeholder `slope = 1 lamport/token` with
+`total_supply = 1_000_000` and basePrice ~41M lamports makes the bonding curve
+essentially flat at any affordable buy size. A **1,000 SOL buy** only moves price
+0.024%. For a friend demo of the "market vs fair value" spread thesis, pre-seeding
+buys across players would produce near-zero spread — visually indistinguishable
+from an untouched market.
+
+**Math at current params:**
+| Buy size        | Cost (SOL)   | Price Δ    | Spread    |
+|-----------------|--------------|------------|-----------|
+| 1,000 tokens    | 41 SOL       | +$0.00015  | +0.0024%  |
+| 10,000 tokens   | 412 SOL      | +$0.0015   | +0.024%   |
+| 1,000,000 (cap) | 41,728 SOL   | +$0.15     | +2.43%    |
+
+**Options:**
+1. Bump `slope` ~100-1000×. At slope=400, a 10k-token buy moves ~10%. Still linear.
+2. Shrink `total_supply` from 1M to ~1k so every unit matters. Changes token meaning.
+3. Switch to a non-linear curve (exponential, like pump.fun). Requires Rust change.
+
+**Why blocked:** user explicitly deferred AMM tuning ("we wil come back and construct
+amm in details later"). But demo pre-seeding depends on a demo-visible slope. These
+two tasks are coupled.
+
+**Effort:** S (option 1 — just re-init with new slope) | **Priority:** P1 if demo is imminent
+
+### [ ] Pre-seed demo buys across players
+**Blocked on:** AMM slope tuning above. Without a sensible slope, buys produce no
+visible spread. Once slope is tuned, run a small script to execute 3-5 buys of
+varying sizes across 4-5 different players to generate diverse spreads for demo
+narrative (some overvalued, some undervalued, some fair).
+
 ### [ ] Price history cliff between pre-reinit and post-reinit eras (ISSUE-003)
 **Severity:** Informational / self-healing
 **What:** `/trade/Player_LD` chart shows a visible discontinuity between the old $0.002 era
