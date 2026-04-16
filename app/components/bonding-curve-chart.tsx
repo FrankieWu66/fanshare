@@ -1,11 +1,13 @@
 "use client";
 
 import { calculateTokensForSol } from "../lib/bonding-curve";
-import { formatLamports } from "../lib/format";
+import { formatLamportsAsUsd } from "../lib/format";
 
+const SOL_REFERENCE_RATE = 150;
 const LAMPORTS_PER_SOL = 1_000_000_000;
-function formatPriceSol(lamports: number): string {
-  return (lamports / LAMPORTS_PER_SOL).toFixed(6);
+function formatPriceUsd(lamports: number): string {
+  const usd = (lamports / LAMPORTS_PER_SOL) * SOL_REFERENCE_RATE;
+  return `$${usd.toFixed(2)}`;
 }
 
 interface BondingCurveChartProps {
@@ -82,7 +84,7 @@ export function BondingCurveChart({
   const currentPrice = priceAt(sold);
   const dotX = xOf(sold);
   const dotY = yOf(currentPrice);
-  const currentPriceSolLabel = formatPriceSol(currentPrice);
+  const currentPriceUsdLabel = formatPriceUsd(currentPrice);
   // Position the price label: right-of-dot when sold < 50%, left-of-dot when > 50%
   const labelAnchor = sold / supply < 0.5 ? "start" : "end";
   const labelX = sold / supply < 0.5 ? dotX + 8 : dotX - 8;
@@ -98,7 +100,7 @@ export function BondingCurveChart({
   // Y-axis grid lines (4 ticks)
   const yTicks = [0, 0.33, 0.67, 1].map((frac) => {
     const price = minPrice + frac * priceRange;
-    return { y: yOf(price), label: formatLamports(price) };
+    return { y: yOf(price), label: formatLamportsAsUsd(price) };
   });
 
   // X-axis ticks (3: 0%, 50%, 100%)
@@ -200,7 +202,7 @@ export function BondingCurveChart({
         <circle cx={dotX} cy={dotY} r="5" fill="var(--color-accent)" opacity="0.25" />
         <circle cx={dotX} cy={dotY} r="3" fill="var(--color-accent)" />
 
-        {/* Current price label in SOL */}
+        {/* Current price label in USD */}
         <text
           x={labelX}
           y={dotY - 7}
@@ -210,7 +212,7 @@ export function BondingCurveChart({
           fontFamily="var(--font-mono)"
           fontWeight="600"
         >
-          {currentPriceSolLabel} SOL
+          {currentPriceUsdLabel}
         </text>
 
         {/* Y-axis labels */}
@@ -305,4 +307,4 @@ export function BondingCurveChart({
   );
 }
 
-// formatLamports imported from app/lib/format.ts
+// formatLamportsAsUsd imported from app/lib/format.ts

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useWallet } from "../lib/wallet/context";
 import { useBalance } from "../lib/hooks/use-balance";
-import { lamportsToSolString } from "../lib/lamports";
+import { formatUsd } from "../lib/oracle-weights";
 import { ellipsify } from "../lib/explorer";
 import { useCluster } from "./cluster-context";
 import { DemoSignin } from "./demo-signin";
@@ -219,9 +219,8 @@ export function WalletButton() {
             <p className="text-xs text-muted">Balance</p>
             <p className="text-lg font-bold tabular-nums">
               {balance.lamports != null
-                ? lamportsToSolString(balance.lamports)
-                : "\u2014"}{" "}
-              <span className="text-sm font-normal text-muted">SOL</span>
+                ? formatUsd(balance.lamports)
+                : "\u2014"}
             </p>
           </div>
 

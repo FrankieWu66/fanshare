@@ -21,7 +21,7 @@ import playerMints from "../../../lib/player-mints.json";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-const PROGRAM_ID = "B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz";
+const PROGRAM_ID = "FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F";
 const MAX_HISTORY = 500;
 
 // Anchor event discriminator: sha256("event:TradeEvent")[0..8]

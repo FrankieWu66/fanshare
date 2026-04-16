@@ -25,15 +25,14 @@ interface SharpCallEntry {
   qualifying_calls: number;
 }
 
+const SOL_REFERENCE_RATE = 150;
+
 function formatScore(score: number, tab: Tab): string {
   if (tab === "top-traders") {
-    // Score is in lamports — convert to SOL
-    const sol = score / 1e9;
-    const sign = sol >= 0 ? "+" : "";
-    if (Math.abs(sol) >= 1) return `${sign}${sol.toFixed(2)}`;
-    if (Math.abs(sol) >= 0.01) return `${sign}${sol.toFixed(3)}`;
-    if (Math.abs(sol) >= 0.001) return `${sign}${sol.toFixed(4)}`;
-    return `${sign}${sol.toFixed(6)}`;
+    // Score is in lamports — convert to USD via $150/SOL
+    const usd = (score / 1e9) * SOL_REFERENCE_RATE;
+    const sign = usd >= 0 ? "+" : "";
+    return `${sign}$${Math.abs(usd).toFixed(2)}`;
   }
   // Sharp calls — just show the score with 1 decimal
   return score.toFixed(1);
@@ -188,7 +187,7 @@ export default function LeaderboardPage() {
                       Wallet
                     </th>
                     <th className="px-4 py-2.5 text-right font-medium">
-                      {tab === "top-traders" ? "PnL (SOL)" : "Score"}
+                      {tab === "top-traders" ? "PnL (USD)" : "Score"}
                     </th>
                     <th className="px-4 py-2.5 text-right font-medium">
                       {tab === "top-traders" ? "Trades" : "Calls"}
@@ -244,11 +243,6 @@ export default function LeaderboardPage() {
                           className={`px-4 py-3 text-right font-mono font-medium tabular-nums ${scoreColor}`}
                         >
                           {formatScore(entry.score, tab)}
-                          {tab === "top-traders" && (
-                            <span className="ml-1 text-xs font-normal text-muted">
-                              SOL
-                            </span>
-                          )}
                           {tab === "sharp-calls" && (
                             <span className="ml-1 text-xs font-normal text-muted">
                               pts
@@ -270,7 +264,7 @@ export default function LeaderboardPage() {
           <div className="mt-4 text-xs text-muted">
             {tab === "top-traders" ? (
               <p>
-                Ranked by realized PnL (SOL received from sells minus SOL spent on buys).
+                Ranked by realized PnL (value received from sells minus value spent on buys).
               </p>
             ) : (
               <p>

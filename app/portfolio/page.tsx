@@ -9,7 +9,7 @@ import { WalletButton } from "../components/wallet-button";
 import { useWallet } from "../lib/wallet/context";
 import { usePlayerMarkets } from "../lib/hooks/use-player-markets";
 import { usePortfolioBalances } from "../lib/hooks/use-portfolio-balances";
-import { formatSol } from "../lib/bonding-curve";
+import { formatUsd } from "../lib/oracle-weights";
 
 export default function PortfolioPage() {
   const { wallet, status, isDemoMode } = useWallet();
@@ -141,8 +141,7 @@ export default function PortfolioPage() {
                     </tr>
                   ) : null}
                   {filteredHoldings.map(({ player, tokenAmount }) => {
-                    // Est. value: tokens * current price in lamports / 1e9 = SOL
-                    // But tokens are whole units, price is lamports per token
+                    // Est. value: tokens * current price in lamports
                     const valueLamports = (tokenAmount * player.currentPrice) / 1_000_000_000n;
 
                     return (
@@ -160,10 +159,10 @@ export default function PortfolioPage() {
                           {tokenAmount.toLocaleString()}
                         </td>
                         <td className="px-4 py-3 text-right font-mono text-muted max-sm:hidden">
-                          {formatSol(player.currentPrice)}
+                          {formatUsd(player.currentPrice)}
                         </td>
                         <td className="px-4 py-3 text-right font-mono font-semibold">
-                          ~{formatSol(valueLamports)} SOL
+                          ~{formatUsd(valueLamports)}
                         </td>
                         <td className="px-4 py-3 text-right">
                           <Link

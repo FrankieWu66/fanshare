@@ -23,7 +23,7 @@ export async function findStatsOraclePda(
   config: { programAddress?: Address | undefined } = {},
 ): Promise<ProgramDerivedAddress> {
   const {
-    programAddress = "B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz" as Address<"B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz">,
+    programAddress = "FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F" as Address<"FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F">,
   } = config;
   return await getProgramDerivedAddress({
     programAddress,

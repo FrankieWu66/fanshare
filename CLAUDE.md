@@ -79,7 +79,7 @@ BALLDONTLIE_API_KEY=     # Optional — improves balldontlie.io rate limits
 A rawDevnet webhook is registered to receive all transactions touching our program.
 - Webhook ID: `060531bd-e13e-4a58-9b5b-aa5d7066b6eb`
 - Endpoint: `POST /api/webhook/helius`
-- Monitors: program `B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz`
+- Monitors: program `FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F`
 - Parses `TradeEvent` from Anchor program logs (base64 borsh in `Program data:` lines)
 - Records price history to KV and forwards to `/api/indexer/trade-event` for leaderboard
 - Auth: `HELIUS_WEBHOOK_SECRET` env var — Helius sends it as the Authorization header

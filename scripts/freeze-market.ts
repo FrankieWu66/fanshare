@@ -24,7 +24,7 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 
-const PROGRAM_ID = new PublicKey("B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz");
+const PROGRAM_ID = new PublicKey("FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F");
 
 function anchorDiscriminator(methodName: string): Buffer {
   const hash = crypto.createHash("sha256").update(`global:${methodName}`).digest();

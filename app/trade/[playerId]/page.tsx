@@ -22,7 +22,7 @@ import {
   getSellInstruction,
   applySlippage,
 } from "../../lib/fanshare-instructions";
-import { lamportsToSolString } from "../../lib/lamports";
+import { formatUsd, SOL_REFERENCE_RATE, calculatePillarBreakdown, type AdvancedPlayerStats } from "../../lib/oracle-weights";
 import { GridBackground } from "../../components/grid-background";
 import { ClusterSelect } from "../../components/cluster-select";
 import { useCluster } from "../../components/cluster-context";
@@ -30,7 +30,6 @@ import { WalletButton } from "../../components/wallet-button";
 import { BondingCurveChart } from "../../components/bonding-curve-chart";
 import { PriceHistoryChart } from "../../components/price-history-chart";
 import {
-  formatSol,
   calculateSellReturn,
   calculateTokensForSol,
   currentPrice,
@@ -322,7 +321,7 @@ export default function TradePage({
       setLocalTrades(loadTradesForPlayer(playerId));
       setLocalPrices(loadLocalPriceHistory(playerId));
       setTxStage("success");
-      toast.success(`Sold ${tokenAmountIn.toLocaleString()} tokens for ${formatSol(solOut)} SOL`, {
+      toast.success(`Sold ${tokenAmountIn.toLocaleString()} tokens for ${formatUsd(solOut)}`, {
         description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
       });
       // Record to server KV (price chart + leaderboard indexing)
@@ -437,7 +436,7 @@ export default function TradePage({
                   <div className="space-y-4">
                     <div>
                       <label htmlFor="trade-input-loading" className="mb-1.5 block text-xs text-muted">
-                        {tab === "buy" ? "SOL to spend" : "Tokens to sell"}
+                        {tab === "buy" ? "Amount to spend (SOL)" : "Tokens to sell"}
                       </label>
                       <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-3">
                         <input
@@ -449,6 +448,7 @@ export default function TradePage({
                           className="w-full bg-transparent font-mono text-sm outline-none placeholder:text-muted"
                         />
                         <span className="text-xs text-muted">{tab === "buy" ? "SOL" : "tokens"}</span>
+
                       </div>
                     </div>
                     <div className="h-10 w-full animate-pulse rounded-xl bg-border-low" />
@@ -582,19 +582,57 @@ export default function TradePage({
                   <div>
                     <p className="text-xs text-muted">Market Price</p>
                     <p className={`mt-0.5 font-mono text-xl font-bold tabular-nums transition-colors ${priceFlashClass}`}>
-                      {formatSol(marketPrice)}
-                      <span className="ml-1 text-sm font-normal text-muted">SOL</span>
+                      {formatUsd(marketPrice)}
                     </p>
                   </div>
                   {indexPrice > 0n && (
                     <div>
                       <p className="text-xs text-muted">Stats Index</p>
                       <p className="mt-0.5 font-mono text-xl font-bold tabular-nums">
-                        {formatSol(indexPrice)}
-                        <span className="ml-1 text-sm font-normal text-muted">SOL</span>
+                        {formatUsd(indexPrice)}
                       </p>
                     </div>
                   )}
+                  {/* Pillar breakdown — computed from player config stats */}
+                  {(() => {
+                    const s = config.stats;
+                    // Only show breakdown if we have enough stats fields for the 4-pillar formula
+                    const advStats: AdvancedPlayerStats | null = ('ppg' in s && 'rpg' in s && 'apg' in s && 'spg' in s && 'bpg' in s)
+                      ? { ppg: s.ppg, rpg: s.rpg, apg: s.apg, spg: s.spg, bpg: s.bpg, tov: 0, ortg: 113, drtg: 113, usg: 20, ts: 56, netRtg: 0 }
+                      : null;
+                    if (!advStats || indexPrice === 0n) return null;
+                    const pillars = calculatePillarBreakdown(advStats);
+                    const pillarItems = [
+                      { label: "Scoring", value: pillars.scoring * 0.12 },
+                      { label: "Playmaking", value: pillars.playmaking * 0.12 },
+                      { label: "Defense", value: pillars.defense * 0.12 },
+                      { label: "Winning", value: pillars.winning * 0.12 },
+                    ];
+                    const maxPillar = Math.max(...pillarItems.map((p) => Math.abs(p.value)), 0.01);
+                    return (
+                      <div className="mt-2 pt-3 border-t border-border-low">
+                        <p className="mb-2 text-xs text-muted">Index Breakdown</p>
+                        <div className="space-y-2">
+                          {pillarItems.map(({ label, value }) => (
+                            <div key={label}>
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="text-muted">{label}</span>
+                                <span className="font-mono font-medium tabular-nums">
+                                  {value >= 0 ? "+" : ""}{`$${Math.abs(value).toFixed(2)}`}
+                                </span>
+                              </div>
+                              <div className="mt-0.5 h-1 w-full overflow-hidden rounded-full bg-border-low">
+                                <div
+                                  className={`h-full rounded-full transition-all ${value >= 0 ? "bg-accent/60" : "bg-negative/40"}`}
+                                  style={{ width: `${(Math.abs(value) / maxPillar) * 100}%` }}
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 </div>
               </div>
             </div>
@@ -667,8 +705,8 @@ export default function TradePage({
                   price = base + slope × tokens_sold
                 </p>
                 <p className="mt-1 font-mono text-xs text-foreground/60">
-                  = {basePrice.toLocaleString()} + {slope.toLocaleString()} × {tokensSold.toLocaleString()}
-                  {" "}= <span className="font-semibold text-foreground">{marketPrice.toLocaleString()} lam</span>
+                  = {basePrice.toLocaleString()} + {slope.toLocaleString()} x {tokensSold.toLocaleString()}
+                  {" "}= <span className="font-semibold text-foreground">{formatUsd(marketPrice)}</span>
                 </p>
                 {config.priceFormula.type === "veteran" && (
                   <p className="mt-2 font-mono text-xs text-foreground/40">
@@ -698,7 +736,7 @@ export default function TradePage({
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted">You spend</span>
-                      <span className="font-mono font-medium">{formatSol(solLamports)} SOL</span>
+                      <span className="font-mono font-medium">{formatUsd(solLamports)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted">You receive</span>
@@ -706,12 +744,12 @@ export default function TradePage({
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted">Fee (1.5%)</span>
-                      <span className="font-mono text-xs text-muted">{formatSol(feeLamports)} SOL</span>
+                      <span className="font-mono text-xs text-muted">{formatUsd(feeLamports)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted">Price after</span>
                       <span className="font-mono font-medium text-foreground/60">
-                        {formatSol(priceAfterBuy)} SOL
+                        {formatUsd(priceAfterBuy)}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -738,16 +776,16 @@ export default function TradePage({
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted">You receive</span>
-                      <span className="font-mono font-medium">{formatSol(afterFee)} SOL</span>
+                      <span className="font-mono font-medium">{formatUsd(afterFee)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted">Fee (1.5%)</span>
-                      <span className="font-mono text-xs text-muted">{formatSol(feeLamports)} SOL</span>
+                      <span className="font-mono text-xs text-muted">{formatUsd(feeLamports)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted">Price after</span>
                       <span className="font-mono font-medium text-foreground/60">
-                        {formatSol(priceAfterSell)} SOL
+                        {formatUsd(priceAfterSell)}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -791,7 +829,7 @@ export default function TradePage({
                   <div className="space-y-4">
                     <div>
                       <label htmlFor="buy-sol-input" className="mb-1.5 block text-xs text-muted">
-                        SOL to spend
+                        Amount to spend (SOL)
                       </label>
                       <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-3 focus-within:border-accent">
                         <input
@@ -808,7 +846,7 @@ export default function TradePage({
                       </div>
                       {balance.lamports != null && (
                         <div className="mt-1 flex justify-between text-xs text-muted">
-                          <span>Balance: {lamportsToSolString(balance.lamports)} SOL</span>
+                          <span>Balance: {formatUsd(balance.lamports)}</span>
                           <button
                             onClick={() =>
                               setSolInput(
@@ -834,7 +872,7 @@ export default function TradePage({
                     )}
                     {solLamports > 0n && tokensOut === 0n && (
                       <p className="text-xs text-negative">
-                        Amount too small — enter at least {formatSol(marketPrice)} SOL
+                        Amount too small — enter at least {formatUsd(marketPrice)}
                       </p>
                     )}
 
@@ -922,9 +960,8 @@ export default function TradePage({
                       <div className="rounded-xl bg-accent-subtle px-3 py-2 text-sm">
                         <span className="text-muted">You receive ~</span>
                         <span className="ml-1 font-mono font-semibold">
-                          {formatSol(solOut)}
+                          {formatUsd(solOut)}
                         </span>
-                        <span className="ml-1 text-muted">SOL</span>
                       </div>
                     )}
 
@@ -997,7 +1034,7 @@ export default function TradePage({
                     <tr className="border-b border-border text-xs text-muted">
                       <th className="px-4 py-2 text-left font-medium">Type</th>
                       <th className="px-4 py-2 text-right font-medium">Tokens</th>
-                      <th className="px-4 py-2 text-right font-medium">SOL</th>
+                      <th className="px-4 py-2 text-right font-medium">Value</th>
                       <th className="px-4 py-2 text-right font-medium hidden sm:table-cell">Time</th>
                       <th className="px-4 py-2 text-right font-medium hidden md:table-cell">Tx</th>
                     </tr>
@@ -1018,7 +1055,7 @@ export default function TradePage({
                           {trade.tokenAmount.toLocaleString()}
                         </td>
                         <td className="px-4 py-3 text-right font-mono">
-                          {trade.solAmount.toFixed(4)}
+                          ${(trade.solAmount * SOL_REFERENCE_RATE).toFixed(2)}
                         </td>
                         <td className="px-4 py-3 text-right text-muted hidden sm:table-cell">
                           {new Date(trade.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}

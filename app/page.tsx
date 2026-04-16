@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useWallet } from "./lib/wallet/context";
 import { useBalance } from "./lib/hooks/use-balance";
 import { usePlayerMarkets } from "./lib/hooks/use-player-markets";
-import { lamportsToSolString } from "./lib/lamports";
+import { formatUsd } from "./lib/oracle-weights";
 import { useSolanaClient } from "./lib/solana-client-context";
 import { ellipsify } from "./lib/explorer";
 import { PlayerCard } from "./components/player-card";
@@ -171,9 +171,8 @@ export default function Home() {
                 <div className="flex items-center gap-3">
                   <p className="font-mono text-2xl font-bold tabular-nums tracking-tight">
                     {balance.lamports != null
-                      ? lamportsToSolString(balance.lamports)
+                      ? formatUsd(balance.lamports)
                       : "\u2014"}
-                    <span className="ml-1 text-sm font-normal text-muted">SOL</span>
                   </p>
                   {cluster !== "mainnet" && !isDemoMode && (
                     <button

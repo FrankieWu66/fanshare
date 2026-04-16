@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { PlayerMarketData } from "../lib/fanshare-program";
-import { formatSol } from "../lib/bonding-curve";
+import { formatUsd } from "../lib/oracle-weights";
 
 interface PlayerCardProps {
   player: PlayerMarketData;
@@ -58,8 +58,7 @@ export function PlayerCard({ player }: PlayerCardProps) {
       {/* Price */}
       <div className="mt-4">
         <p className="font-mono text-2xl font-bold tabular-nums tracking-tight">
-          {formatSol(currentPrice)}
-          <span className="ml-1 text-sm font-normal text-muted">SOL</span>
+          {formatUsd(currentPrice)}
         </p>
       </div>
 
@@ -68,7 +67,7 @@ export function PlayerCard({ player }: PlayerCardProps) {
         <div>
           <p className="text-[11px] text-muted">Stats Index</p>
           <p className="font-mono text-sm font-medium tabular-nums">
-            {indexPrice > 0n ? formatSol(indexPrice) : "--"}
+            {indexPrice > 0n ? formatUsd(indexPrice) : "--"}
           </p>
         </div>
         <div>

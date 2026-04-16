@@ -6,7 +6,7 @@ use anchor_spl::token::{self, Mint, MintTo, Burn, Token, TokenAccount};
 mod tests;
 
 // Placeholder — will be replaced by `anchor keys list` after first build
-declare_id!("B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz");
+declare_id!("FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F");
 
 /// Fee rate: 15 / 1000 = 1.5%
 const FEE_NUMERATOR: u64 = 15;
@@ -61,6 +61,7 @@ pub mod fanshare {
         oracle.mint = ctx.accounts.mint.key();
         oracle.index_price_lamports = 0;
         oracle.last_updated = 0;
+        oracle.stats_source_date = 0;
         oracle.authority = ctx.accounts.authority.key();
         oracle.bump = ctx.bumps.stats_oracle;
 
@@ -545,15 +546,32 @@ pub mod fanshare {
     // ========================================================================
 
     /// Update the stats oracle index price. Only callable by the oracle authority.
-    pub fn update_oracle(ctx: Context<UpdateOracle>, index_price_lamports: u64) -> Result<()> {
+    /// Accepts 4-pillar attribution deltas for transparency (OracleUpdateEvent).
+    pub fn update_oracle(
+        ctx: Context<UpdateOracle>,
+        index_price_lamports: u64,
+        stats_source_date: i64,
+        delta_scoring: i64,
+        delta_playmaking: i64,
+        delta_defense: i64,
+        delta_winning: i64,
+    ) -> Result<()> {
         let oracle = &mut ctx.accounts.stats_oracle;
+        let old_index_price = oracle.index_price_lamports;
         oracle.index_price_lamports = index_price_lamports;
         oracle.last_updated = Clock::get()?.unix_timestamp;
+        oracle.stats_source_date = stats_source_date;
 
         emit!(OracleUpdateEvent {
             mint: oracle.mint,
-            index_price_lamports,
+            old_index_price,
+            new_index_price: index_price_lamports,
+            delta_scoring,
+            delta_playmaking,
+            delta_defense,
+            delta_winning,
             timestamp: oracle.last_updated,
+            stats_source_date,
         });
 
         Ok(())
@@ -859,6 +877,8 @@ pub struct StatsOracleAccount {
     pub index_price_lamports: u64,
     /// Unix timestamp of last update
     pub last_updated: i64,
+    /// Date of the box scores used (unix timestamp, midnight UTC)
+    pub stats_source_date: i64,
     /// Oracle update authority (cron wallet)
     pub authority: Pubkey,
     /// PDA bump seed
@@ -1286,8 +1306,16 @@ pub struct TradeEvent {
 #[event]
 pub struct OracleUpdateEvent {
     pub mint: Pubkey,
-    pub index_price_lamports: u64,
+    pub old_index_price: u64,
+    pub new_index_price: u64,
+    /// Signed lamport delta per pillar (new − old contribution)
+    pub delta_scoring: i64,
+    pub delta_playmaking: i64,
+    pub delta_defense: i64,
+    pub delta_winning: i64,
     pub timestamp: i64,
+    /// Date of the box scores used for this update
+    pub stats_source_date: i64,
 }
 
 #[event]

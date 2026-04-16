@@ -30,7 +30,7 @@ import {
 } from "../instructions";
 
 export const FANSHARE_PROGRAM_ADDRESS =
-  "B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz" as Address<"B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz">;
+  "FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F" as Address<"FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F">;
 
 export enum FanshareAccount {
   BondingCurveAccount,
@@ -141,7 +141,7 @@ export function identifyFanshareInstruction(
 }
 
 export type ParsedFanshareInstruction<
-  TProgram extends string = "B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz",
+  TProgram extends string = "FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F",
 > =
   | ({
       instructionType: FanshareInstruction.Buy;

@@ -6,7 +6,7 @@
 import { STAT_WEIGHTS } from "./oracle-weights";
 
 // Program ID from anchor build
-export const PROGRAM_ID = "B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz" as const;
+export const PROGRAM_ID = "FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F" as const;
 
 // PDA seed prefixes (must match Rust seeds exactly)
 export const BONDING_CURVE_SEED = "bonding-curve";
@@ -131,6 +131,7 @@ export interface StatsOracleData {
   mint: string;
   indexPriceLamports: bigint;
   lastUpdated: bigint;
+  statsSourceDate: bigint;
   authority: string;
   bump: number;
 }
@@ -222,6 +223,7 @@ export function deserializeBondingCurve(data: Uint8Array): BondingCurveData {
  *   32 bytes: mint (Pubkey)
  *   8 bytes: index_price_lamports (u64 LE)
  *   8 bytes: last_updated (i64 LE)
+ *   8 bytes: stats_source_date (i64 LE)
  *   32 bytes: authority (Pubkey)
  *   1 byte: bump (u8)
  */
@@ -235,6 +237,7 @@ export function deserializeStatsOracle(data: Uint8Array): StatsOracleData {
 
   const indexPriceLamports = view.getBigUint64(offset, true); offset += 8;
   const lastUpdated = view.getBigInt64(offset, true); offset += 8;
+  const statsSourceDate = view.getBigInt64(offset, true); offset += 8;
 
   const authorityBytes = data.slice(offset, offset + 32);
   const authority = bytesToBase58(authorityBytes);
@@ -242,7 +245,7 @@ export function deserializeStatsOracle(data: Uint8Array): StatsOracleData {
 
   const bump = data[offset];
 
-  return { mint, indexPriceLamports, lastUpdated, authority, bump };
+  return { mint, indexPriceLamports, lastUpdated, statsSourceDate, authority, bump };
 }
 
 /**

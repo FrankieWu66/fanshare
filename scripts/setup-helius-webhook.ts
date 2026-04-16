@@ -20,7 +20,7 @@ import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), "../.env.local") });
 
-const PROGRAM_ID = "B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz";
+const PROGRAM_ID = "FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F";
 const WEBHOOK_URL = "https://fanshare-1.vercel.app/api/webhook/helius";
 
 const API_KEY = process.env.NEXT_PUBLIC_HELIUS_API_KEY;

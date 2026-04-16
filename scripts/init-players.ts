@@ -30,7 +30,7 @@ import {
 import { createMint } from "@solana/spl-token";
 
 // ── Constants ──────────────────────────────────────────────────────────────
-const PROGRAM_ID = new PublicKey("B69juh6rX1Z6WNN2qCkrhuHDnk6v5vrK8oJ2o6oHTVYz");
+const PROGRAM_ID = new PublicKey("FLnVTYYPDShw4nmGz6oZKsBHVSdWB1vJxLmcycFo1T7F");
 const TOKEN_DECIMALS = 0; // integer tokens (no fractional)
 
 // ── Stats-anchored pricing (CEO review 2026-04-06) ─────────────────────────

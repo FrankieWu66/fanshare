@@ -243,6 +243,7 @@ function mockPlayerData(config: PlayerConfig, index: number): PlayerMarketData {
       mint: `mock-mint-${index}`,
       indexPriceLamports: indexPrice,
       lastUpdated: BigInt(Math.floor(Date.now() / 1000)),
+      statsSourceDate: BigInt(Math.floor(new Date().setUTCHours(0, 0, 0, 0) / 1000)),
       authority: "mock-oracle-authority",
       bump: 254,
     },

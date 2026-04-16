@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import { formatLamports } from "../lib/format";
+import { formatLamportsAsUsd } from "../lib/format";
 
 interface PricePoint {
   t: number; // unix timestamp (seconds)
@@ -32,6 +32,7 @@ function formatTime(ts: number): string {
   return d.toLocaleDateString([], { month: "short", day: "numeric" });
 }
 
+const SOL_REFERENCE_RATE = 150;
 const LAMPORTS_PER_SOL = 1_000_000_000;
 
 export function PriceHistoryChart({ data, currentPrice }: PriceHistoryChartProps) {
@@ -40,8 +41,7 @@ export function PriceHistoryChart({ data, currentPrice }: PriceHistoryChartProps
       <div className="flex h-[164px] flex-col items-center justify-center gap-2">
         {currentPrice !== undefined && (
           <p className="font-mono text-xl font-bold tabular-nums">
-            {(currentPrice / LAMPORTS_PER_SOL).toFixed(6)}
-            <span className="ml-1 text-sm font-normal text-muted">SOL</span>
+            ${((currentPrice / LAMPORTS_PER_SOL) * SOL_REFERENCE_RATE).toFixed(2)}
           </p>
         )}
         <p className="font-mono text-xs text-muted">
@@ -86,11 +86,11 @@ export function PriceHistoryChart({ data, currentPrice }: PriceHistoryChartProps
           />
           <YAxis
             domain={[minP - pad, maxP + pad]}
-            tickFormatter={formatLamports}
+            tickFormatter={formatLamportsAsUsd}
             tick={{ fontSize: 9, fill: "var(--color-muted)", fontFamily: "var(--font-mono)" }}
             tickLine={false}
             axisLine={false}
-            width={40}
+            width={48}
           />
           <Tooltip
             content={({ active, payload }) => {
@@ -100,7 +100,7 @@ export function PriceHistoryChart({ data, currentPrice }: PriceHistoryChartProps
                 <div className="rounded-lg border border-border-low bg-card px-2.5 py-1.5 shadow-lg">
                   <p className="font-mono text-xs text-muted">{formatTime(pt.t)}</p>
                   <p className="font-mono text-sm font-semibold text-foreground">
-                    {formatLamports(pt.p)} lam
+                    {formatLamportsAsUsd(pt.p)}
                   </p>
                 </div>
               );

@@ -4,7 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { useWallet } from "../lib/wallet/context";
 import { useSendTransaction } from "../lib/hooks/use-send-transaction";
 import { useBalance } from "../lib/hooks/use-balance";
-import { lamportsFromSol, lamportsToSolString } from "../lib/lamports";
+import { lamportsFromSol } from "../lib/lamports";
+import { formatUsd } from "../lib/oracle-weights";
 import { type Address } from "@solana/kit";
 import { toast } from "sonner";
 import {
@@ -62,7 +63,7 @@ export function VaultCard() {
     const depositLamports = lamportsFromSol(parseFloat(amount));
     if (walletLamports != null && walletLamports < depositLamports) {
       toast.error("Insufficient balance.", {
-        description: `You need at least ${amount} SOL plus fees. Current balance: ${lamportsToSolString(walletLamports)} SOL.`,
+        description: `You need at least ${amount} SOL plus fees. Current balance: ${formatUsd(walletLamports)}.`,
       });
       return;
     }
@@ -160,8 +161,7 @@ export function VaultCard() {
           Vault Balance
         </p>
         <p className="mt-1 text-3xl font-bold tabular-nums">
-          {vaultLamports ? lamportsToSolString(vaultLamports) : "0"}{" "}
-          <span className="text-lg font-normal text-muted">SOL</span>
+          {vaultLamports ? formatUsd(vaultLamports) : "$0.00"}
         </p>
         {vaultAddress && (vaultLamports ?? 0n) > 0n && (
           <p className="group mt-2 flex items-center gap-1.5">

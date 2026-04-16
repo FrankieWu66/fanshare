@@ -33,7 +33,7 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 
-const FUND_SOL = 0.05; // SOL to send to each new demo wallet
+const FUND_SOL = 0.667; // SOL to send to each new demo wallet ($100 at $150/SOL)
 
 // Lazy KV import — graceful when KV is not configured (local dev)
 async function getKV() {
