@@ -147,6 +147,7 @@ describe("deserializeBondingCurve", () => {
 //   32 bytes: mint pubkey
 //   u64 LE  : index_price_lamports
 //   i64 LE  : last_updated (unix timestamp)
+//   i64 LE  : stats_source_date (unix timestamp of stats snapshot)
 //   32 bytes: authority pubkey
 //   1 byte  : bump
 
@@ -154,10 +155,11 @@ function buildStatsOracleBytes(opts: {
   mint: Uint8Array;
   indexPriceLamports: bigint;
   lastUpdated: bigint;
+  statsSourceDate: bigint;
   authority: Uint8Array;
   bump: number;
 }): Uint8Array {
-  const totalLen = 8 + 32 + 8 + 8 + 32 + 1;
+  const totalLen = 8 + 32 + 8 + 8 + 8 + 32 + 1;
   const buf = new ArrayBuffer(totalLen);
   const view = new DataView(buf);
   let off = 8; // skip discriminator
@@ -167,6 +169,7 @@ function buildStatsOracleBytes(opts: {
 
   view.setBigUint64(off, opts.indexPriceLamports, true); off += 8;
   view.setBigInt64(off, opts.lastUpdated, true); off += 8;
+  view.setBigInt64(off, opts.statsSourceDate, true); off += 8;
 
   new Uint8Array(buf, off, 32).set(opts.authority);
   off += 32;
@@ -185,6 +188,7 @@ describe("deserializeStatsOracle", () => {
     mint: MINT,
     indexPriceLamports: 47_120n,
     lastUpdated: TIMESTAMP,
+    statsSourceDate: TIMESTAMP,
     authority: AUTHORITY,
     bump: 252,
   });
@@ -206,6 +210,7 @@ describe("deserializeStatsOracle", () => {
       mint: MINT,
       indexPriceLamports: 0n,
       lastUpdated: 0n,
+      statsSourceDate: 0n,
       authority: AUTHORITY,
       bump: 255,
     });
@@ -219,6 +224,7 @@ describe("deserializeStatsOracle", () => {
       mint: MINT,
       indexPriceLamports: MAX_U64,
       lastUpdated: TIMESTAMP,
+      statsSourceDate: TIMESTAMP,
       authority: AUTHORITY,
       bump: 1,
     });
