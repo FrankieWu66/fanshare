@@ -68,9 +68,13 @@ export function lamportsToUsd(lamports: bigint): number {
   return Number(lamports) / 1_000_000_000 * SOL_REFERENCE_RATE;
 }
 
-/** Format lamports as USD string. */
+/** Format lamports as USD string. Uses more precision below $0.01 so tiny
+ *  bonding-curve prices don't collapse to "$0.00" and look broken. */
 export function formatUsd(lamports: bigint): string {
   const usd = lamportsToUsd(lamports);
+  if (usd === 0) return "$0.00";
+  if (usd < 0.0001) return `$${usd.toFixed(6)}`;
+  if (usd < 0.01) return `$${usd.toFixed(4)}`;
   return `$${usd.toFixed(2)}`;
 }
 
