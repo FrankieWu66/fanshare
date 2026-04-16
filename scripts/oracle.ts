@@ -34,6 +34,7 @@ import {
   calculatePillarBreakdown,
   usdToLamports,
 } from "../app/lib/oracle-weights.js";
+import { pushPriceHistoryEntry } from "../app/lib/kv-history.js";
 
 // Load .env.local for KV credentials (Next.js convention)
 dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), "../.env.local") });
@@ -444,7 +445,7 @@ async function main() {
       console.log(`  ✓ Updated (tx: ${sig})`);
       updated++;
 
-      // Write price history to Vercel KV (non-blocking)
+      // Write price history to Vercel KV (non-blocking, atomic pipeline)
       if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
         try {
           const entry = JSON.stringify({
@@ -456,8 +457,6 @@ async function main() {
             defense: pillars.defense * 0.12,
             winning: pillars.winning * 0.12,
           });
-          const kvUrl = process.env.KV_REST_API_URL;
-          const kvToken = process.env.KV_REST_API_TOKEN;
           const rpcUrl = process.env.SOLANA_RPC_URL ?? "";
           const cluster =
             process.env.SOLANA_CLUSTER ??
@@ -465,14 +464,7 @@ async function main() {
              rpcUrl.includes("mainnet") ? "mainnet" :
              rpcUrl.includes("testnet") ? "testnet" : "localnet");
           const key = `price-history:${cluster}:${playerId}`;
-          await fetch(`${kvUrl}/rpush/${encodeURIComponent(key)}/${encodeURIComponent(entry)}`, {
-            method: "POST",
-            headers: { Authorization: `Bearer ${kvToken}` },
-          });
-          await fetch(`${kvUrl}/ltrim/${encodeURIComponent(key)}/-500/-1`, {
-            method: "POST",
-            headers: { Authorization: `Bearer ${kvToken}` },
-          });
+          await pushPriceHistoryEntry(key, entry);
           console.log(`  ✓ KV price history recorded (with pillar breakdown)`);
         } catch (kvErr) {
           console.warn(`  ⚠ KV write failed (non-fatal):`, kvErr);

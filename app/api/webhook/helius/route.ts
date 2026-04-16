@@ -18,6 +18,7 @@
 
 import { NextResponse } from "next/server";
 import playerMints from "../../../lib/player-mints.json";
+import { pushPriceHistoryEntry } from "../../../lib/kv-history";
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
@@ -214,23 +215,10 @@ function extractTradeEvents(tx: RawTransaction): ParsedTradeEvent[] {
 // ── KV price recording ──────────────────────────────────────────────────────
 
 async function recordPrice(playerId: string, price: number, timestamp: number) {
-  const kvUrl = process.env.KV_REST_API_URL;
-  const kvToken = process.env.KV_REST_API_TOKEN;
-  if (!kvUrl || !kvToken) return;
-
   const cluster = process.env.SOLANA_CLUSTER ?? "devnet";
   const key = `price-history:${cluster}:${playerId}`;
   const entry = JSON.stringify({ t: timestamp, p: price });
-
-  await fetch(`${kvUrl}/rpush/${encodeURIComponent(key)}/${encodeURIComponent(entry)}`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${kvToken}` },
-  });
-
-  await fetch(`${kvUrl}/ltrim/${encodeURIComponent(key)}/-${MAX_HISTORY}/-1`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${kvToken}` },
-  });
+  await pushPriceHistoryEntry(key, entry, { maxLen: MAX_HISTORY });
 }
 
 // ── Indexer forwarding ──────────────────────────────────────────────────────

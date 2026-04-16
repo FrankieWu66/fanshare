@@ -30,6 +30,7 @@ import {
   calculatePillarBreakdown,
   usdToLamports,
 } from "../../../lib/oracle-weights";
+import { pushPriceHistoryEntry } from "../../../lib/kv-history";
 
 // update_oracle discriminator from fanshare IDL
 const UPDATE_ORACLE_DISCRIMINATOR = Buffer.from([112, 41, 209, 18, 248, 226, 252, 188]);
@@ -150,10 +151,6 @@ async function writeKvPriceHistory(
   scoring: number, playmaking: number, defense: number, winning: number,
   cluster: string
 ) {
-  const kvUrl = process.env.KV_REST_API_URL;
-  const kvToken = process.env.KV_REST_API_TOKEN;
-  if (!kvUrl || !kvToken) return;
-
   const entry = JSON.stringify({
     t: Math.floor(Date.now() / 1000),
     p: Number(indexLamports),
@@ -161,15 +158,7 @@ async function writeKvPriceHistory(
     scoring, playmaking, defense, winning,
   });
   const key = `price-history:${cluster}:${playerId}`;
-
-  await fetch(`${kvUrl}/rpush/${encodeURIComponent(key)}/${encodeURIComponent(entry)}`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${kvToken}` },
-  });
-  await fetch(`${kvUrl}/ltrim/${encodeURIComponent(key)}/-500/-1`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${kvToken}` },
-  });
+  await pushPriceHistoryEntry(key, entry);
 }
 
 export async function GET(request: Request) {

@@ -18,8 +18,7 @@
  */
 
 import { NextResponse } from "next/server";
-
-const MAX_HISTORY = 500; // Max price points to keep per player
+import { pushPriceHistoryEntry, PRICE_HISTORY_MAX } from "../../../lib/kv-history";
 
 export async function POST(req: Request) {
   let body: {
@@ -55,10 +54,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid playerId format" }, { status: 400 });
   }
 
-  const kvUrl = process.env.KV_REST_API_URL;
-  const kvToken = process.env.KV_REST_API_TOKEN;
-
-  if (!kvUrl || !kvToken) {
+  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
     return NextResponse.json({ ok: true, skipped: true, reason: "KV not configured" });
   }
 
@@ -66,22 +62,13 @@ export async function POST(req: Request) {
   const entry = JSON.stringify({ t: Math.floor(Date.now() / 1000), p: price });
 
   try {
-    // RPUSH to append, then LTRIM to keep only the last MAX_HISTORY entries
-    const pushRes = await fetch(`${kvUrl}/rpush/${encodeURIComponent(key)}/${encodeURIComponent(entry)}`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${kvToken}` },
-    });
-
-    if (!pushRes.ok) {
-      console.error(`[price-history/record] RPUSH failed: ${pushRes.status}`);
+    // Atomic RPUSH + LTRIM via Upstash pipeline — single round-trip,
+    // all-or-nothing (prevents unbounded list growth if trim fails alone).
+    const res = await pushPriceHistoryEntry(key, entry, { maxLen: PRICE_HISTORY_MAX });
+    if (res && !res.ok) {
+      console.error(`[price-history/record] pipeline failed: ${res.status}`);
       return NextResponse.json({ error: "KV write failed" }, { status: 503 });
     }
-
-    // Trim to last N entries
-    await fetch(`${kvUrl}/ltrim/${encodeURIComponent(key)}/-${MAX_HISTORY}/-1`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${kvToken}` },
-    });
   } catch (err) {
     console.error("[price-history/record] error:", err);
     return NextResponse.json({ error: "KV write failed" }, { status: 503 });

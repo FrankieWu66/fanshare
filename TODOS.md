@@ -44,17 +44,13 @@ real names on mainnet. Display names can be descriptive without using licensed m
 
 ### [x] git init + .gitignore + initial commit — DONE
 
-### [ ] Fund oracle devnet wallet
+### [x] Fund oracle devnet wallet
+Resolved. Deploy/oracle wallet `CsGh5T7EzTUW3hmdpjMrJyzBVq1RPnDXMr9VYuHyXa83` holds
+20.88 SOL (verified 2026-04-16), topped up daily by `/api/cron/faucet` from Helius.
 
-**What:** Airdrop test SOL to the oracle keypair on devnet so the cron can pay transaction
-fees when writing price updates on-chain. ~0.000005 SOL per update, negligible, but wallet must have balance.
-
-**How:** `solana airdrop 2 <oracle-pubkey> --url devnet`
-
-### [ ] Sign up for Helius free RPC
-
-**What:** Free tier RPC provider for frontend + oracle to talk to Solana devnet.
-100k requests/day. Sufficient for 10-15 beta users. Track in expenses.md.
+### [x] Sign up for Helius RPC
+Resolved. On the Helius paid plan ($49/mo after first month). Devnet RPC URL configured
+across `SOLANA_RPC_URL`, init-players, oracle, anchor-deploy. See CLAUDE.md for details.
 
 ---
 
@@ -109,12 +105,9 @@ position/team filters. The current grid works fine up to ~20 cards.
 
 ## From CEO Review 2026-04-06 (tokenomics v2)
 
-### [ ] Provision Vercel KV before merging price history feature
-
-**What:** Set `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` in Vercel dashboard.
-Smoke-test: `curl https://fanshare-1.vercel.app/api/price-history/Player_LD` → `{"data":[]}`.
-
-**Effort:** S | **Priority:** P1 (blocks #6 price history chart)
+### [x] Provision Vercel KV
+Resolved. KV provisioned and live. `/api/price-history/Player_LD?cluster=devnet` returns
+238 points (verified 2026-04-16). Oracle cron + Helius webhook both writing successfully.
 
 ### [x] Extract bonding curve math to shared TS module
 
@@ -140,11 +133,10 @@ mutates `bonding_curve.base_price` based on performance. Formula: `new_base = ti
 because it requires a new Rust instruction, rebuild, and holder fairness UX treatment.
 **Effort:** L | **Priority:** P2 (mainnet only) | **Depends on:** security audit, Squads multisig
 
-### [ ] Price history chart: 1-data-point edge case
-
-**What:** recharts LineChart renders nothing with a single data point. When `data.length === 1`,
-render a Scatter dot or show "Not enough data — check back after the next oracle update."
-**Effort:** XS | **Priority:** P2
+### [x] Price history chart: 1-data-point edge case
+Resolved. `PriceHistoryChart` at [app/components/price-history-chart.tsx:55](app/components/price-history-chart.tsx:55)
+duplicates the single point 1 second later so recharts draws a visible flat line.
+Empty-state fallback also in place for zero points (shows current price + "Price history records after oracle updates").
 
 ### [ ] Move DEVNET_PLAYERS to JSON file when roster exceeds 30 players
 
@@ -152,14 +144,12 @@ render a Scatter dot or show "Not enough data — check back after the next orac
 will become unwieldy at 30+ players. Move to `app/lib/players.json` or a DB.
 **Effort:** S | **Priority:** P3 (future)
 
-### [ ] KV RPUSH+LTRIM atomicity
-
-**What:** In `scripts/oracle.ts`, RPUSH and LTRIM are two separate HTTP calls. If LTRIM fails
-(rate limit, timeout), the list grows unbounded. Wrap using Upstash pipeline API to make
-them atomic: one HTTP call, both commands, all-or-nothing.
-**Why:** At devnet scale (15 players, 5-min cron) this is low risk. At mainnet scale (100+
-players, continuous oracle) unbounded growth becomes a real issue.
-**Effort:** XS | **Priority:** P2
+### [x] KV RPUSH+LTRIM atomicity
+Resolved 2026-04-16. Added `app/lib/kv-history.ts::pushPriceHistoryEntry` — single POST
+to Upstash `/pipeline` endpoint with `[["RPUSH",k,v],["LTRIM",k,-N,-1]]`. All four call
+sites refactored: `scripts/oracle.ts`, `app/api/cron/oracle/route.ts`,
+`app/api/webhook/helius/route.ts`, `app/api/price-history/record/route.ts`.
+Regression test in `test/kv-history.test.ts` (3 cases).
 
 ### [ ] Devnet reset workflow — wipe bonding curves and start fresh
 
@@ -192,11 +182,10 @@ showing to investors or new testers makes the demo more controlled.
 **Effort:** M (program change + script) | **Priority:** P2 (pre-demo tooling)
 **Depends on:** Security audit sign-off before adding any new authority instructions on mainnet.
 
-### [ ] Formula section: collapse on mobile
-
-**What:** The bonding curve formula display on the trade page always-visible on mobile pushes
-the trade widget down. Add a disclosure `<details>` or accordion: "How is price calculated?"
-**Effort:** XS | **Priority:** P3
+### [x] Formula section: collapse on mobile
+Resolved. The Bonding Curve section at [app/trade/[playerId]/page.tsx:700](app/trade/[playerId]/page.tsx:700)
+is already wrapped in `<details>` and collapsed by default, with a chevron indicator and
+styled summary ("Bonding Curve ▾").
 
 ---
 
