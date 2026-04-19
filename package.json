@@ -9,6 +9,7 @@
     "oracle": "tsx scripts/oracle.ts",
     "oracle:mock": "tsx scripts/oracle.ts --mock",
     "reclaim-demo": "tsx scripts/reclaim-demo-kv.ts",
+    "reset-kv": "tsx scripts/reset-kv.ts",
     "freeze-market": "tsx scripts/freeze-market.ts",
     "setup-webhook": "tsx scripts/setup-helius-webhook.ts",
     "build": "next build",
