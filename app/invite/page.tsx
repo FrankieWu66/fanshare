@@ -39,15 +39,13 @@ export default function InvitePage() {
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col gap-8 px-6 py-12">
       {/* Hero */}
       <header className="space-y-3">
-        {/* TODO(ops): landing headline */}
         <h1 className="font-display text-4xl font-extrabold tracking-tight">
-          Welcome to FanShare
+          Trade player tokens that move with real stats.
         </h1>
-        {/* TODO(ops): landing subhead — what-is-this, why-care */}
         <p className="text-base text-muted">
-          Trade NBA player performance tokens on a bonding curve anchored to
-          stats. Your $100 demo grant is on us — no real money, just fake
-          devnet SOL.
+          Every player has a token. Stats move a fair-value price. The market
+          decides what it actually trades at. The gap is your edge — if
+          you&apos;re right, and early.
         </p>
       </header>
 
@@ -57,20 +55,21 @@ export default function InvitePage() {
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent/15 font-mono text-[10px] text-accent">
             1
           </span>
-          Claim your $100 grant
+          Get $100 in devnet SOL
         </div>
 
         {!isConnected ? (
           <div className="space-y-3">
             <p className="text-sm">
-              We&apos;ll create a demo wallet and airdrop 0.667 SOL (≈ $100)
-              so you can start trading immediately.
+              One click. We&apos;ll spin up a wallet and drop 0.667 SOL ($100)
+              into it. No signup, no seed phrase to copy down — just click
+              and trade.
             </p>
             <button
               onClick={() => setShowSignin(true)}
               className="w-full cursor-pointer rounded-lg bg-accent px-4 py-3 text-sm font-bold text-accent-foreground transition hover:bg-accent/90"
             >
-              Claim $100 demo grant →
+              Claim $100 →
             </button>
           </div>
         ) : (
@@ -103,12 +102,25 @@ export default function InvitePage() {
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent/15 font-mono text-[10px] text-accent">
             2
           </span>
-          Make your first trade
+          Find a player the market has wrong
         </div>
-        {/* TODO(ops): first-trade walkthrough copy */}
+        <p className="mb-3 text-sm text-muted">
+          Every card shows a fair-value price (from stats) and a market price
+          (what others paid). When they disagree, that&apos;s the
+          opportunity. Green{" "}
+          <span className="font-semibold text-positive">UNDERVALUED</span> =
+          market below fair value. Red{" "}
+          <span className="font-semibold text-negative">OVERVALUED</span> =
+          above.
+        </p>
         <p className="mb-4 text-sm text-muted">
-          Pick a player, buy some tokens, watch the spread move. Sell anytime
-          — 1.5% fee, no lockup.
+          <span className="font-semibold text-foreground">
+            Buy if you think stats will catch up. Sell if you think the
+            hype&apos;s done.
+          </span>{" "}
+          Your $100 moves the price a few percent on a star, more on a role
+          player. Hold as long as your read holds. Sell whenever. No rounds,
+          no expiry.
         </p>
         <Link
           href={`/trade/${FIRST_MARKET}`}
@@ -137,19 +149,15 @@ export default function InvitePage() {
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent/15 font-mono text-[10px] text-accent">
             3
           </span>
-          Badges you can earn
+          What you&apos;re playing for
         </div>
-        {/* TODO(ops): badge copy — what each one means */}
-        <p className="mb-4 text-sm text-muted">
-          Locked badges preview the earnable system. The backend ships after
-          Demo 1.
-        </p>
-        <ul className="space-y-3">
+        <ul className="mb-4 space-y-3">
           <li className="flex items-start justify-between gap-4 rounded-lg border border-border-low bg-cream/30 px-3 py-2">
             <div>
               <p className="text-sm font-medium">Early Adopter</p>
               <p className="text-xs text-muted">
-                Traded in the first cohort of FanShare users.
+                Trade on Demo 1 to earn — among the first 15 to touch the
+                platform. Locked in forever.
               </p>
             </div>
             <StaticBadge tier="early_adopter" locked />
@@ -158,7 +166,8 @@ export default function InvitePage() {
             <div>
               <p className="text-sm font-medium">Sharp Caller</p>
               <p className="text-xs text-muted">
-                Bought undervalued players before the oracle caught up.
+                5+ profitable trades at &gt;20% spread — you saw what the
+                market missed, repeatedly.
               </p>
             </div>
             <StaticBadge tier="sharp_caller" locked />
@@ -167,12 +176,17 @@ export default function InvitePage() {
             <div>
               <p className="text-sm font-medium">Diamond Hands</p>
               <p className="text-xs text-muted">
-                Held through volatility for 7+ days.
+                Hold a winning position through 3 oracle updates — conviction
+                over churn.
               </p>
             </div>
             <StaticBadge tier="diamond_hands" locked />
           </li>
         </ul>
+        <p className="text-xs text-muted">
+          Badges are preview-only for Demo 1. They&apos;ll be earnable when
+          we open beta.
+        </p>
       </section>
 
       {showSignin && <DemoSignin onClose={() => setShowSignin(false)} />}
