@@ -28,11 +28,11 @@ export default function InvitePage() {
   const [showSignin, setShowSignin] = useState(false);
 
   const address = wallet?.account.address;
-  const balance = useBalance(address);
+  const { lamports } = useBalance(address);
   const isConnected = Boolean(wallet);
   // 0.667 SOL grant floor — display "grant received" once balance crosses half that
   // (allows for small trade activity without reverting the badge).
-  const balanceSol = balance ? Number(balance) / 1_000_000_000 : 0;
+  const balanceSol = lamports != null ? Number(lamports) / 1_000_000_000 : 0;
   const grantReceived = balanceSol >= 0.3;
 
   return (
