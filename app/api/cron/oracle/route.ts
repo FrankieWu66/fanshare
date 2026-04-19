@@ -32,12 +32,12 @@ import {
   usdToLamports,
 } from "@/app/lib/oracle-weights";
 import { pushPriceHistoryEntry } from "@/app/lib/kv-history";
-import { resolveStats } from "@/scripts/lib/stats";
-import { getStatsOraclePda } from "@/scripts/lib/pdas";
+import { resolveStats } from "@/app/lib/shared/stats";
+import { getStatsOraclePda } from "@/app/lib/shared/pdas";
 import {
   buildUpdateOracleInstruction,
   pillarLamportDeltas,
-} from "@/scripts/lib/oracle-instruction";
+} from "@/app/lib/shared/oracle-instruction";
 
 async function writeKvPriceHistory(
   playerId: string, indexLamports: bigint, usdPrice: number,

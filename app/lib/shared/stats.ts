@@ -12,8 +12,8 @@
  * and land on the same pillars → spread = 0 at launch.
  */
 
-import type { AdvancedPlayerStats } from "../../app/lib/oracle-weights";
-import { DEVNET_PLAYERS } from "../../app/lib/fanshare-program";
+import type { AdvancedPlayerStats } from "../oracle-weights";
+import { DEVNET_PLAYERS } from "../fanshare-program";
 
 // ── Balldontlie lookup ─────────────────────────────────────────────────────
 

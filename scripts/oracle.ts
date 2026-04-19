@@ -6,7 +6,7 @@
  *
  * Flow:
  *   1. Load player-mints.json (output of init-players.ts)
- *   2. Resolve stats via scripts/lib/stats.ts (live balldontlie or mock)
+ *   2. Resolve stats via app/lib/shared/stats.ts (live balldontlie or mock)
  *   3. Calculate 4-pillar index price in USD, convert to lamports at $150/SOL
  *   4. Call update_oracle for each player (with pillar deltas for OracleUpdateEvent)
  *
@@ -34,12 +34,12 @@ import {
   usdToLamports,
 } from "../app/lib/oracle-weights";
 import { pushPriceHistoryEntry } from "../app/lib/kv-history";
-import { PLAYER_API_MAP, resolveStats } from "./lib/stats";
-import { getMarketStatusPda, getStatsOraclePda, PROGRAM_ID } from "./lib/pdas";
+import { PLAYER_API_MAP, resolveStats } from "../app/lib/shared/stats";
+import { getMarketStatusPda, getStatsOraclePda, PROGRAM_ID } from "../app/lib/shared/pdas";
 import {
   buildUpdateOracleInstruction,
   pillarLamportDeltas,
-} from "./lib/oracle-instruction";
+} from "../app/lib/shared/oracle-instruction";
 
 // Load .env.local for KV credentials (Next.js convention)
 dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), "../.env.local") });

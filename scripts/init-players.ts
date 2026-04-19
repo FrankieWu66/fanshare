@@ -33,12 +33,12 @@ import {
 import { createMint } from "@solana/spl-token";
 import { DEVNET_PLAYERS } from "../app/lib/fanshare-program";
 import { calculatePillarBreakdown, usdToLamports } from "../app/lib/oracle-weights";
-import { resolveStats } from "./lib/stats";
-import { getBondingCurvePda, getStatsOraclePda, PROGRAM_ID } from "./lib/pdas";
+import { resolveStats } from "../app/lib/shared/stats";
+import { getBondingCurvePda, getStatsOraclePda, PROGRAM_ID } from "../app/lib/shared/pdas";
 import {
   buildUpdateOracleInstruction,
   pillarLamportDeltas,
-} from "./lib/oracle-instruction";
+} from "../app/lib/shared/oracle-instruction";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const TOKEN_DECIMALS = 0; // integer tokens (no fractional)

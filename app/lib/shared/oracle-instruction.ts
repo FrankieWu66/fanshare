@@ -9,7 +9,7 @@ import {
   PublicKey,
   TransactionInstruction,
 } from "@solana/web3.js";
-import type { PillarBreakdown } from "../../app/lib/oracle-weights";
+import type { PillarBreakdown } from "../oracle-weights";
 import { PROGRAM_ID } from "./pdas";
 
 // update_oracle discriminator from IDL — DO NOT CHANGE
