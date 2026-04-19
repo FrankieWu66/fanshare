@@ -28,7 +28,7 @@ import { ClusterSelect } from "../../components/cluster-select";
 import { useCluster } from "../../components/cluster-context";
 import { WalletButton } from "../../components/wallet-button";
 import { BondingCurveChart } from "../../components/bonding-curve-chart";
-import { PriceHistoryChart } from "../../components/price-history-chart";
+import { CandlestickChart } from "../../components/candlestick-chart";
 import {
   calculateSellReturn,
   calculateTokensForSol,
@@ -735,9 +735,11 @@ export default function TradePage({
                     inputLamports={tab === "buy" && solLamports > 0n ? solLamports : undefined}
                   />
                 ) : (
-                  <PriceHistoryChart
+                  <CandlestickChart
                     data={mergePriceHistory(priceHistory, localPrices)}
-                    currentPrice={indexPrice > 0n ? Number(indexPrice) : undefined}
+                    currentPrice={marketPrice > 0n ? Number(marketPrice) : undefined}
+                    fairValuePrice={indexPrice > 0n ? Number(indexPrice) : undefined}
+                    height={200}
                   />
                 )}
 
