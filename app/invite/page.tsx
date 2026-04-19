@@ -6,24 +6,76 @@ import { useWallet } from "../lib/wallet/context";
 import { useBalance } from "../lib/hooks/use-balance";
 import { usePlayerMarkets } from "../lib/hooks/use-player-markets";
 import { DemoSignin } from "../components/demo-signin";
-import { StaticBadge } from "../components/badge";
 import { formatUsd } from "../lib/oracle-weights";
 
 /**
  * Demo 1 invite landing page.
  *
- * Single-viewport hero on desktop: big display type, live market ticker,
- * amber primary CTA, ghost secondary, inline locked-badge row. The goal is a
- * "trading floor on first paint" feel — not a numbered marketing checklist.
+ * Composed layout (per design handoff):
+ *   • Hero zone — V1 Terminal styling: live ticker above, dense status row,
+ *     big display headline with amber accent em, amber primary CTA + ghost
+ *     secondary link.
+ *   • Premise zone — V2 Scoreboard styling: centered eyebrow + oversized
+ *     display-type manifesto, amber em emphasis.
+ *   • Walkthrough zone — V2 Scoreboard styling: vertical 01/02/03 rail with
+ *     huge amber mono numerals and generous spacing.
+ *   • Badges zone — V3 Editorial styling: minimal wireframe plaques with
+ *     locked state + unlock criteria footer.
  *
- * If the visitor is disconnected: primary CTA opens DemoSignin modal which
- * hits /api/demo/register and transfers 0.667 SOL from the deploy wallet.
- *
- * If connected: primary CTA links straight to /trade/Player_LBJ.
+ * Copy source: design bundle shared.jsx (STEPS, BADGES, MANIFESTO, etc.).
+ * Wallet/demo logic unchanged from prior single-viewport version.
  */
 
 const FIRST_MARKET = "Player_LBJ";
-const GRANT_FLOOR_SOL = 0.3; // below this we assume the grant hasn't hit yet
+const GRANT_FLOOR_SOL = 0.3;
+
+const STEPS = [
+  {
+    n: "01",
+    title: "Get $100 in devnet SOL",
+    body: "One click. We'll spin up a wallet and drop 0.667 SOL ($100) into it. No signup, no seed phrase to copy down — just click and trade.",
+  },
+  {
+    n: "02",
+    title: "Find a player the market has wrong",
+    body: "Every card shows a fair-value price (from stats) and a market price (what others paid). When they disagree, that's the opportunity. Green \"UNDERVALUED\" = market below fair value. Red \"OVERVALUED\" = above.",
+  },
+  {
+    n: "03",
+    title:
+      "Buy if you think stats will catch up. Sell if you think the hype's done.",
+    body: "Your $100 moves the price a few percent on a star, more on a role player. Hold as long as your read holds. Sell whenever. No rounds, no expiry.",
+  },
+] as const;
+
+const BADGES = [
+  {
+    key: "early",
+    name: "Early Adopter",
+    unlock: "Trade on Demo 1 to earn",
+    oneLine: "Among the first 15 to touch the platform. Locked in forever.",
+    color: "var(--accent)",
+  },
+  {
+    key: "sharp",
+    name: "Sharp Caller",
+    unlock: "5+ profitable trades at >20% spread",
+    oneLine: "You saw what the market missed, repeatedly.",
+    color: "var(--positive)",
+  },
+  {
+    key: "diamond",
+    name: "Diamond Hands",
+    unlock: "Hold a winning position through 3 oracle updates",
+    oneLine: "Conviction over churn.",
+    color: "#A855F7",
+  },
+] as const;
+
+const DISCLAIMER =
+  "Running on Solana devnet. All SOL is test SOL. No real money, no financial risk, no financial advice.";
+const BADGE_FINE =
+  "Badges are preview-only for Demo 1. They'll be earnable when we open beta.";
 
 export default function InvitePage() {
   const { wallet, isDemoMode } = useWallet();
@@ -43,11 +95,11 @@ export default function InvitePage() {
     .slice(0, 8);
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-background">
-      {/* Subtle grid backdrop — reinforces "trading terminal" feel without competing for attention */}
+    <div className="relative overflow-hidden bg-background">
+      {/* Grid backdrop — reinforces "trading terminal" feel. Fixed so it stays during scroll. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        className="pointer-events-none fixed inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
             "linear-gradient(to right, var(--color-foreground) 1px, transparent 1px), linear-gradient(to bottom, var(--color-foreground) 1px, transparent 1px)",
@@ -55,117 +107,279 @@ export default function InvitePage() {
         }}
       />
 
-      <div className="relative mx-auto flex min-h-screen max-w-5xl flex-col gap-8 px-6 py-8 lg:py-12">
-        {/* ── Market ticker strip ────────────────────────────────────────── */}
-        <MarketTicker movers={movers} />
+      <div className="relative">
+        {/* ── Market ticker strip ──────────────────────────────────────────── */}
+        <div className="mx-auto max-w-6xl px-6 pt-6">
+          <MarketTicker movers={movers} />
+        </div>
 
-        {/* ── Hero ───────────────────────────────────────────────────────── */}
-        <header className="flex flex-1 flex-col justify-center gap-6 lg:gap-8">
-          <div className="space-y-4">
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-              Devnet · Invite only · Demo 1
-            </p>
-            <h1 className="font-display text-[2.75rem] font-extrabold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-              Players trade<br />
-              <span className="text-accent">like stocks.</span>
+        {/* ── Hero (V1 Terminal) ───────────────────────────────────────────── */}
+        <header className="mx-auto max-w-6xl px-6 pb-16 pt-10 lg:pb-20 lg:pt-14">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+              <Dot color="positive" pulse />
+              <span>Live · Devnet</span>
+              <span style={{ color: "var(--border)" }}>·</span>
+              <span>Invite · Demo 1</span>
+            </div>
+            <h1
+              className="m-0 font-display font-extrabold text-foreground"
+              style={{
+                fontSize: "clamp(40px, 5.4vw, 64px)",
+                lineHeight: 0.98,
+                letterSpacing: "-0.03em",
+              }}
+            >
+              Trade player tokens that move with{" "}
+              <em className="not-italic text-accent">real stats.</em>
             </h1>
-            <p className="max-w-xl text-base text-muted lg:text-lg">
-              Every NBA player has a token. Stats drive a fair-value price.
+            <p className="m-0 max-w-[540px] text-base leading-[1.55] text-muted">
+              Every player has a token.{" "}
+              <b className="font-medium text-foreground">
+                Stats move a fair-value price.
+              </b>{" "}
               The market decides what it actually trades at. The gap is your
               edge — if you&apos;re right, and early.
             </p>
-          </div>
 
-          {/* CTA block */}
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            {!isConnected ? (
-              <button
-                onClick={() => setShowSignin(true)}
-                className="group inline-flex min-h-[52px] cursor-pointer items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-bold text-accent-foreground transition hover:bg-accent/90"
-              >
-                Claim $100 in devnet SOL
-                <span
-                  aria-hidden="true"
-                  className="transition-transform group-hover:translate-x-0.5"
+            {/* CTA row */}
+            <div className="mt-1 flex flex-wrap items-center gap-6">
+              {!isConnected ? (
+                <button
+                  onClick={() => setShowSignin(true)}
+                  className="inline-flex h-14 cursor-pointer items-center gap-2.5 rounded-xl bg-accent px-6 text-base font-bold tracking-[-0.005em] text-accent-foreground shadow-[0_8px_32px_-8px_rgba(245,158,11,0.4)] transition hover:-translate-y-px hover:bg-[#FBBF24] hover:shadow-[0_12px_40px_-8px_rgba(245,158,11,0.5)] active:translate-y-0"
                 >
-                  →
-                </span>
-              </button>
-            ) : (
-              <Link
-                href={`/trade/${FIRST_MARKET}`}
-                className="group inline-flex min-h-[52px] items-center justify-center gap-2 rounded-lg bg-accent px-6 py-3 text-sm font-bold text-accent-foreground transition hover:bg-accent/90"
-              >
-                Trade {FIRST_MARKET.replace("Player_", "$")}
-                <span
-                  aria-hidden="true"
-                  className="transition-transform group-hover:translate-x-0.5"
+                  <span className="whitespace-nowrap">Claim $100 →</span>
+                </button>
+              ) : (
+                <Link
+                  href={`/trade/${FIRST_MARKET}`}
+                  className="inline-flex h-14 items-center gap-2.5 rounded-xl bg-accent px-6 text-base font-bold tracking-[-0.005em] text-accent-foreground shadow-[0_8px_32px_-8px_rgba(245,158,11,0.4)] transition hover:-translate-y-px hover:bg-[#FBBF24] hover:shadow-[0_12px_40px_-8px_rgba(245,158,11,0.5)] active:translate-y-0"
                 >
-                  →
-                </span>
-              </Link>
-            )}
-            <Link
-              href="/"
-              className="inline-flex min-h-[52px] items-center justify-center rounded-lg border border-border-low bg-transparent px-6 py-3 text-sm font-semibold text-foreground transition hover:border-foreground/30 hover:bg-card"
-            >
-              Browse all markets
-            </Link>
-          </div>
+                  <span className="whitespace-nowrap">
+                    Trade {FIRST_MARKET.replace("Player_", "$")} →
+                  </span>
+                </Link>
+              )}
+              <a
+                href="#walkthrough"
+                className="inline-flex h-11 items-center gap-1.5 text-[13px] font-medium text-muted transition hover:text-foreground"
+              >
+                How it works
+                <svg
+                  viewBox="0 0 24 24"
+                  width="13"
+                  height="13"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 5v14" />
+                  <path d="m19 12-7 7-7-7" />
+                </svg>
+              </a>
+            </div>
 
-          {/* Status strip — wallet + grant */}
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs text-muted">
-            <span className="inline-flex items-center gap-1.5">
-              <Dot color={isConnected ? "positive" : "muted"} />
-              {isConnected
-                ? `Wallet connected${isDemoMode ? " · demo" : ""}`
-                : "No wallet yet"}
-            </span>
-            {isConnected && (
+            {/* Status strip (wallet + grant) — live data, unchanged from prior version */}
+            <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs text-muted">
               <span className="inline-flex items-center gap-1.5">
-                <Dot color={grantReceived ? "positive" : "accent"} pulse={!grantReceived} />
-                {grantReceived ? (
-                  <>
-                    Grant received ·{" "}
-                    <span className="font-semibold text-foreground">
-                      {balanceSol.toFixed(3)} SOL
-                    </span>
-                  </>
-                ) : (
-                  <>Grant incoming… {balanceSol.toFixed(3)} SOL</>
-                )}
+                <Dot color={isConnected ? "positive" : "muted"} />
+                {isConnected
+                  ? `Wallet connected${isDemoMode ? " · demo" : ""}`
+                  : "No wallet yet"}
               </span>
-            )}
-            <span>0.667 SOL · $100 · no real money · no seed phrase</span>
+              {isConnected && (
+                <span className="inline-flex items-center gap-1.5">
+                  <Dot color={grantReceived ? "positive" : "accent"} pulse={!grantReceived} />
+                  {grantReceived ? (
+                    <>
+                      Grant received ·{" "}
+                      <span className="font-semibold text-foreground">
+                        {balanceSol.toFixed(3)} SOL
+                      </span>
+                    </>
+                  ) : (
+                    <>Grant incoming… {balanceSol.toFixed(3)} SOL</>
+                  )}
+                </span>
+              )}
+              <span>0.667 SOL · $100 · no real money · no seed phrase</span>
+            </div>
           </div>
         </header>
 
-        {/* ── Footer: mechanic + earnable badges ─────────────────────────── */}
-        <section className="grid gap-4 rounded-xl border border-border-low bg-card p-5 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-8">
-          <div className="space-y-1.5">
-            <p className="font-mono text-[10px] uppercase tracking-wider text-muted">
-              How it works
+        {/* ── Premise / Manifesto (V2 Scoreboard, centered) ────────────────── */}
+        <section className="border-t border-border-low">
+          <div className="mx-auto max-w-6xl px-6 py-20 text-center lg:py-24">
+            <Eyebrow>Thesis</Eyebrow>
+            <p
+              className="mx-auto m-0 mt-6 max-w-[860px] font-display font-bold text-foreground"
+              style={{
+                fontSize: "clamp(28px, 3.8vw, 44px)",
+                lineHeight: 1.15,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Being right <em className="not-italic text-accent">early</em> — and{" "}
+              <em className="not-italic text-accent">staying right</em> — pays
+              better than being right once.
             </p>
-            <p className="text-sm leading-relaxed text-foreground">
-              <span className="font-semibold text-positive">Green UNDERVALUED</span>{" "}
-              = market below fair value.{" "}
-              <span className="font-semibold text-negative">Red OVERVALUED</span>{" "}
-              = above. Buy if stats will catch up. Sell if the hype&apos;s done.
-              No rounds, no expiry.
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] uppercase tracking-wider text-muted">
-              Earn
-            </span>
-            <StaticBadge tier="early_adopter" locked />
-            <StaticBadge tier="sharp_caller" locked />
           </div>
         </section>
+
+        {/* ── Walkthrough (V2 Scoreboard vertical rail) ────────────────────── */}
+        <section id="walkthrough" className="border-t border-border-low">
+          <div className="mx-auto max-w-6xl px-6 py-16 lg:py-20">
+            <div className="mb-10 flex flex-col gap-3">
+              <Eyebrow>How it works</Eyebrow>
+              <h2
+                className="m-0 font-display font-extrabold text-foreground"
+                style={{
+                  fontSize: "clamp(28px, 3.6vw, 42px)",
+                  lineHeight: 1.1,
+                  letterSpacing: "-0.025em",
+                }}
+              >
+                Three clicks to your first trade.
+              </h2>
+            </div>
+            <div className="flex flex-col">
+              {STEPS.map((step, i) => (
+                <div
+                  key={step.n}
+                  className={`grid grid-cols-[64px_1fr] items-start gap-6 py-8 sm:grid-cols-[128px_1fr] sm:gap-12 sm:py-10 ${
+                    i < STEPS.length - 1 ? "border-b border-border-low" : ""
+                  }`}
+                >
+                  <div
+                    className="font-mono font-bold tabular-nums text-accent"
+                    style={{
+                      fontSize: "clamp(48px, 7vw, 88px)",
+                      lineHeight: 0.9,
+                      letterSpacing: "-0.03em",
+                    }}
+                  >
+                    {step.n}
+                  </div>
+                  <div className="max-w-[640px] pt-3">
+                    <h3
+                      className="m-0 mb-3.5 font-display font-extrabold text-foreground"
+                      style={{
+                        fontSize: "clamp(22px, 2.5vw, 30px)",
+                        lineHeight: 1.15,
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      {step.title}
+                    </h3>
+                    <p className="m-0 text-[15px] leading-[1.6] text-muted">
+                      {step.body}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Badges (V3 Editorial wireframe plaques) ──────────────────────── */}
+        <section className="border-t border-border-low">
+          <div className="mx-auto max-w-6xl px-6 py-20 lg:py-24">
+            <Eyebrow>What you&apos;re playing for</Eyebrow>
+            <h2
+              className="m-0 mb-10 mt-5 font-display font-extrabold text-foreground"
+              style={{
+                fontSize: "clamp(28px, 3.6vw, 40px)",
+                lineHeight: 1.1,
+                letterSpacing: "-0.025em",
+              }}
+            >
+              Three badges. Zero claimed so far.
+            </h2>
+            <div className="grid gap-4 md:grid-cols-3">
+              {BADGES.map((b) => (
+                <div
+                  key={b.key}
+                  className="flex min-h-[200px] flex-col gap-4 rounded-xl border border-border bg-transparent p-6 transition-colors hover:border-border-low"
+                >
+                  <div
+                    className="flex items-center gap-2.5 font-mono text-[11px] font-bold uppercase tracking-[0.12em]"
+                    style={{ color: b.color }}
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="13"
+                      height="13"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <rect x="4" y="11" width="16" height="10" rx="2" />
+                      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+                    </svg>
+                    <span className="text-muted">Locked</span>
+                  </div>
+                  <div
+                    className="font-display text-[22px] font-extrabold text-foreground opacity-75"
+                    style={{ letterSpacing: "-0.02em", lineHeight: 1.1 }}
+                  >
+                    {b.name}
+                  </div>
+                  <p className="m-0 flex-1 text-[14px] leading-[1.55] text-muted">
+                    {b.oneLine}
+                  </p>
+                  <div className="border-t border-border-low pt-3.5 font-mono text-[11px] text-muted">
+                    <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-accent">
+                      Unlock
+                    </div>
+                    <div>{b.unlock}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p className="mt-6 max-w-[640px] text-[13px] text-muted">
+              {BADGE_FINE}
+            </p>
+          </div>
+        </section>
+
+        {/* ── Footer ───────────────────────────────────────────────────────── */}
+        <footer className="border-t border-border-low">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-6 py-8 lg:py-10">
+            <span className="inline-flex items-center gap-2 text-sm font-bold tracking-[-0.01em] text-foreground">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="3" rx="1" fill="var(--accent)" />
+                <rect x="3" y="10.5" width="13" height="3" rx="1" fill="var(--foreground)" />
+                <rect x="3" y="16" width="18" height="3" rx="1" fill="var(--accent)" opacity="0.55" />
+              </svg>
+              FanShare
+            </span>
+            <p className="m-0 max-w-[560px] font-mono text-[11px] leading-[1.55] text-muted">
+              {DISCLAIMER}
+            </p>
+          </div>
+        </footer>
       </div>
 
       {showSignin && <DemoSignin onClose={() => setShowSignin(false)} />}
     </div>
+  );
+}
+
+// ── Eyebrow (shared across section heads) ──────────────────────────────────
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-2.5 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-accent">
+      <span className="inline-block h-px w-6 bg-accent" />
+      {children}
+    </span>
   );
 }
 
