@@ -17,8 +17,8 @@ Run this:
 | Leaderboard | `trader:*`, `sharp:*`, both sorted-set leaderboards | `npm run reset-kv` |
 | Sharp calls history | `sharp:buys:*`, `sharp:<wallet>` score records | `npm run reset-kv` |
 | On-chain curves | Bonding curve `tokensSold`, `treasuryLamports`, all holder ATAs | Re-init — new mints via `npm run init-players` |
-| Oracle / fair value | Per-player `stats_oracle` PDA price feed | Re-init + `npm run oracle:mock` |
-| Spread | Function of `market_price - oracle_price` — becomes 0 when market and oracle both start at the same base | Falls out of the re-init above |
+| Oracle / fair value | Per-player `stats_oracle` PDA price feed | `init-players` now writes the first oracle tick inline using the same pillars it used for base_price |
+| Spread | Function of `market_price - oracle_price` — becomes 0 at T0 because init writes both values from one in-memory pillars snapshot | Falls out of the re-init above |
 
 ## Command sequence
 
@@ -36,13 +36,19 @@ npm run reset-kv -- --yes
 # 3. Back up current mints, then re-init bonding curves + oracles on-chain.
 #    init-players is resume-safe — it only creates mints for players missing from
 #    player-mints.json. Deleting the file forces it to create all 15 fresh.
+#
+#    init-players now writes BOTH base_price (via initialize_curve) AND the
+#    first index_price (via update_oracle) in the same run, from one in-memory
+#    pillars snapshot. Result: spread = 0 at T0. No separate oracle step needed.
+#
+#    For the real invite launch: omit --mock so balldontlie live stats drive
+#    the launch-day pillars. For QA/dry-runs: add `-- --mock` to use hardcoded
+#    stats from DEVNET_PLAYERS.stats.
 mv app/lib/player-mints.json app/lib/player-mints.pre-reset-$(date +%Y%m%d-%H%M%S).json
-npm run init-players
+npm run init-players              # live balldontlie (real launch)
+# or:  npm run init-players -- --mock  (offline dev)
 
-# 4. Seed every fresh oracle with current stats so fair_value = base_price → spread = 0.
-npm run oracle:mock
-
-# 5. Commit the new mints so prod picks them up.
+# 4. Commit the new mints so prod picks them up.
 git add app/lib/player-mints.json app/lib/player-mints.pre-reset-*.json
 git commit -m "chore(reset): re-init all 15 player markets — blank slate for <reason>"
 git push origin master
@@ -68,7 +74,8 @@ curl -s https://fanshares.xyz/api/leaderboard/sharp-calls | jq .
 # C. Spread should be 0 on every player card
 # Open https://fanshares.xyz/ — no UNDERVALUED/OVERVALUED tags should appear
 # (spread renders only when |spread| > 0). If a player still shows a tag, the
-# oracle didn't update on that market — re-run `npm run oracle:mock`.
+# first oracle tick in init-players failed on that market — check the init-players
+# log for the missing `✓ update_oracle` line and re-run init for just that player.
 
 # D. Deploy wallet should be fat with reclaimed SOL
 solana balance CsGh5T7EzTUW3hmdpjMrJyzBVq1RPnDXMr9VYuHyXa83 --url <HELIUS_URL>
@@ -100,9 +107,9 @@ Before sending the real invites:
 
 - [ ] `npm run reclaim-demo` completed — demo wallets drained
 - [ ] `npm run reset-kv -- --yes` completed — leaderboard empty
-- [ ] `npm run init-players` completed — new mints in `player-mints.json`
-- [ ] `npm run oracle:mock` completed at least twice (first to seed, second to
-      confirm the cron path works without touching balldontlie)
+- [ ] `npm run init-players` completed — new mints in `player-mints.json`,
+      each player shows `✓ update_oracle — tx: ...` immediately after its
+      `✓ initialize_curve` line (that's the first oracle tick, base=index at T0)
 - [ ] Deploy wallet balance ≥ 10 SOL
 - [ ] Vercel deploy green, `/invite` returns 200 on fanshares.xyz
 - [ ] Spot-check: open `/trade/Player_LBJ` in incognito — no UNDERVALUED/OVERVALUED
