@@ -3,3 +3,4 @@ anchor/
 oracle-keypair*.json
 .claude/
 scripts/
+!scripts/lib/
