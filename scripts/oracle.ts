@@ -124,9 +124,14 @@ const API_HEADERS: Record<string, string> = process.env.BALLDONTLIE_API_KEY
 
 /**
  * Fetch advanced player stats from balldontlie.io.
- * Uses /v1/season_averages for basic stats (PPG, RPG, APG, SPG, BPG, TOV)
- * and /v1/stats/advanced for advanced (ORTG, DRTG, USG%, TS%, NetRtg).
- * Requires GOAT tier API key for advanced endpoint.
+ *
+ * Demo 1 (2026-04-18): box-score averages come from the last 5 games (rolling window)
+ * instead of season averages. Smooths single-game noise without being as slow as a
+ * full season average. Advanced ratings (ORTG/DRTG/USG/TS/NetRtg) still use the
+ * season-averaged `/v1/stats/advanced` endpoint — per-game advanced is noisier and
+ * the pillar formula is most sensitive to basic box-score stats anyway.
+ *
+ * Fallback chain: last-5 games → season averages → null.
  */
 async function fetchPlayerStats(playerName: string): Promise<AdvancedPlayerStats | null> {
   try {
@@ -145,22 +150,26 @@ async function fetchPlayerStats(playerName: string): Promise<AdvancedPlayerStats
       return null;
     }
 
-    // 2. Fetch basic season averages
-    const basicUrl = `https://api.balldontlie.io/v1/season_averages?player_ids[]=${player.id}`;
-    const basicRes = await fetch(basicUrl, { headers: API_HEADERS });
-    if (!basicRes.ok) {
-      console.warn(`  Basic stats fetch failed for ${playerName}: ${basicRes.status}`);
-      return null;
-    }
-
-    const basicData = await basicRes.json();
-    const basic = basicData.data?.[0];
+    // 2. Try last-5-games rolling average for box-score stats
+    let basic = await fetchLast5GamesAverage(player.id);
     if (!basic) {
-      console.warn(`  No season averages for ${playerName}`);
-      return null;
+      // Fall back to season averages if the 5-game endpoint is empty (off-season, API hiccup)
+      console.warn(`  No last-5-games data for ${playerName} — falling back to season averages`);
+      const basicUrl = `https://api.balldontlie.io/v1/season_averages?player_ids[]=${player.id}`;
+      const basicRes = await fetch(basicUrl, { headers: API_HEADERS });
+      if (!basicRes.ok) {
+        console.warn(`  Season averages fetch failed for ${playerName}: ${basicRes.status}`);
+        return null;
+      }
+      const basicData = await basicRes.json();
+      basic = basicData.data?.[0];
+      if (!basic) {
+        console.warn(`  No season averages for ${playerName}`);
+        return null;
+      }
     }
 
-    // 3. Fetch advanced stats (GOAT tier required)
+    // 3. Fetch advanced stats (GOAT tier required) — season-averaged
     const advancedUrl = `https://api.balldontlie.io/v1/stats/advanced?player_ids[]=${player.id}`;
     const advancedRes = await fetch(advancedUrl, { headers: API_HEADERS });
 
@@ -200,6 +209,32 @@ async function fetchPlayerStats(playerName: string): Promise<AdvancedPlayerStats
     console.warn(`  API error for ${playerName}:`, err);
     return null;
   }
+}
+
+/**
+ * Fetch the 5 most recent game lines for a player and return averaged box-score stats
+ * in the same shape as `/v1/season_averages` (pts/reb/ast/stl/blk/turnover/fga/fta).
+ * Returns null if fewer than 1 game available.
+ */
+async function fetchLast5GamesAverage(
+  playerId: number
+): Promise<Record<string, number> | null> {
+  const url =
+    `https://api.balldontlie.io/v1/stats?player_ids[]=${playerId}` +
+    `&per_page=5&sort=date&order=desc`;
+  const res = await fetch(url, { headers: API_HEADERS });
+  if (!res.ok) return null;
+  const data = await res.json();
+  const games: Array<Record<string, number>> = data.data ?? [];
+  if (games.length === 0) return null;
+
+  const keys = ["pts", "reb", "ast", "stl", "blk", "turnover", "fga", "fta"] as const;
+  const avg: Record<string, number> = {};
+  for (const k of keys) {
+    const sum = games.reduce((acc, g) => acc + (Number(g[k]) || 0), 0);
+    avg[k] = sum / games.length;
+  }
+  return avg;
 }
 
 /** Calculate TS% from basic stats: PTS / (2 × (FGA + 0.44 × FTA)) × 100 */

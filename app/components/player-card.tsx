@@ -11,9 +11,10 @@ interface PlayerCardProps {
 export function PlayerCard({ player }: PlayerCardProps) {
   const { config, currentPrice, spreadPercent, curve, oracle } = player;
   const tokensSold = curve?.tokensSold ?? 0n;
-  const totalSupply = curve?.totalSupply ?? 1000000n;
+  const totalSupply = curve?.totalSupply ?? 5000n;
   const supplyPercent = totalSupply > 0n ? (Number(tokensSold) / Number(totalSupply)) * 100 : 0;
   const indexPrice = oracle?.indexPriceLamports ?? 0n;
+  const treasuryLamports = curve?.treasuryLamports ?? 0n;
 
   const isUndervalued = spreadPercent < 0;
   const isOvervalued = spreadPercent > 5;
@@ -79,9 +80,9 @@ export function PlayerCard({ player }: PlayerCardProps) {
           </p>
         </div>
         <div>
-          <p className="text-[11px] text-muted">Supply</p>
+          <p className="text-[11px] text-muted">Tokens sold</p>
           <p className="font-mono text-sm font-medium tabular-nums">
-            {supplyPercent < 1 && supplyPercent > 0 ? supplyPercent.toFixed(2) : supplyPercent.toFixed(1)}%
+            {Number(tokensSold).toLocaleString()}/{Number(totalSupply).toLocaleString()}
           </p>
         </div>
       </div>
@@ -92,6 +93,14 @@ export function PlayerCard({ player }: PlayerCardProps) {
           className="h-full rounded-full bg-accent/60 transition-all"
           style={{ width: `${Math.max(supplyPercent > 0 ? 1 : 0, Math.min(supplyPercent, 100))}%` }}
         />
+      </div>
+
+      {/* Treasury — proof the curve is self-funding exits */}
+      <div className="mt-2 flex items-baseline justify-between">
+        <span className="text-[11px] text-muted">Treasury</span>
+        <span className="font-mono text-xs font-medium tabular-nums text-foreground">
+          {formatUsd(treasuryLamports)}
+        </span>
       </div>
 
       {/* Hover arrow */}

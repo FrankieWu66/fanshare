@@ -42,3 +42,7 @@ npm-debug.log*
 .gstack/browse-network.log
 .gstack/
 .vercel
+
+# QA artifacts (ephemeral test outputs)
+qa-run-*.json
+telemetry-*.csv

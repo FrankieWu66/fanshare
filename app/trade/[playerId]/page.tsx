@@ -226,8 +226,8 @@ export default function TradePage({
   // Frozen market state
   const isFrozen = marketStatus?.isFrozen ?? false;
   const isClosed = isFrozen && Number(marketStatus?.closeTimestamp ?? 0) <= Math.floor(Date.now() / 1000);
-  const buyDisabledByFreeze = isFrozen; // buy disabled when frozen (sell-only or closed)
-  const sellDisabledByFreeze = isClosed; // sell disabled only when fully closed
+  const buyDisabledByFreeze = isFrozen; // buy disabled whenever frozen
+  const sellDisabledByFreeze = isFrozen; // sell disabled whenever frozen (full halt)
 
   // ── Handlers ─────────────────────────────────────────────────────────────
   const handleBuy = useCallback(async () => {
@@ -566,6 +566,29 @@ export default function TradePage({
           {/* Frozen market banner */}
           {marketStatus?.isFrozen && (
             <FrozenMarketBanner marketStatus={marketStatus} />
+          )}
+
+          {/* Demo 1 spread warning — fires when market diverges ≥30% from oracle fair value.
+              Threshold is a placeholder; will tighten once we have real trade distribution data. */}
+          {indexPrice > 0n && Math.abs(spread) >= 30 && (
+            <div
+              role="alert"
+              className="rounded-xl border border-accent/40 bg-accent-subtle px-4 py-3"
+            >
+              <div className="flex items-start gap-3">
+                <svg viewBox="0 0 16 16" className="mt-0.5 h-4 w-4 flex-none text-accent" fill="currentColor" aria-hidden="true">
+                  <path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Zm0 3a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0v-4A.75.75 0 0 1 8 4.5Zm0 7.25a.9.9 0 1 1 0-1.8.9.9 0 0 1 0 1.8Z" />
+                </svg>
+                <div className="flex-1 text-sm">
+                  <p className="font-semibold text-accent">
+                    Market price is {spread >= 0 ? "above" : "below"} stats-based fair value by {Math.abs(spread).toFixed(1)}%.
+                  </p>
+                  <p className="mt-0.5 text-xs text-muted">
+                    ±30% is a placeholder threshold for Demo 1 — it will tighten once we have real trade-distribution data.
+                  </p>
+                </div>
+              </div>
+            </div>
           )}
 
           {/* 3-column layout */}
@@ -915,7 +938,7 @@ export default function TradePage({
                           disabled
                           className="w-full cursor-not-allowed rounded-xl bg-muted/30 py-3 text-sm font-bold text-muted opacity-60"
                         >
-                          {isClosed ? "Market Closed" : "Market Frozen — Sell Only"}
+                          {isClosed ? "Market Closed" : "Market Frozen"}
                         </button>
                       </div>
                     ) : (
@@ -1011,7 +1034,7 @@ export default function TradePage({
                           disabled
                           className="w-full cursor-not-allowed rounded-xl bg-muted/30 py-3 text-sm font-bold text-muted opacity-60"
                         >
-                          Market Closed — Claim Exit Instead
+                          {isClosed ? "Market Closed — Claim Exit Instead" : "Market Frozen"}
                         </button>
                       </div>
                     ) : (

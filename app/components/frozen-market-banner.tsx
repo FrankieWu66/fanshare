@@ -64,20 +64,20 @@ export function FrozenMarketBanner({ marketStatus, onClaimExit }: FrozenMarketBa
     );
   }
 
-  // Market frozen but still in sell window
+  // Market frozen — trading fully halted until close_timestamp, then process_exit
   return (
     <div className="mb-5 rounded-xl border border-accent/30 bg-accent-subtle px-4 py-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-sm font-semibold text-accent">
-            This market is frozen. Selling only.
+            This market is frozen. Trading disabled.
           </p>
           <p className="mt-0.5 text-xs text-muted">
-            Closes in{" "}
+            Exit claim available in{" "}
             <span className="font-mono font-semibold text-accent">
               {formatCountdown(secondsRemaining)}
             </span>
-            . Sell your tokens before the window ends.
+            .
           </p>
         </div>
         <div className="font-mono text-lg font-bold tabular-nums text-accent">

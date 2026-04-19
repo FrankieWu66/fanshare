@@ -461,12 +461,10 @@ pub mod fanshare {
     pub fn sell(ctx: Context<Trade>, token_amount: u64, min_sol_out: u64) -> Result<()> {
         require!(token_amount > 0, FanshareError::ZeroAmount);
 
-        // Phase 2: if frozen, only allow sells during the 30-day window
-        let market_status = &ctx.accounts.market_status;
-        if market_status.is_frozen {
-            let now = Clock::get()?.unix_timestamp;
-            require!(now < market_status.close_timestamp, FanshareError::MarketClosed);
-        }
+        // Demo 1 (2026-04-18): full halt on frozen markets — sells blocked too.
+        // Previously allowed sells for 30 days after freeze; Demo 2 retirement work
+        // will reintroduce a timed sell window via a separate instruction.
+        require!(!ctx.accounts.market_status.is_frozen, FanshareError::MarketFrozen);
 
         // Read state before CPIs
         let base_price = ctx.accounts.bonding_curve.base_price;
@@ -524,7 +522,12 @@ pub mod fanshare {
         exit_treasury.balance_lamports = exit_treasury.balance_lamports.checked_add(fee_treasury).unwrap();
         exit_treasury.total_collected = exit_treasury.total_collected.checked_add(fee_treasury).unwrap();
 
+        // Demo 1 telemetry: compute spread on sell so post-demo CSV has both sides.
+        // Field name `spread_at_buy` kept to avoid IDL churn; now means "spread at execution".
         let new_tokens_sold = curve.tokens_sold;
+        let market_price_after = current_price(base_price, slope, new_tokens_sold);
+        let index_price = ctx.accounts.stats_oracle.index_price_lamports;
+        let spread_at_execution = compute_spread(market_price_after, index_price);
         emit!(TradeEvent {
             mint: mint_key,
             player_id,
@@ -533,9 +536,9 @@ pub mod fanshare {
             sol_amount: sol_return,
             is_buy: false,
             tokens_sold_after: new_tokens_sold,
-            price_after: current_price(base_price, slope, new_tokens_sold),
+            price_after: market_price_after,
             fee_lamports: fee_total,
-            spread_at_buy: 0, // Not applicable for sells
+            spread_at_buy: spread_at_execution,
         });
 
         Ok(())

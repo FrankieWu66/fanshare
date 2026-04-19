@@ -221,6 +221,29 @@ async function recordPrice(playerId: string, price: number, timestamp: number) {
   await pushPriceHistoryEntry(key, entry, { maxLen: MAX_HISTORY });
 }
 
+/**
+ * Demo 1 telemetry: persist full trade-event lines for post-demo CSV export.
+ * Separate list from price-history so the chart query stays cheap.
+ */
+const TRADE_EVENTS_MAX = 5000;
+async function recordTradeEvent(event: ParsedTradeEvent) {
+  const cluster = process.env.SOLANA_CLUSTER ?? "devnet";
+  const key = `trade-events:${cluster}`;
+  const entry = JSON.stringify({
+    t: event.timestamp,
+    sig: event.signature,
+    player: event.player_id,
+    trader: event.trader,
+    side: event.is_buy ? "buy" : "sell",
+    tokens: event.token_amount,
+    sol: event.sol_amount,
+    price_after: event.price_after,
+    spread: event.spread_at_buy,
+    fee: event.fee_lamports,
+  });
+  await pushPriceHistoryEntry(key, entry, { maxLen: TRADE_EVENTS_MAX });
+}
+
 // ── Indexer forwarding ──────────────────────────────────────────────────────
 
 async function forwardToIndexer(event: ParsedTradeEvent) {
@@ -289,9 +312,10 @@ export async function POST(req: Request) {
           continue;
         }
 
-        // Record price and forward to indexer in parallel
+        // Record price, trade event, and forward to indexer in parallel
         await Promise.all([
           recordPrice(playerId, event.price_after, event.timestamp),
+          recordTradeEvent(event),
           forwardToIndexer(event),
         ]);
 
