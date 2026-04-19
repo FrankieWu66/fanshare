@@ -26,7 +26,6 @@ import { formatUsd } from "../lib/oracle-weights";
  * Wallet/demo logic unchanged from prior single-viewport version.
  */
 
-const FIRST_MARKET = "Player_LBJ";
 const GRANT_FLOOR_SOL = 0.3;
 
 const STEPS = [
@@ -153,12 +152,10 @@ export default function InvitePage() {
                 </button>
               ) : (
                 <Link
-                  href={`/trade/${FIRST_MARKET}`}
+                  href="/"
                   className="inline-flex h-14 items-center gap-2.5 rounded-xl bg-accent px-6 text-base font-bold tracking-[-0.005em] text-accent-foreground shadow-[0_8px_32px_-8px_rgba(245,158,11,0.4)] transition hover:-translate-y-px hover:bg-[#FBBF24] hover:shadow-[0_12px_40px_-8px_rgba(245,158,11,0.5)] active:translate-y-0"
                 >
-                  <span className="whitespace-nowrap">
-                    Trade {FIRST_MARKET.replace("Player_", "$")} →
-                  </span>
+                  <span className="whitespace-nowrap">Start Trading →</span>
                 </Link>
               )}
               <a
