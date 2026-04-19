@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { toast } from "sonner";
 import { useWallet } from "../lib/wallet/context";
 
 interface Props {
@@ -44,6 +45,7 @@ export function DemoSignin({ onClose }: Props) {
 
     try {
       await connectDemo(trimmed);
+      toast.success("0.667 SOL landed in your wallet. Go find a mispriced player.");
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Try again.");

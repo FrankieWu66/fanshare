@@ -104,6 +104,9 @@ export default function TradePage({
   const [tokenInput, setTokenInput] = useState("");
   const [txStage, setTxStage] = useState<TxStage>("idle");
   const [txError, setTxError] = useState<string | null>(null);
+  // Two-click sell confirm — first click arms, second click sells.
+  // Auto-disarms after 5s so a stale armed button doesn't surprise the user.
+  const [sellArmed, setSellArmed] = useState(false);
   const [localTrades, setLocalTrades] = useState<TradeRecord[]>(() => loadTradesForPlayer(playerId));
   const [localPrices, setLocalPrices] = useState(() => loadLocalPriceHistory(playerId));
   const txTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -124,6 +127,18 @@ export default function TradePage({
     }
     return () => { if (txTimerRef.current) clearTimeout(txTimerRef.current); };
   }, [txStage]);
+
+  // Auto-disarm sell confirm after 5s of inactivity
+  useEffect(() => {
+    if (!sellArmed) return;
+    const t = setTimeout(() => setSellArmed(false), 5000);
+    return () => clearTimeout(t);
+  }, [sellArmed]);
+
+  // Disarm when switching tabs or changing token input
+  useEffect(() => {
+    setSellArmed(false);
+  }, [tab, tokenInput]);
 
   const isBusy = txStage !== "idle";
 
@@ -1039,8 +1054,21 @@ export default function TradePage({
                       </div>
                     ) : (
                       <div aria-live="polite" aria-atomic="true">
+                        {sellArmed && txStage === "idle" && (
+                          <p className="mb-2 text-center text-xs text-muted">
+                            Selling locks in your P&amp;L against the curve. Sure?
+                          </p>
+                        )}
                         <button
-                          onClick={handleSell}
+                          onClick={() => {
+                            if (txStage !== "idle") return;
+                            if (!sellArmed) {
+                              setSellArmed(true);
+                              return;
+                            }
+                            setSellArmed(false);
+                            void handleSell();
+                          }}
                           disabled={isBusy || tokenAmountIn === 0n || solOut === 0n}
                           className="w-full cursor-pointer rounded-xl bg-negative py-3 text-sm font-bold text-background transition hover:opacity-90 active:scale-[0.98] active:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
                         >
@@ -1048,8 +1076,16 @@ export default function TradePage({
                           {txStage === "confirming" && "Confirming on Solana..."}
                           {txStage === "success" && "Done!"}
                           {txStage === "failed" && "Transaction failed"}
-                          {txStage === "idle" && "Sell tokens"}
+                          {txStage === "idle" && (sellArmed ? "Yes, sell" : "Sell tokens")}
                         </button>
+                        {sellArmed && txStage === "idle" && (
+                          <button
+                            onClick={() => setSellArmed(false)}
+                            className="mt-1 w-full text-center text-xs text-muted underline"
+                          >
+                            Cancel
+                          </button>
+                        )}
                         {txStage === "failed" && txError && (
                           <p className="mt-1 text-center text-xs text-negative">{txError}</p>
                         )}

@@ -112,9 +112,9 @@ export default function PortfolioPage() {
           ) : holdings.length === 0 ? (
             <div className="rounded-xl border border-border bg-card p-8 text-center">
               <p className="mb-1 text-2xl">📭</p>
-              <p className="text-sm font-medium">No holdings yet</p>
+              <p className="text-sm font-medium">No positions yet.</p>
               <p className="mt-1 text-sm text-muted">
-                Buy some player tokens to see them here.
+                Your edge starts with one trade.
               </p>
               <Link href="/" className="mt-4 inline-block text-sm text-accent underline hover:opacity-80">
                 Browse players
