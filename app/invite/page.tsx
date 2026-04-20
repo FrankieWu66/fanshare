@@ -198,8 +198,10 @@ export default function InvitePage() {
                         {balanceSol.toFixed(3)} SOL
                       </span>
                     </>
-                  ) : (
+                  ) : balanceSol > 0 ? (
                     <>Grant incoming… {balanceSol.toFixed(3)} SOL</>
+                  ) : (
+                    <>Grant incoming…</>
                   )}
                 </span>
               )}
@@ -414,7 +416,12 @@ function MarketTicker({ movers }: { movers: Mover[] }) {
       <div className="ticker-track flex min-w-max animate-[ticker_60s_linear_infinite] gap-8 whitespace-nowrap px-6">
         {loop.map((p, i) => {
           const priceUsd = formatUsd(p.currentPrice);
-          const up = p.spreadPercent < 0; // market below fair value → undervalued (green, likely to rise)
+          const abs = Math.abs(p.spreadPercent);
+          // Treat sub-0.05% as flat — the bonding curve emits tiny float noise
+          // even at T0 when base === index. Don't paint the whole ticker red
+          // (or green) for a zero delta.
+          const flat = abs < 0.05;
+          const up = p.spreadPercent < 0; // market below fair value → undervalued
           return (
             <Link
               key={`${p.config.id}-${i}`}
@@ -427,10 +434,10 @@ function MarketTicker({ movers }: { movers: Mover[] }) {
               <span className="tabular-nums">{priceUsd}</span>
               <span
                 className={`tabular-nums ${
-                  up ? "text-positive" : "text-negative"
+                  flat ? "text-muted" : up ? "text-positive" : "text-negative"
                 }`}
               >
-                {up ? "▲" : "▼"} {Math.abs(p.spreadPercent).toFixed(1)}%
+                {flat ? "—" : up ? "▲" : "▼"} {abs.toFixed(1)}%
               </span>
             </Link>
           );
