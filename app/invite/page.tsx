@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useWallet } from "../lib/wallet/context";
 import { useBalance } from "../lib/hooks/use-balance";
 import { usePlayerMarkets } from "../lib/hooks/use-player-markets";
 import { DemoSignin } from "../components/demo-signin";
 import { formatUsd } from "../lib/oracle-weights";
+import { track } from "../lib/analytics/track";
 
 /**
  * Demo 1 invite landing page.
@@ -107,6 +108,15 @@ export default function InvitePage() {
   const address = wallet?.account.address;
   const { lamports } = useBalance(address);
   const isConnected = Boolean(wallet);
+
+  // Fire page-view event once per mount.
+  useEffect(() => {
+    track("invite_page_viewed", { wallet: address ?? null });
+    // Intentionally not watching address — the brief is "page viewed", not
+    // "page viewed per wallet change". We identify inside PostHog via
+    // identifyWallet wherever the connection happens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const balanceSol = lamports != null ? Number(lamports) / 1_000_000_000 : 0;
   const grantReceived = balanceSol >= GRANT_FLOOR_SOL;
 
@@ -169,7 +179,10 @@ export default function InvitePage() {
             <div className="mt-1 flex flex-wrap items-center gap-6">
               {!isConnected ? (
                 <button
-                  onClick={() => setShowSignin(true)}
+                  onClick={() => {
+                    track("invite_cta_clicked");
+                    setShowSignin(true);
+                  }}
                   className="inline-flex h-14 cursor-pointer items-center gap-2.5 rounded-xl bg-accent px-6 text-base font-bold tracking-[-0.005em] text-accent-foreground shadow-[0_8px_32px_-8px_rgba(245,158,11,0.4)] transition hover:-translate-y-px hover:bg-[#FBBF24] hover:shadow-[0_12px_40px_-8px_rgba(245,158,11,0.5)] active:translate-y-0"
                 >
                   <span className="whitespace-nowrap">Claim $100 →</span>
@@ -397,7 +410,13 @@ export default function InvitePage() {
           <div className="mx-auto max-w-6xl px-6 py-6">
             <button
               type="button"
-              onClick={() => setTermsOpen((v) => !v)}
+              onClick={() => {
+                setTermsOpen((v) => {
+                  const next = !v;
+                  if (next) track("terms_expanded");
+                  return next;
+                });
+              }}
               aria-expanded={termsOpen}
               className="inline-flex cursor-pointer items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted transition hover:text-foreground"
             >

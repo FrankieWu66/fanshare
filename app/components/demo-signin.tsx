@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { useWallet } from "../lib/wallet/context";
+import { track, identifyWallet } from "../lib/analytics/track";
 
 interface Props {
   onClose: () => void;
@@ -46,9 +47,26 @@ export function DemoSignin({ onClose }: Props) {
     try {
       await connectDemo(trimmed);
       toast.success("0.667 SOL landed in your wallet. Go find a mispriced player.");
+      // Grant confirmed on-chain: wallet is provisioned + 0.05 SOL transferred
+      // inside the /api/demo/register call. Read the address from localStorage
+      // where the wallet context just wrote it (context doesn't return it).
+      let wallet: string | null = null;
+      try {
+        const raw = localStorage.getItem("fanshare_demo");
+        if (raw) wallet = (JSON.parse(raw) as { address?: string }).address ?? null;
+      } catch {
+        /* ignore — event still fires with wallet=null */
+      }
+      identifyWallet(wallet);
+      track("grant_claimed", { wallet });
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong. Try again.");
+      const msg = err instanceof Error ? err.message : "Something went wrong. Try again.";
+      setError(msg);
+      track("error_shown", {
+        source: "demo_signin",
+        message: msg.slice(0, 200),
+      });
     } finally {
       setLoading(false);
     }

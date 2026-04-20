@@ -6,6 +6,7 @@ import { type Address } from "@solana/kit";
 import { GridBackground } from "../components/grid-background";
 import { ClusterSelect } from "../components/cluster-select";
 import { WalletButton } from "../components/wallet-button";
+import { AboutDemoLink } from "../components/about-demo-link";
 import { useWallet } from "../lib/wallet/context";
 import { usePlayerMarkets } from "../lib/hooks/use-player-markets";
 import { usePortfolioBalances } from "../lib/hooks/use-portfolio-balances";
@@ -55,12 +56,7 @@ export default function PortfolioPage() {
         <span className="text-sm font-semibold">Portfolio</span>
       </div>
       <div className="flex items-center gap-3">
-        <Link
-          href="/invite"
-          className="inline-flex min-h-[44px] items-center text-xs font-medium text-muted transition hover:text-foreground max-sm:hidden"
-        >
-          About this demo →
-        </Link>
+        <AboutDemoLink source="portfolio" />
         <ClusterSelect />
         <WalletButton />
       </div>

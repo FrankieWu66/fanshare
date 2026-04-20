@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { DM_Sans, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { Providers } from "./components/providers";
+import { AnalyticsProvider } from "./components/analytics-provider";
+import { TallyButton } from "./components/tally-button";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -52,7 +56,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${dmSans.variable} ${geistMono.variable} ${cabinetGrotesk.variable} antialiased`}>
-        <Providers>{children}</Providers>
+        <AnalyticsProvider>
+          <Providers>{children}</Providers>
+          <TallyButton />
+        </AnalyticsProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

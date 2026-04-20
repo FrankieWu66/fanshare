@@ -13,6 +13,7 @@ import { PlayerCard } from "./components/player-card";
 import { GridBackground } from "./components/grid-background";
 import { ClusterSelect } from "./components/cluster-select";
 import { WalletButton } from "./components/wallet-button";
+import { AboutDemoLink } from "./components/about-demo-link";
 import { useCluster } from "./components/cluster-context";
 import { DEVNET_PLAYERS } from "./lib/fanshare-program";
 import Link from "next/link";
@@ -106,12 +107,10 @@ export default function Home() {
             >
               Leaderboard
             </Link>
-            <Link
-              href="/invite"
+            <AboutDemoLink
+              source="home"
               className="inline-flex min-h-[44px] items-center text-xs font-medium text-muted transition hover:text-foreground"
-            >
-              About this demo →
-            </Link>
+            />
           </div>
           <div className="flex items-center gap-3">
             <span className="max-sm:hidden">

@@ -27,6 +27,7 @@ import { GridBackground } from "../../components/grid-background";
 import { ClusterSelect } from "../../components/cluster-select";
 import { useCluster } from "../../components/cluster-context";
 import { WalletButton } from "../../components/wallet-button";
+import { AboutDemoLink } from "../../components/about-demo-link";
 import { BondingCurveChart } from "../../components/bonding-curve-chart";
 import { CandlestickChart } from "../../components/candlestick-chart";
 import {
@@ -41,6 +42,7 @@ import { recordTrade, loadTradesForPlayer, type TradeRecord } from "../../lib/tr
 import { recordLocalPrice, loadLocalPriceHistory, mergePriceHistory } from "../../lib/local-price-history";
 import { useMarketStatus } from "../../lib/hooks/use-market-status";
 import { FrozenMarketBanner } from "../../components/frozen-market-banner";
+import { track, trackOnce } from "../../lib/analytics/track";
 
 // Module-level fetcher — stable reference, avoids new function on every render
 const jsonFetcher = (url: string) =>
@@ -139,6 +141,15 @@ export default function TradePage({
   useEffect(() => {
     setSellArmed(false);
   }, [tab, tokenInput]);
+
+  // First time this wallet opens this player — fire once per (wallet, player).
+  useEffect(() => {
+    if (!player) return;
+    trackOnce("first_player_opened", address ?? null, {
+      player_id: playerId,
+      wallet: address ?? null,
+    });
+  }, [player, address, playerId]);
 
   const isBusy = txStage !== "idle";
 
@@ -247,6 +258,12 @@ export default function TradePage({
   // ── Handlers ─────────────────────────────────────────────────────────────
   const handleBuy = useCallback(async () => {
     if (isBusy || buyDisabledByFreeze || !address || !player || !curve || solLamports === 0n || tokensOut === 0n) return;
+    track("first_buy_attempted", {
+      wallet: address,
+      player_id: playerId,
+      amount_sol: Number(solLamports) / 1e9,
+      spread_at_click: player.spreadPercent,
+    });
     setTxError(null);
     setTxStage("signing");
     try {
@@ -296,6 +313,13 @@ export default function TradePage({
       toast.success(`Bought ${tokensOut.toLocaleString()} tokens!`, {
         description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
       });
+      track("first_buy_succeeded", {
+        wallet: address,
+        player_id: playerId,
+        amount_sol: Number(solLamports) / 1e9,
+        spread_at_click: player.spreadPercent,
+        signature: sig ?? null,
+      });
       // Record to server KV (price chart + leaderboard indexing)
       recordPriceToServer({
         playerId,
@@ -316,6 +340,12 @@ export default function TradePage({
       const msg = parseTransactionError(err);
       setTxError(msg);
       setTxStage("failed");
+      track("error_shown", {
+        source: "trade_buy",
+        wallet: address,
+        player_id: playerId,
+        message: msg.slice(0, 200),
+      });
     }
   }, [isBusy, buyDisabledByFreeze, address, player, curve, solLamports, tokensOut, send, playerId, priceAfterBuy]);
 
@@ -366,6 +396,13 @@ export default function TradePage({
       toast.success(`Sold ${tokenAmountIn.toLocaleString()} tokens for ${formatUsd(solOut)}`, {
         description: sig ? `Tx: ${sig.slice(0, 8)}…` : undefined,
       });
+      track("first_sell_succeeded", {
+        wallet: address,
+        player_id: playerId,
+        amount_sol: Number(solOut) / 1e9,
+        spread_at_click: player.spreadPercent,
+        signature: sig ?? null,
+      });
       // Record to server KV (price chart + leaderboard indexing)
       recordPriceToServer({
         playerId,
@@ -386,6 +423,12 @@ export default function TradePage({
       const msg = parseTransactionError(err);
       setTxError(msg);
       setTxStage("failed");
+      track("error_shown", {
+        source: "trade_sell",
+        wallet: address,
+        player_id: playerId,
+        message: msg.slice(0, 200),
+      });
     }
   }, [isBusy, sellDisabledByFreeze, address, player, curve, tokenAmountIn, solOut, send, playerId, priceAfterSell]);
 
@@ -536,12 +579,7 @@ export default function TradePage({
             <span className="text-sm font-semibold">{config.displayName}</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link
-              href="/invite"
-              className="inline-flex min-h-[44px] items-center text-xs font-medium text-muted transition hover:text-foreground max-sm:hidden"
-            >
-              About this demo →
-            </Link>
+            <AboutDemoLink source="trade" />
             <ClusterSelect />
             <WalletButton />
           </div>
