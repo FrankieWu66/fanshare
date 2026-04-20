@@ -3,6 +3,7 @@
 import { useEffect, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
+import { flushPendingPosthog } from "../lib/analytics/track";
 
 /**
  * Initializes PostHog once on the client with autocapture + session replay ON
@@ -33,6 +34,9 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
         if (process.env.NODE_ENV === "development") {
           ph.debug();
         }
+        // Flush any events that fired before init() completed (e.g. page-mount
+        // useEffects that ran before this provider's useEffect).
+        flushPendingPosthog();
       },
     });
   }, []);

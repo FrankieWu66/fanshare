@@ -36,6 +36,26 @@ export interface EventProps {
   [key: string]: string | number | boolean | null | undefined;
 }
 
+// Events fired before posthog.init() completes get queued here and flushed
+// in AnalyticsProvider's `loaded` callback. Without this, page-mount events
+// like `invite_page_viewed` silently drop because __loaded is still false
+// when React runs the component's useEffect.
+type QueuedEvent = { event: EventName; props: Record<string, string | number | boolean | null> };
+const pendingPosthog: QueuedEvent[] = [];
+
+export function flushPendingPosthog() {
+  if (typeof window === "undefined") return;
+  if (!posthog.__loaded) return;
+  while (pendingPosthog.length > 0) {
+    const { event, props } = pendingPosthog.shift()!;
+    try {
+      posthog.capture(event, props);
+    } catch {
+      /* no-op */
+    }
+  }
+}
+
 export function track(event: EventName, props?: EventProps) {
   if (typeof window === "undefined") return;
 
@@ -54,13 +74,15 @@ export function track(event: EventName, props?: EventProps) {
     // Analytics script may be blocked (ad-blocker); never crash the app.
   }
 
-  // PostHog — only if initialized (i.e. env var was set at bootstrap).
-  try {
-    if (posthog.__loaded) {
+  // PostHog — queue until init completes, otherwise fire immediately.
+  if (posthog.__loaded) {
+    try {
       posthog.capture(event, clean);
+    } catch {
+      /* no-op */
     }
-  } catch {
-    // Same — don't let telemetry break the UI.
+  } else {
+    pendingPosthog.push({ event, props: clean });
   }
 }
 

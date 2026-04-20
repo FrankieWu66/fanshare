@@ -7,6 +7,7 @@ import "./globals.css";
 import { Providers } from "./components/providers";
 import { AnalyticsProvider } from "./components/analytics-provider";
 import { TallyButton } from "./components/tally-button";
+import { QaReset } from "./components/qa-reset";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -57,6 +58,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${dmSans.variable} ${geistMono.variable} ${cabinetGrotesk.variable} antialiased`}>
         <AnalyticsProvider>
+          <QaReset />
           <Providers>{children}</Providers>
           <TallyButton />
         </AnalyticsProvider>
