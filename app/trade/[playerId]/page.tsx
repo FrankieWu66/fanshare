@@ -536,6 +536,12 @@ export default function TradePage({
             <span className="text-sm font-semibold">{config.displayName}</span>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/invite"
+              className="inline-flex min-h-[44px] items-center text-xs font-medium text-muted transition hover:text-foreground max-sm:hidden"
+            >
+              About this demo →
+            </Link>
             <ClusterSelect />
             <WalletButton />
           </div>
@@ -564,8 +570,18 @@ export default function TradePage({
                 className={`flex min-w-[128px] flex-col items-end rounded-xl border ${spreadLabel.border} ${spreadLabel.bg} px-4 py-2.5`}
                 aria-label={`${spreadLabel.text}: market price is ${spread >= 0 ? "+" : ""}${spread.toFixed(1)}% vs fair value`}
               >
-                <span className={`text-[10px] font-semibold uppercase tracking-wider ${spreadLabel.color}`}>
+                <span
+                  className={`inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider ${spreadLabel.color}`}
+                >
                   {spreadLabel.text}
+                  <span
+                    tabIndex={0}
+                    title="Spread: gap between our computer's fair price and what people are actually paying. Big gap = possible trade."
+                    aria-label="Spread explained"
+                    className="inline-flex h-3 w-3 cursor-help items-center justify-center rounded-full border border-current text-[8px] leading-none opacity-70"
+                  >
+                    i
+                  </span>
                 </span>
                 <span className={`font-mono text-xl font-bold tabular-nums leading-tight ${spreadLabel.pctColor}`}>
                   {spread >= 0 ? "+" : ""}

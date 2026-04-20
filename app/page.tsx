@@ -106,6 +106,12 @@ export default function Home() {
             >
               Leaderboard
             </Link>
+            <Link
+              href="/invite"
+              className="inline-flex min-h-[44px] items-center text-xs font-medium text-muted transition hover:text-foreground"
+            >
+              About this demo →
+            </Link>
           </div>
           <div className="flex items-center gap-3">
             <span className="max-sm:hidden">

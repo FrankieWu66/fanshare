@@ -96,6 +96,12 @@ export default function LeaderboardPage() {
             <span className="text-sm font-semibold">Leaderboard</span>
           </div>
           <div className="flex items-center gap-3">
+            <Link
+              href="/invite"
+              className="inline-flex min-h-[44px] items-center text-xs font-medium text-muted transition hover:text-foreground max-sm:hidden"
+            >
+              About this demo →
+            </Link>
             <ClusterSelect />
             <WalletButton />
           </div>

@@ -72,7 +72,18 @@ export function PlayerCard({ player }: PlayerCardProps) {
           </p>
         </div>
         <div>
-          <p className="text-[11px] text-muted">Spread</p>
+          <p className="inline-flex items-center gap-1 text-[11px] text-muted">
+            Spread
+            <span
+              tabIndex={0}
+              title="Gap between our computer's fair price and what people are actually paying. Big gap = possible trade."
+              aria-label="Spread: gap between fair price and market price"
+              className="inline-flex h-3 w-3 cursor-help items-center justify-center rounded-full border border-border text-[8px] leading-none text-muted"
+              onClick={(e) => e.stopPropagation()}
+            >
+              i
+            </span>
+          </p>
           <p className={`font-mono text-sm font-medium tabular-nums ${spreadColor}`}>
             {indexPrice > 0n
               ? `${spreadPercent > 0 ? "+" : ""}${spreadPercent.toFixed(1)}%`

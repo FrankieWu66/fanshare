@@ -32,18 +32,41 @@ const STEPS = [
   {
     n: "01",
     title: "Get $100 in devnet SOL",
-    body: "One click. We'll spin up a wallet and drop 0.667 SOL ($100) into it. No signup, no seed phrase to copy down — just click and trade.",
+    body: "Click the button. We'll create a fake trading account for you and deposit $100 of play money. No signup, no password — it just appears.",
   },
   {
     n: "02",
     title: "Find a player the market has wrong",
-    body: "Every card shows a fair-value price (from stats) and a market price (what others paid). When they disagree, that's the opportunity. Green \"UNDERVALUED\" = market below fair value. Red \"OVERVALUED\" = above.",
+    body: "Every card shows a fair-value price (from stats) and a market price (what others paid). When they disagree, that's the opportunity. Green \"UNDERVALUED\" = market below fair value. Red \"OVERVALUED\" = above. Example: if stats say LeBron is worth $5.59 but the market is trading him at $4.20, you think others are sleeping on him — buy. When they catch up, you cash out the gap.",
   },
   {
     n: "03",
     title:
       "Buy if you think stats will catch up. Sell if you think the hype's done.",
-    body: "Your $100 moves the price a few percent on a star, more on a role player. Hold as long as your read holds. Sell whenever. No rounds, no expiry.",
+    body: "Buying raises the price for the next person. Selling lowers it. Your $100 only nudges a star like LeBron — but can meaningfully move a role player. That matters because a big price swing means bigger potential gains (and losses) per trade.",
+  },
+] as const;
+
+const TERMS = [
+  {
+    k: "Fair-value price",
+    v: "What a computer thinks a player is worth based on their real NBA stats (updated daily).",
+  },
+  {
+    k: "Market price",
+    v: "What FanShare users are actually paying right now. Goes up when people buy, down when people sell.",
+  },
+  {
+    k: "Spread",
+    v: "The gap between fair-value and market. Big gap = big opportunity (or big risk).",
+  },
+  {
+    k: "Oracle",
+    v: "The computer that reads NBA stats and updates fair-value prices.",
+  },
+  {
+    k: "Devnet / SOL",
+    v: "Solana's test network. SOL is the fake currency we run on. No real money, no real transactions, nothing is worth anything outside this demo.",
   },
 ] as const;
 
@@ -79,6 +102,7 @@ const BADGE_FINE =
 export default function InvitePage() {
   const { wallet, isDemoMode } = useWallet();
   const [showSignin, setShowSignin] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
 
   const address = wallet?.account.address;
   const { lamports } = useBalance(address);
@@ -209,6 +233,26 @@ export default function InvitePage() {
             </div>
           </div>
         </header>
+
+        {/* ── 10-second explainer (quieter, for crypto-naive first-timers) ── */}
+        <section className="border-t border-border-low">
+          <div className="mx-auto max-w-3xl px-6 py-10 lg:py-12">
+            <div className="mb-3">
+              <span className="inline-flex items-center gap-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-muted">
+                <span className="inline-block h-px w-6 bg-border" />
+                New here? 10-second version.
+              </span>
+            </div>
+            <p className="m-0 text-[14px] leading-[1.65] text-muted">
+              FanShare is a pretend stock market for NBA players. A computer
+              turns each player&apos;s real stats into a &ldquo;fair price&rdquo;
+              every day. You use $100 of fake money to bet on players the market
+              has priced wrong. If you&apos;re right, your pretend money grows.
+              If you&apos;re wrong, it shrinks. No real money, no risk — just a
+              fun test of your basketball knowledge.
+            </p>
+          </div>
+        </section>
 
         {/* ── Premise / Manifesto (V2 Scoreboard, centered) ────────────────── */}
         <section className="border-t border-border-low">
@@ -345,6 +389,46 @@ export default function InvitePage() {
             <p className="mt-6 max-w-[640px] text-[13px] text-muted">
               {BADGE_FINE}
             </p>
+          </div>
+        </section>
+
+        {/* ── Terms explained (collapsible, above disclaimer) ───────────────── */}
+        <section className="border-t border-border-low">
+          <div className="mx-auto max-w-6xl px-6 py-6">
+            <button
+              type="button"
+              onClick={() => setTermsOpen((v) => !v)}
+              aria-expanded={termsOpen}
+              className="inline-flex cursor-pointer items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted transition hover:text-foreground"
+            >
+              <span
+                aria-hidden="true"
+                className="inline-block transition-transform"
+                style={{
+                  transform: termsOpen ? "rotate(180deg)" : "rotate(0deg)",
+                }}
+              >
+                ↓
+              </span>
+              Terms explained
+            </button>
+            {termsOpen && (
+              <dl className="mt-5 grid grid-cols-1 gap-x-10 gap-y-3 md:grid-cols-2">
+                {TERMS.map((t) => (
+                  <div
+                    key={t.k}
+                    className="flex flex-col border-t border-border-low pt-3"
+                  >
+                    <dt className="font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-accent">
+                      {t.k}
+                    </dt>
+                    <dd className="m-0 mt-1.5 text-[13px] leading-[1.55] text-muted">
+                      {t.v}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
           </div>
         </section>
 
