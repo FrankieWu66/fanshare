@@ -26,18 +26,18 @@ Key routing rules:
 
 ## Deploy Configuration (configured by /setup-deploy)
 - Platform: Vercel
-- Production URL: https://fanshare-1.vercel.app
+- Production URL: https://fanshares.xyz
 - Deploy workflow: `vercel --prod --yes` (CLI push, no auto-deploy from GitHub yet)
 - Deploy status command: `vercel ls --prod`
 - Merge method: squash
 - Project type: web app (Next.js 16)
-- Post-deploy health check: `curl -sf https://fanshare-1.vercel.app -o /dev/null -w "%{http_code}"`
+- Post-deploy health check: `curl -sf https://fanshares.xyz -o /dev/null -w "%{http_code}"`
 
 ### Custom deploy hooks
 - Pre-merge: `npm run test && npm run build`
 - Deploy trigger: `vercel --prod --yes`
 - Deploy status: `vercel inspect <deployment-url>`
-- Health check: https://fanshare-1.vercel.app (HTTP 200)
+- Health check: https://fanshares.xyz (HTTP 200)
 
 ## Scripts
 - `npm run init-players` — initializes all 15 player bonding curves on devnet. Loads env from `.env.local`. Saves mint addresses to `app/lib/player-mints.json`. Resume-safe (skips already-initialized players by checking the json file).

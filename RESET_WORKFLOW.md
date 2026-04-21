@@ -19,6 +19,7 @@ Run this:
 | On-chain curves | Bonding curve `tokensSold`, `treasuryLamports`, all holder ATAs | Re-init — new mints via `npm run init-players` |
 | Oracle / fair value | Per-player `stats_oracle` PDA price feed | `init-players` now writes the first oracle tick inline using the same pillars it used for base_price |
 | Spread | Function of `market_price - oracle_price` — becomes 0 at T0 because init writes both values from one in-memory pillars snapshot | Falls out of the re-init above |
+| Market status / freeze-guard | Per-player `market-status` PDA (required by buy/sell for the freeze check) | `npx tsx scripts/init-tokenomics.ts` — idempotent, creates any missing `market_status` PDAs for new mints |
 
 ## Command sequence
 
@@ -48,7 +49,14 @@ mv app/lib/player-mints.json app/lib/player-mints.pre-reset-$(date +%Y%m%d-%H%M%
 npm run init-players              # live balldontlie (real launch)
 # or:  npm run init-players -- --mock  (offline dev)
 
-# 4. Commit the new mints so prod picks them up.
+# 4. Initialize per-player market_status PDAs for the new mints.
+#    Without this, every buy/sell fails with Anchor error 3012 (AccountNotInitialized)
+#    because the program reads market_status for its freeze-guard check.
+#    Idempotent: skips singletons (exit_treasury, oracle_config, leaderboards)
+#    that already exist; only creates the 15 new market_status PDAs.
+npx tsx scripts/init-tokenomics.ts
+
+# 5. Commit the new mints so prod picks them up.
 git add app/lib/player-mints.json app/lib/player-mints.pre-reset-*.json
 git commit -m "chore(reset): re-init all 15 player markets — blank slate for <reason>"
 git push origin master
