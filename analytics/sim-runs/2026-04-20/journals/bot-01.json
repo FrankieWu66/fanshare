@@ -1,0 +1,103 @@
+{
+  "user_id": "bot-01",
+  "entries": [
+    {
+      "ts": "2026-04-20T23:33:55.437Z",
+      "user_id": "bot-01",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "idle (waiting)",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:11.592Z",
+      "user_id": "bot-01",
+      "step": "opened-player",
+      "what_they_read": "Anthony Davis",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "open the trade page for Player_AD",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:17.101Z",
+      "user_id": "bot-01",
+      "step": "traded",
+      "what_they_read": "← Market/LeBron JamesdevnetConnect Wallet👑LeBron JamesSF·LALBuySellAmount to spend (SOL)SOLLoading market data…💬Feedba",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.0659 SOL worth of Player_LBJ",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:26.604Z",
+      "user_id": "bot-01",
+      "step": "traded",
+      "what_they_read": "← Market/LeBron JamesdevnetConnect Wallet👑LeBron JamesSF·LALBuySellAmount to spend (SOL)SOLLoading market data…💬Feedba",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.0907 SOL worth of Player_LBJ",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:34.629Z",
+      "user_id": "bot-01",
+      "step": "traded",
+      "what_they_read": "← Market/LeBron JamesdevnetConnect Wallet👑LeBron JamesSF·LALBuySellAmount to spend (SOL)SOLLoading market data…💬Feedba",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.0705 SOL worth of Player_LBJ",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:44.665Z",
+      "user_id": "bot-01",
+      "step": "traded",
+      "what_they_read": "← Market/LeBron JamesdevnetConnect Wallet👑LeBron JamesSF·LALBuySellAmount to spend (SOL)SOLLoading market data…💬Feedba",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.0634 SOL worth of Player_LBJ",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:53.571Z",
+      "user_id": "bot-01",
+      "step": "traded",
+      "what_they_read": "← Market/Anthony DavisdevnetConnect Wallet🦾Anthony DavisPF·LALBuySellAmount to spend (SOL)SOLLoading market data…💬Feed",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.1094 SOL worth of Player_AD",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:35:00.539Z",
+      "user_id": "bot-01",
+      "step": "traded",
+      "what_they_read": "← Market/LeBron JamesdevnetConnect Wallet👑LeBron JamesSF·LALBuySellAmount to spend (SOL)SOLLoading market data…💬Feedba",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.1283 SOL worth of Player_LBJ",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-20T23:54:13.033Z",
+    "user_id": "bot-01",
+    "q1_what_am_i_buying": "(fallback: no LLM key set)",
+    "q2_what_moves_price": "(fallback)",
+    "q3_hold_week": "(fallback)",
+    "q4_fair_vs_market": "(fallback)",
+    "overall_confidence": 0.5,
+    "flagged_wrong": false
+  }
+}

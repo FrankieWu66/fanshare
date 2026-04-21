@@ -1,0 +1,70 @@
+{
+  "user_id": "bot-10",
+  "entries": [
+    {
+      "ts": "2026-04-20T23:34:04.001Z",
+      "user_id": "bot-10",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "idle (waiting)",
+      "their_rationale": "newbie default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:12.474Z",
+      "user_id": "bot-10",
+      "step": "opened-player",
+      "what_they_read": "Jayson Tatum",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "open the trade page for Player_JT",
+      "their_rationale": "newbie default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:20.056Z",
+      "user_id": "bot-10",
+      "step": "traded",
+      "what_they_read": "← Market/Jayson TatumdevnetConnect Wallet🦅Jayson TatumSF·BOSBuySellAmount to spend (SOL)SOLLoading market data…💬Feedba",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.0961 SOL worth of Player_JT",
+      "their_rationale": "newbie default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:35:05.217Z",
+      "user_id": "bot-10",
+      "step": "traded",
+      "what_they_read": "← Market/Jayson TatumdevnetConnect Wallet🦅Jayson TatumSF·BOSBuySellAmount to spend (SOL)SOLLoading market data…💬Feedba",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.0973 SOL worth of Player_JT",
+      "their_rationale": "newbie default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:35:21.848Z",
+      "user_id": "bot-10",
+      "step": "traded",
+      "what_they_read": "← Market/Jayson TatumdevnetConnect Wallet🦅Jayson TatumSF·BOSBuySellAmount to spend (SOL)SOLLoading market data…💬Feedba",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.1066 SOL worth of Player_JT",
+      "their_rationale": "newbie default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-20T23:54:13.418Z",
+    "user_id": "bot-10",
+    "q1_what_am_i_buying": "(fallback: no LLM key set)",
+    "q2_what_moves_price": "(fallback)",
+    "q3_hold_week": "(fallback)",
+    "q4_fair_vs_market": "(fallback)",
+    "overall_confidence": 0.5,
+    "flagged_wrong": false
+  }
+}

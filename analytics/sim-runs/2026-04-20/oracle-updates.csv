@@ -1,0 +1,10 @@
+ts,atSec,playerId,pctDelta,headline,priceBeforeLamports,priceAfterLamports,txSig
+2026-04-20T23:36:12.673Z,120,Player_LBJ,0.04,LBJ opens Q1 hot — 8 quick points,37248000,38737920,
+2026-04-20T23:38:11.770Z,240,Player_KD,0.05,KD answers with 3 triples,38555200,40482960,
+2026-04-20T23:40:10.967Z,360,Player_JT,0.03,JT cooking in Boston,38780000,39943400,
+2026-04-20T23:42:12.302Z,480,Player_JE,-0.02,JE picks up early foul trouble,52067200,51025856,
+2026-04-20T23:44:13.153Z,600,Player_KD,-0.01,Lakers lead after Q1,38555200,38169648,
+2026-04-20T23:44:13.153Z,600,Player_LBJ,0.02,Lakers lead after Q1,37248000,37992960,
+2026-04-20T23:47:11.397Z,780,Player_AD,0.03,AD crashes the boards,46108800,47492064,
+2026-04-20T23:50:11.449Z,960,Player_LBJ,-0.02,KD takes over Q2,37248000,36503040,
+2026-04-20T23:50:11.449Z,960,Player_KD,0.06,KD takes over Q2,38555200,40868512,

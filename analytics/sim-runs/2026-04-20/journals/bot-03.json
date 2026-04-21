@@ -1,0 +1,81 @@
+{
+  "user_id": "bot-03",
+  "entries": [
+    {
+      "ts": "2026-04-20T23:33:55.698Z",
+      "user_id": "bot-03",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "idle (waiting)",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:11.706Z",
+      "user_id": "bot-03",
+      "step": "opened-player",
+      "what_they_read": "← Market/Joel EmbiiddevnetConnect Wallet🔨Joel EmbiidC·PHIBuySellAmount to spend (SOL)SOLLoading market data…💬Feedback",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "open the trade page for Player_JE",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:18.526Z",
+      "user_id": "bot-03",
+      "step": "traded",
+      "what_they_read": "← Market/Joel EmbiiddevnetConnect Wallet🔨Joel EmbiidC·PHIBuySellAmount to spend (SOL)SOLLoading market data…💬Feedback",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.1933 SOL worth of Player_JE",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:28.773Z",
+      "user_id": "bot-03",
+      "step": "traded",
+      "what_they_read": "← Market/Joel EmbiiddevnetConnect Wallet🔨Joel EmbiidC·PHIBuySellAmount to spend (SOL)SOLLoading market data…💬Feedback",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.1250 SOL worth of Player_JE",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:36.819Z",
+      "user_id": "bot-03",
+      "step": "traded",
+      "what_they_read": "← Market/Joel EmbiiddevnetConnect Wallet🔨Joel EmbiidC·PHIBuySellAmount to spend (SOL)SOLLoading market data…💬Feedback",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.1558 SOL worth of Player_JE",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:47.139Z",
+      "user_id": "bot-03",
+      "step": "traded",
+      "what_they_read": "← Market/Joel EmbiiddevnetConnect Wallet🔨Joel EmbiidC·PHIBuySellAmount to spend (SOL)SOLLoading market data…💬Feedback",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.1759 SOL worth of Player_JE",
+      "their_rationale": "hype default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-20T23:54:13.199Z",
+    "user_id": "bot-03",
+    "q1_what_am_i_buying": "(fallback: no LLM key set)",
+    "q2_what_moves_price": "(fallback)",
+    "q3_hold_week": "(fallback)",
+    "q4_fair_vs_market": "(fallback)",
+    "overall_confidence": 0.5,
+    "flagged_wrong": false
+  }
+}

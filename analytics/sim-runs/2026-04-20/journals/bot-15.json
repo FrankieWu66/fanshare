@@ -1,0 +1,37 @@
+{
+  "user_id": "bot-15",
+  "entries": [
+    {
+      "ts": "2026-04-20T23:34:09.783Z",
+      "user_id": "bot-15",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "idle (waiting)",
+      "their_rationale": "power default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:12.660Z",
+      "user_id": "bot-15",
+      "step": "opened-player",
+      "what_they_read": "← Market/Kevin DurantdevnetConnect Wallet🪄Kevin DurantSF·PHXBuySellAmount to spend (SOL)SOLLoading market data…💬Feedba",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "open the trade page for Player_KD",
+      "their_rationale": "power default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-20T23:54:13.556Z",
+    "user_id": "bot-15",
+    "q1_what_am_i_buying": "(fallback: no LLM key set)",
+    "q2_what_moves_price": "(fallback)",
+    "q3_hold_week": "(fallback)",
+    "q4_fair_vs_market": "(fallback)",
+    "overall_confidence": 0.5,
+    "flagged_wrong": false
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "user_id": "bot-11",
+  "entries": [
+    {
+      "ts": "2026-04-20T23:34:05.237Z",
+      "user_id": "bot-11",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "idle (waiting)",
+      "their_rationale": "newbie default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:12.563Z",
+      "user_id": "bot-11",
+      "step": "opened-player",
+      "what_they_read": "Shai Gilgeous-Alexander",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "open the trade page for Player_SGA",
+      "their_rationale": "newbie default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:20.851Z",
+      "user_id": "bot-11",
+      "step": "traded",
+      "what_they_read": "← Market/Shai Gilgeous-AlexanderdevnetConnect Wallet🌩Shai Gilgeous-AlexanderPG·OKCBuySellAmount to spend (SOL)SOLLoadin",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.1479 SOL worth of Player_SGA",
+      "their_rationale": "newbie default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:30.264Z",
+      "user_id": "bot-11",
+      "step": "traded",
+      "what_they_read": "← Market/Shai Gilgeous-AlexanderdevnetConnect Wallet🌩Shai Gilgeous-AlexanderPG·OKCBuySellAmount to spend (SOL)SOLLoadin",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.1252 SOL worth of Player_SGA",
+      "their_rationale": "newbie default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    },
+    {
+      "ts": "2026-04-20T23:34:39.299Z",
+      "user_id": "bot-11",
+      "step": "traded",
+      "what_they_read": "← Market/Shai Gilgeous-AlexanderdevnetConnect Wallet🌩Shai Gilgeous-AlexanderPG·OKCBuySellAmount to spend (SOL)SOLLoadin",
+      "their_interpretation": "(fallback: no LLM key set)",
+      "their_decision": "buy 0.1269 SOL worth of Player_SGA",
+      "their_rationale": "newbie default heuristic",
+      "confidence": 0.5,
+      "confusion_notes": []
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-20T23:54:13.418Z",
+    "user_id": "bot-11",
+    "q1_what_am_i_buying": "(fallback: no LLM key set)",
+    "q2_what_moves_price": "(fallback)",
+    "q3_hold_week": "(fallback)",
+    "q4_fair_vs_market": "(fallback)",
+    "overall_confidence": 0.5,
+    "flagged_wrong": false
+  }
+}
