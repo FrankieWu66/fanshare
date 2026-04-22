@@ -1,0 +1,80 @@
+{
+  "user_id": "bot-09",
+  "display_name": "Sam Jefferson",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "3F5GSRmWV1hXyefJKkJv5GDz6PwXeFhTo18RjXVEFgdQ",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:21.987Z",
+      "user_id": "bot-09",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(no interpretation)",
+      "their_decision": "(no explicit decision)",
+      "their_rationale": "(no rationale)",
+      "confidence": 0.5,
+      "confusion_notes": [],
+      "first_impression_elements": [
+        "The giant bold headline with 'real stats.' in orange — it jumps out immediately",
+        "The yellow 'Claim $100 →' button — my eyes went straight to it, looks clickable and safe",
+        "The dark grid background — feels techy and intentional, not cheap"
+      ],
+      "ignored_elements": [
+        "The 'AWAITING TIP-OFF' status bar at the very top — I saw it but didn't know what it meant so I moved on",
+        "The 'How it works ↓' secondary link — the yellow button was more interesting",
+        "The 'NEW HERE? 10-SECOND VERSION.' section at the bottom — didn't scroll to it naturally"
+      ],
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:00:51.860Z",
+    "user_id": "bot-09",
+    "q1_what_am_i_buying": "Okay so... I think I'm buying like a pretend version of a player? Like a fake stock that's tied to LeBron or whoever? It's not real money and it's not like I own a piece of LeBron obviously, but the app said every player has a token so I guess it's just this made-up thing that tracks how good they're playing. Wait, is it actually a crypto token on Solana or is it just a number in the app? I genuinely don't know, I just clicked the button.",
+    "q2_what_moves_price": "Two things I think? The app said a computer looks at real stats and makes a 'fair-value price' every day, so if LeBron has a crazy game that probably pushes that number up. But then there's also the market price which is what other people in the app are actually paying — and the app said buying raises the price and selling lowers it. So like... other users trading can move it too? I'm a little confused about which one I'm actually watching when I look at the number on the card.",
+    "q3_hold_week": "Honestly I'm not totally sure. I think the fair-value price keeps updating every day based on his real stats, so if he plays well that number goes up? But I don't know if the market price automatically follows or if I have to wait for other people to catch on and start buying. The app said 'being right early and staying right pays better than being right once' so maybe holding is good? But it didn't really explain what happens mechanically if I just sit there and do nothing.",
+    "q4_fair_vs_market": "So the way I understood it — fair value is what the app's computer thinks the player is worth based on actual basketball stats, and market price is what people in the app are actually trading him at. Like if everyone is hyped on LeBron they might be paying more than the stats say he's worth, or if nobody's paying attention they might be paying less. The gap between those two numbers is supposed to be the opportunity — you're basically betting on whether the crowd is wrong. That part actually made sense to me, it's like buying something on sale if you think it's underpriced.",
+    "overall_confidence": 0.35,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The giant bold headline with 'real stats.' in orange — it jumps out immediately",
+          "The yellow 'Claim $100 →' button — my eyes went straight to it, looks clickable and safe",
+          "The dark grid background — feels techy and intentional, not cheap"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' status bar at the very top — I saw it but didn't know what it meant so I moved on",
+          "The 'How it works ↓' secondary link — the yellow button was more interesting",
+          "The 'NEW HERE? 10-SECOND VERSION.' section at the bottom — didn't scroll to it naturally"
+        ],
+        "visual_notes": "The dark theme with orange/yellow accent is cohesive and energetic — feels like a sports product, which is on-brand. Typography hierarchy is strong: the headline dominates correctly, the CTA is unmissable, and the micro-copy beneath ('no real money · no seed phrase') does quiet reassurance work without screaming. The grid overlay background adds texture without clutter, though the page feels slightly sparse in the mid-section between the CTA and the explainer block below."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

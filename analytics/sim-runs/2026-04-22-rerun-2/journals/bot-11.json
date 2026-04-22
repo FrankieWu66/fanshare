@@ -1,0 +1,89 @@
+{
+  "user_id": "bot-11",
+  "display_name": "Kwame Ade",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "Fnwrc5nGVuDLjMzYat71VcDG3jJSMob9cTDa3Ccc6sAC",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:26.009Z",
+      "user_id": "bot-11",
+      "step": "landed",
+      "what_they_read": "I saw 'Get $100 in practice money' and 'FanShare is a pretend stock market for NBA players' pretty much right away. The little explainer box that said no real money, no risk really stood out.",
+      "their_interpretation": "Okay so this is basically like a fantasy basketball app but instead of drafting a team you're buying and selling individual players like they're stocks — and they're giving me $100 of fake money to start, which is cool because I'm not putting anything real on the line.",
+      "their_decision": "I'm clicking 'Claim $100' for sure.",
+      "their_rationale": "It literally says no real money and no password, so what do I have to lose? Plus I know basketball, so if the computer is calculating a fair-value price from stats, I feel like I can spot when a player is undervalued before everyone else does — that's basically just knowing the game.",
+      "confidence": 0.72,
+      "confusion_notes": [
+        "'fair-value price' — I get that it's from stats but I'm reading this like it's a guaranteed target the market price HAS to reach eventually, not just a model estimate",
+        "'token' — is this like a crypto coin? Nobody explained that word and it made me pause",
+        "'seed phrase' — they said 'no seed phrase' which I guess is good but I have zero idea what that even is",
+        "'devnet' — never saw this word on the page but my friend mentioned it and I don't know what it means",
+        "'SOL' — same, not on the page but if this is crypto-adjacent I'd want to know",
+        "'market price (what others paid)' — wait, are there real other people trading right now or is this simulated? Not clear",
+        "'AWAITING TIP-OFF' — is the app broken or is this a countdown thing? Felt glitchy for a second"
+      ],
+      "first_impression_elements": [
+        "Big bold 'Claim $100 →' button — that jumped out immediately",
+        "The '10-second version' explainer box calling it a 'pretend stock market for NBA players' — that made everything click",
+        "The LeBron example with $5.59 fair value vs $4.20 market price — super concrete, I got it right away"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link at the bottom — didn't bother",
+        "'AWAITING TIP-OFF' ticker text at the very top — skimmed past it",
+        "'💬Feedback' button — completely invisible to me"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 8
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:00:50.445Z",
+    "user_id": "bot-11",
+    "q1_what_am_i_buying": "You're buying like a fake stock for that player — so if I buy LeBron, I own a piece of his token, and it's tied to how he's actually performing in real games. It's not real money but it acts like a stock, basically.",
+    "q2_what_moves_price": "Two things I think — his real stats move the fair-value price every day, and then other people buying or selling on the app moves the market price. If everybody's buying LeBron his market price goes up, and if nobody wants him it drops.",
+    "q3_hold_week": "Honestly I'm not totally sure — I think the fair value keeps updating every day based on his stats, so if LeBron goes off for a few big games the fair value climbs higher and higher above the market price, and then when the market catches up I make money? But I don't know exactly what happens to my balance while I'm just sitting there holding.",
+    "q4_fair_vs_market": "Fair value is what the computer says he's actually worth based on his stats, and market price is what people are paying for him right now. If fair value is higher than market price, that basically means the price is going to go up to meet it — like it's almost guaranteed to catch up, that's the whole point of buying undervalued.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 8,
+        "first_impression_elements": [
+          "The huge bold headline with 'real stats.' in orange — that popped immediately, felt energetic and legit",
+          "The yellow 'Claim $100 →' button — big, chunky, impossible to miss, made me want to click right away",
+          "The dark grid background — looks techy and serious, like a real trading platform"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' status bar at the top — didn't really register what it meant",
+          "The 'How it works ↓' secondary link — my eyes went straight to the big button",
+          "The small print below the CTA about no real money — skimmed past it honestly"
+        ],
+        "visual_notes": "This thing looks clean and intentional — the dark theme with orange and yellow accents gives it real fintech energy, like it belongs next to Robinhood or something. The type hierarchy is strong, the headline is massive and confident which made me feel like this is the real deal. The only thing that made me pause is there's no logo anywhere so I had to scroll down to even find the name 'FanShare' — felt a little mysterious but the overall vibe is polished enough that I trust it."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

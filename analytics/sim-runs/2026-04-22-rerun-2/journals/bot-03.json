@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-03",
+  "display_name": "Chris Banks",
+  "archetype": "hype",
+  "viewport": "mobile",
+  "wallet_address": "7JovE5N424z23ch5bPA28e7U95MsTvwmaUUZYaJcWCVU",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:10.444Z",
+      "user_id": "bot-03",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top, then that breakdown about fair-value price vs. market price — the whole undervalued/overvalued gap thing. And the big 'Claim $100 →' button was right there in my face.",
+      "their_interpretation": "So this is basically a fake stock market for NBA players where the stats set a 'real' price and the crowd sets another price, and if I spot the difference before everyone else does, I win fake money. Like a basketball knowledge flex, not a gambling app.",
+      "their_decision": "I'm clicking 'Claim $100 →' right now.",
+      "their_rationale": "No account, no seed phrase, no real money — that's three things that would've made me bounce, and they killed all three upfront. Plus the LeBron undervalued example hit different because I've been saying the market sleeps on Joel all season, so I already see myself using this.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'fair-value price (from stats)' — I get the concept but HOW does the computer calculate it exactly? What stats? Per game? Weighted? That math is a black box right now.",
+        "'Buying raises the price for the next person' — so it's bonding curve mechanics? They didn't say that. I know what that means but a lot of people won't and it's just dropped in casually.",
+        "'AWAITING TIP-OFF' at the very top — felt like a loading state or a bug, I wasn't sure if the app was broken or that was intentional flavor text.",
+        "'The gap is your edge' — edge is a sports betting term, which is fine for me, but it might read as gambling language to someone more cautious"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — impossible to miss, that was the first thing my thumb wanted to hit",
+        "'No account yet · $100 · no real money · no seed phrase' subtext under the button — that line actually stopped me and made me trust it more",
+        "The UNDERVALUED/OVERVALUED color labels with the LeBron $5.59 vs $4.20 example — concrete and I immediately started thinking about who I'd actually buy"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — didn't even register it until I was already sold",
+        "'💬Feedback' button — zero attention, felt like a dev tool",
+        "The 'ThesisBeing right early — and staying right — pays better than being right once.' line — skimmed past it, felt like filler philosophy copy"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "mobile",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 8
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:00:05.423Z",
+    "user_id": "bot-03",
+    "q1_what_am_i_buying": "Far as I can tell, it's like a pretend stock for a player — so I'm buying a token that represents Joel or whoever, and the price on it moves based on their real stats. It's not a real share of anything, it's fake money practice mode, but the idea is you're betting on whether the market's sleeping on your guy.",
+    "q2_what_moves_price": "Stats move some kind of 'fair value' price that a computer calculates, and then other people buying and selling moves the actual market price — so if everybody's hyping a dude and buying his token, that price goes up. If I buy Joel and he drops 35 and 10, I'd expect his fair value to jump, and hopefully the market follows.",
+    "q3_hold_week": "Honestly I'm not totally sure — I think the price just keeps updating as stats come in each day, so it could go up or down depending on how Bron plays that week. The app didn't really spell out if there's like a timer or expiration, so I'm guessing I just ride it until I decide to sell.",
+    "q4_fair_vs_market": "Fair value is what the computer thinks the player's worth based on his actual stats, and market price is what other people in the app are actually paying for the token right now. The gap between those two is supposed to be where you make your move — if the market's low and stats say he should be higher, you buy in and wait for people to catch up.",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 8,
+        "first_impression_elements": [
+          "That big orange 'real stats.' hit me immediately — clean contrast, feels like a sports ticker",
+          "The 'Claim $100' button is huge and impossible to miss, orange pops hard against the dark background",
+          "'AWAITING TIP-OFF' status bar at the top — that live-feeling indicator made me feel like something's actually happening right now"
+        ],
+        "ignored_elements": [
+          "The grid/graph paper background texture — barely registered it",
+          "'How it works' secondary link — my eyes went straight past it to the button",
+          "The 'Feedback' chat bubble in the corner"
+        ],
+        "visual_notes": "Dark theme with the orange accent is doing real work here — feels like a legit fintech-meets-sports product, not some janky fantasy app. The typography hierarchy is tight: status badge → headline → sub-copy → CTA, no wasted motion. The micro-copy under the button ('no real money · no seed phrase') is smart friction-removal but it's a little small on mobile — had to squint."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

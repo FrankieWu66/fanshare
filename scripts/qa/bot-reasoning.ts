@@ -199,6 +199,7 @@ export async function narrateOnboarding(input: OnboardingReasoningInput): Promis
 export interface VisionAssessment {
   visual_professionalism: number;
   trust_signal_strength: number;
+  trust_inventory_completeness: number; // 2026-04-22 recalibration: separate signal for standard-SaaS trust-anchor completeness, independent of trust_signal_strength.
   would_show_friend: number;
   first_impression_elements: string[];
   ignored_elements: string[];
@@ -240,6 +241,7 @@ export async function assessVisuals(input: VisionInput): Promise<VisionAssessmen
   return {
     visual_professionalism: asScore10(parsed.visual_professionalism, 5),
     trust_signal_strength: asScore10(parsed.trust_signal_strength, 5),
+    trust_inventory_completeness: asScore10(parsed.trust_inventory_completeness, 5),
     would_show_friend: asScore10(parsed.would_show_friend, 5),
     first_impression_elements: asStringArr(parsed.first_impression_elements) ?? [],
     ignored_elements: asStringArr(parsed.ignored_elements) ?? [],
@@ -313,14 +315,35 @@ function visionSystemPrompt(): string {
     "described in the next message. You are NOT evaluating the product's pitch — you are",
     "evaluating the VISUAL quality and trust cues.",
     "",
+    "IMPORTANT context for trust scoring (read carefully):",
+    "This is a focused single-CTA conversion landing page (an invite/grant offer).",
+    "It is INTENTIONALLY MINIMAL: no top nav, no logo block, no team/about section,",
+    "no social proof carousel, no large below-fold sections. That is a deliberate",
+    "design choice for this page type, not a defect. A focused 'squeeze page' layout",
+    "is correct for invite landings. A homepage would have those elements; this is",
+    "not a homepage.",
+    "",
+    "When scoring `trust_signal_strength`, rate the QUALITY OF CRAFT on what's actually",
+    "present: typography, color discipline, hierarchy, spacing, micro-copy, restraint,",
+    "intent. A well-crafted minimal landing deserves 7-8 on trust if its visual craft",
+    "is high. Penalize only for actually-broken/generic/thrown-together visuals — NOT",
+    "for the absence of standard SaaS trust anchors that would belong on a homepage.",
+    "",
+    "Score `trust_inventory_completeness` separately to record the missing-anchors",
+    "signal: how complete is the standard SaaS trust inventory (logo + nav + about +",
+    "social-proof + below-fold product preview)? 10 = fully equipped homepage; 0 =",
+    "bare single-CTA landing. This score is INDEPENDENT of trust_signal_strength —",
+    "a page can score 8 on craft and 2 on inventory, or vice versa.",
+    "",
     "Output strict JSON with these keys:",
     "{",
-    '  "visual_professionalism": number,        // 0-10 — does it look designed by pros or thrown-together?',
-    '  "trust_signal_strength": number,         // 0-10 — does it LOOK safe enough to eventually connect real money to? (visual only, not the copy)',
-    '  "would_show_friend": number,             // 0-10 — would you screenshot this and show a friend as something cool, or be embarrassed?',
-    '  "first_impression_elements": string[],   // top 3 things that caught your eye visually',
-    '  "ignored_elements": string[],            // visual elements the page tried to show you that you did not engage with',
-    '  "visual_notes": string                   // 1-3 sentences on what the visual does well or badly',
+    '  "visual_professionalism": number,         // 0-10 — does it look designed by pros or thrown-together?',
+    '  "trust_signal_strength": number,          // 0-10 — quality-of-craft on this page type, anchored per IMPORTANT block above',
+    '  "trust_inventory_completeness": number,   // 0-10 — separate signal: completeness of standard SaaS trust inventory (logo/nav/about/social-proof/below-fold). Independent.',
+    '  "would_show_friend": number,              // 0-10 — would you screenshot this and show a friend as something cool, or be embarrassed?',
+    '  "first_impression_elements": string[],    // top 3 things that caught your eye visually',
+    '  "ignored_elements": string[],             // visual elements the page tried to show you that you did not engage with',
+    '  "visual_notes": string                    // 1-3 sentences on what the visual does well or badly',
     "}",
     "",
     "Rules:",

@@ -1,0 +1,84 @@
+{
+  "user_id": "bot-04",
+  "display_name": "Marcus Reid",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "Ayqjm1VsCWXd2KUdjYbEoWwppNKKaxaoYsptt3Unte3v",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:12.218Z",
+      "user_id": "bot-04",
+      "step": "landed",
+      "what_they_read": "Caught 'Trade player tokens that move with real stats' up top, then the $100 claim button and the 'no real money, no seed phrase' line underneath it.",
+      "their_interpretation": "It's like a fantasy sports sim but with token price action — fake money, real NBA stats driving the prices, and you're basically trying to front-run other people's reads on players.",
+      "their_decision": "I'm clicking 'Claim $100 →' right now.",
+      "their_rationale": "No seed phrase, no signup, free fake hundo — zero downside to just getting in and seeing what the boards look like. If the vibes are off inside I'll just close the tab.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'fair-value price' vs 'market price' split — I get it conceptually but I want to see the actual numbers before I trust the gap is real",
+        "'Buying raises the price for the next person' — is this a bonding curve thing? Feels like it but they never say bonding curve",
+        "'AWAITING TIP-OFF' at the top — wasn't sure if the app was broken or that's just flavor text for tonight's games"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — jumped out immediately",
+        "'no real money · no seed phrase' subtext under the button — that's what made it feel safe enough to proceed",
+        "'AWAITING TIP-OFF' banner — caught my eye first, thought the site might be loading"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — didn't even register it",
+        "The 'Thesis' section with the 'being right early' copy — skimmed past it",
+        "'💬Feedback' button — completely invisible to me"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 8
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:59:59.674Z",
+    "user_id": "bot-04",
+    "q1_what_am_i_buying": "Like a fake stock for a player, bro. LeBron token, whatever. It's play money so not real but the price moves like it's real.",
+    "q2_what_moves_price": "Stats do something to it, and then other people buying or selling moves it too. If I buy it goes up for the next guy, so if everyone's aping in it pumps.",
+    "q3_hold_week": "Honestly no idea, I'd never hold a week lmao. I guess the stats keep updating so the fair value thing changes? Might pump might dump. I'm not holding anything that long.",
+    "q4_fair_vs_market": "Fair value is what the computer says based on stats, market price is what people actually paid. If they're different that's supposed to be the play — but honestly I'm just buying green candles and seeing what happens.",
+    "overall_confidence": 0.3,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 8,
+        "first_impression_elements": [
+          "that massive orange 'real stats.' hit different — instantly grabbed",
+          "yellow CTA button is loud and chunky, can't miss it",
+          "dark grid background gives it that crypto terminal energy"
+        ],
+        "ignored_elements": [
+          "the 'How it works' secondary link — who reads that",
+          "the fine print dots below the CTA — skipped"
+        ],
+        "visual_notes": "Dark mode grid + orange accent is clean degen aesthetic, looks like something you'd actually ape into. Typography hierarchy is tight — headline does the heavy lifting and the color pop on 'real stats.' is the right move. No logo or nav but honestly for a squeeze page this hits, feels intentional not lazy."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "user_id": "bot-10",
+  "display_name": "Nia Johnson",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "2wXCUj6erZK3i491qCENzwkRyJcQ1EAnxzjnNmenLc6x",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:23.916Z",
+      "user_id": "bot-10",
+      "step": "landed",
+      "what_they_read": "I saw 'Get $100 in practice money' and 'FanShare is a pretend stock market for NBA players' pretty much right away. Also caught 'no real money, no risk' which was like okay good.",
+      "their_interpretation": "So it's like... fake money to bet on NBA players based on their stats? Like if LeBron is playing good and nobody noticed yet, you buy him and make fake money? That actually sounds kinda fun lol.",
+      "their_decision": "I'd click 'Claim $100' for sure.",
+      "their_rationale": "It said no real money like three times and the button is right there, plus I don't have to sign up or make a password which is honestly the part that usually makes me give up on stuff. Free fake money to mess around with basketball players? I'm not losing anything.",
+      "confidence": 0.72,
+      "confusion_notes": [
+        "'token' — like a crypto thing? I don't know what that means exactly, I just skipped past it",
+        "'fair-value price' — okay so the computer makes up a number based on stats? I think I get it but it sounds fancy",
+        "'market price' — like what other people are paying? I guess?",
+        "'seed phrase' — they said 'no seed phrase' which I was like... what even IS a seed phrase, why are you bringing it up if I don't need it lol",
+        "'UNDERVALUED' / 'OVERVALUED' — I think I get this from the example but the words themselves sound like econ class",
+        "'your edge' — edge of what?? that sentence lost me",
+        "'Thesis' — that header just appeared out of nowhere, felt like homework",
+        "'devnet' — I didn't see this word on the page but the URL has it and I have no idea",
+        "'nudges a star like LeBron' — the part about buying raises the price for the next person confused me a little, like am I playing against other people?"
+      ],
+      "first_impression_elements": [
+        "big 'Claim $100 →' button",
+        "'no real money, no risk' text near the button",
+        "the LeBron $5.59 vs $4.20 example — that actually made it click for me"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link at the bottom",
+        "'AWAITING TIP-OFF' banner at the top — I saw it but didn't know what it meant so I moved on",
+        "'Thesis' section — felt like a word problem, I skimmed it",
+        "💬Feedback button",
+        "the part about buying raising the price for the next person — too complicated, I glazed over"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:00:51.247Z",
+    "user_id": "bot-10",
+    "q1_what_am_i_buying": "Okay so like... I'm buying a token for a player? It's not a real stock or anything, it's fake money so I think it's just like a pretend share of a player that goes up if he's doing good. The app said 'player tokens' so I'm going with that.",
+    "q2_what_moves_price": "His real stats move something called the 'fair price,' and then like... other people buying and selling moves the actual market price? I think? Also it said buying raises the price and selling lowers it, so if everyone's buying LeBron his price goes up. That part I actually get lol.",
+    "q3_hold_week": "Honestly I'm not totally sure — I think the price just keeps changing based on his games? Like if he has a good week it goes up, bad week it goes down maybe. The app didn't really tell me what happens if I just sit there and do nothing, so I'm kind of guessing here.",
+    "q4_fair_vs_market": "Okay so the fair value is what the computer thinks he's worth based on his stats, and the market price is what people are actually paying for him. If those two numbers are different that's supposed to be my chance to make fake money — like if the market is sleeping on him I buy before everyone catches up. I think I get it but the word 'spread' keeps throwing me off, I thought that was a betting thing.",
+    "overall_confidence": 0.38,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "Giant bold headline with 'real stats.' in orange — that color pop is eye-catching",
+          "Big yellow 'Claim $100' button — immediately saw it, wanted to click it",
+          "Dark grid background gives it a techy/finance-y vibe that feels kinda legit"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' status bar at the top — didn't really register what that meant",
+          "The small dot bullet micro-copy below the button ('no real money · no seed phrase') — skimmed past it",
+          "The '10-second version' explainer section at the bottom — scrolled past without really reading"
+        ],
+        "visual_notes": "The dark theme with the orange accent and oversized typography feels confident and intentional — not thrown together. The CTA button is chunky and impossible to miss, which is doing its job. The grid background adds texture without being distracting, though the page feels a little sparse in the middle section between the CTA and the explainer block."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

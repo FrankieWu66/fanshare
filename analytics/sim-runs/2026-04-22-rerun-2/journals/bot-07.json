@@ -1,0 +1,61 @@
+{
+  "user_id": "bot-07",
+  "display_name": "Diego Morales",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "5YKB39iDsWoCkPGbj7PDD3yJsNYVHZafcnD3GTfbvLyw",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:18.145Z",
+      "user_id": "bot-07",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top, then the three-step breakdown explaining fair-value price versus market price, and the $100 play-money offer with 'no real money, no seed phrase' spelled out clearly.",
+      "their_interpretation": "Okay so this is basically a fantasy sports meets paper-trading app — they calculate what a player *should* be worth from stats, the crowd trades around that number, and you're hunting the gap between the two. That's actually a clean concept, I get it.",
+      "their_decision": "I'd click 'Claim $100' and see what the player cards look like.",
+      "their_rationale": "No seed phrase, no signup, no real money — the friction cost is basically zero, so the risk of clicking is nothing. And the gap-between-fair-value-and-market-price framing is exactly the kind of thing I think about anyway, so I'm curious whether their 'fair value' model is any good.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'The gap is your edge' — sounds clean but I don't yet know how the fair-value price is actually calculated; 'stats' is vague, could be points only or full advanced metrics",
+        "'Buying raises the price for the next person' — is this a bonding curve? They never say that word but it sounds like one, and I'd want to know before I trade seriously",
+        "'AWAITING TIP-OFF — Prices move after tonight's games' — does that mean tokens are frozen right now? Can I still place orders or am I just looking?",
+        "No explanation of what 'devnet' means or whether this is blockchain-backed at all — I own SOL so I noticed there's no wallet connect prompt, which is either intentional simplicity or they're hiding something"
+      ],
+      "first_impression_elements": [
+        "The 'no real money · no seed phrase' subtext under the Claim $100 button — that line did the most trust work for me immediately",
+        "The LeBron example with actual dollar figures ($5.59 fair value vs $4.20 market) — concrete numbers made the mechanic click fast",
+        "The 'AWAITING TIP-OFF' banner — it's the first thing I registered visually and made me wonder if the app was even live yet"
+      ],
+      "ignored_elements": [
+        "The '↓Terms explained' link — I saw it, assumed it was legal boilerplate, skipped it",
+        "The 'ThesisBeing right early — and staying right — pays better than being right once' line — felt like flavor text, didn't slow me down",
+        "The Feedback button — not relevant to me on a first visit"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop"
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:00:24.055Z",
+    "user_id": "bot-07",
+    "q1_what_am_i_buying": "From what I can tell, I'm buying a token that represents a player — like a fake share of Kevin Durant or whoever. It's not a real asset, it's play money tied to how that player performs statistically. Think of it like a pretend stock where the company is the player's stat line.",
+    "q2_what_moves_price": "Two things seem to be moving it — the stats-based fair value updates after real games, and then other users buying or selling pushes the market price around. So if a bunch of people pile into KD after a big game, the market price climbs even if the fair value hasn't caught up yet. That gap is exactly what I'm watching.",
+    "q3_hold_week": "Honestly, the app hasn't told me explicitly what happens if I just sit on it. I'd assume the fair value keeps updating with each game, and the market price drifts based on what other users do — so my position either grows or shrinks depending on both. But I'm not 100% sure if there's any decay or expiration mechanic I'm missing.",
+    "q4_fair_vs_market": "(no answer)",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

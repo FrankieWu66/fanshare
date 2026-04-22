@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-13",
+  "display_name": "Hana Kim",
+  "archetype": "skeptic",
+  "viewport": "desktop",
+  "wallet_address": "BtKsPE6WL8crbp7pu1kMEug3P4YFChP7sRmuu3PXUjsK",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:30.138Z",
+      "user_id": "bot-13",
+      "step": "landed",
+      "what_they_read": "Big headline says 'Trade player tokens that move with real stats' and below that a three-step explainer walking me through fake money, finding undervalued players, and buying/selling. There's a 'No account yet · $100 · no real money · no seed phrase' line tucked under the main CTA.",
+      "their_interpretation": "Okay so it's basically a fantasy sports simulator dressed up in stock-market language — fake money, NBA players as tokens, the 'edge' is spotting where the crowd mispriced someone. The 'no seed phrase' callout is doing a lot of heavy lifting to tell me this isn't a crypto wallet grab.",
+      "their_decision": "I'd hover over 'Claim $100' without clicking it, then scroll down to read '↓Terms explained' first.",
+      "their_rationale": "The copy is unusually self-aware — 'pretend stock market,' 'fake money,' 'no real money no risk' repeated three times — which is either genuinely transparent or a very polished trust-washing job, and I need the terms to tell me which. The 'No signup, no password — it just appears' line is the one that actually makes me pause: nothing just appears, something is being stored somewhere.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'fair-value price (from stats)' — what stats exactly, and who runs the algorithm? No attribution.",
+        "'The market decides what it actually trades at' — what market? Other demo users? Bots? The size of this fake market matters for whether the gap signal means anything.",
+        "'Buying raises the price for the next person' — so this is a bonding curve or order book? That distinction changes how I'd think about strategy and I can't tell which it is.",
+        "'AWAITING TIP-OFF · Prices move after tonight's games' — is this live data or canned demo data? The urgency framing feels real but I don't know if it is.",
+        "No mention of who built this, no company name, no 'about' link — 'FanShare' appears only in the footer and the URL is fanshares.xyz which doesn't match"
+      ],
+      "first_impression_elements": [
+        "The 'No account yet · $100 · no real money · no seed phrase' reassurance line directly under the CTA button — that's the first thing that earned a second look",
+        "The plain-English '10-second version' explainer box — calling it a 'pretend stock market' is disarmingly honest and that grabbed me",
+        "'AWAITING TIP-OFF' countdown badge in the header — creates urgency I immediately distrust but can't ignore"
+      ],
+      "ignored_elements": [
+        "The 'How it works' anchor link — redundant since the three-step section is already visible on scroll",
+        "The LeBron $5.59 vs $4.20 example — I clocked it exists but didn't actually do the math",
+        "The footer 'Practice mode. No real money, no financial risk, no financial advice.' disclaimer — saw it, filed it as boilerplate, moved on"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:00:52.000Z",
+    "user_id": "bot-13",
+    "q1_what_am_i_buying": "Okay so as far as I can tell, I'm buying a fake token that represents a player — like a pretend share of LeBron James — using monopoly money. It's not a real asset, it's not an NFT, it's just a number in a practice account that goes up or down based on... something. The app calls it a 'player token' but never really defines what that means structurally, which, cool onboarding guys.",
+    "q2_what_moves_price": "Two things apparently — the computer recalculates a 'fair value' based on real stats every day, and then separately the market price moves when people buy or sell, because buying nudges the price up and selling nudges it down. So it's like... a tug of war between the algorithm and the crowd? I think? I'm not totally sure which one dominates or how much weight each has.",
+    "q3_hold_week": "Honestly I have no idea, and the app didn't really tell me. I assume the fair value keeps updating as LeBron plays games, so the price would drift around — but whether my position gains or loses without me doing anything is unclear to me. I'm guessing it just sits there reacting to stats and other people's trades, but I could be completely wrong about that.",
+    "q4_fair_vs_market": "Fair value is the price the app's algorithm spits out from actual stats — like a calculated 'what he should be worth.' Market price is what other users have actually been paying for the token, which can be higher or lower depending on hype or apathy. The gap between the two is supposedly where you make your play, which I get conceptually, but I'm a little fuzzy on how the fair value number gets calculated in the first place.",
+    "overall_confidence": 0.38,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The oversized bold headline with 'real stats.' in orange — it's doing the heavy lifting and it works",
+          "The amber/yellow CTA button — chunky, confident, hard to miss against the dark grid background",
+          "The subtle dot grid background texture — gives it a Bloomberg-terminal-meets-crypto-app energy"
+        ],
+        "ignored_elements": [
+          "The 'How it works ↓' secondary link — it's visually understyled and I scrolled past it mentally",
+          "The 'AWAITING TIP-OFF' status bar at the top — I clocked it but didn't process what it meant"
+        ],
+        "visual_notes": "Dark mode with tight typographic hierarchy and a restrained two-color accent system (orange + green dots) — this reads as intentional, not lazy. The micro-copy below the CTA ('no real money · no seed phrase') is doing real trust work in a small footprint, which I appreciate. The 10-second explainer block below the fold is a nice editorial touch, though the all-caps label feels slightly overdesigned for what is essentially a tooltip."
+      }
+    }
+  ],
+  "tally_submitted": true,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

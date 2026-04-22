@@ -1,0 +1,85 @@
+{
+  "user_id": "bot-02",
+  "display_name": "Maya Patel",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "4XVAEJgfF8anFbb4316JptqvYTkPXkaTT3ow2ixi27Zb",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:08.122Z",
+      "user_id": "bot-02",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top, then the whole breakdown about fair-value prices versus market prices, and the three-step thing — get $100, find a mispriced player, buy or sell based on your read.",
+      "their_interpretation": "Okay so it's basically fantasy sports but instead of drafting a team you're betting on whether the market is sleeping on a player or overhyping them — like, I'm not picking a roster, I'm picking gaps, which honestly sounds way more fun and way more me.",
+      "their_decision": "I'm clicking Claim $100 right now, no hesitation.",
+      "their_rationale": "It literally says no real money, no seed phrase, no signup — like they removed every single thing that usually makes me bounce from a crypto demo, and the NBA angle has me genuinely curious whether Tatum is undervalued after his last few games.",
+      "confidence": 0.88,
+      "confusion_notes": [
+        "'fair-value price' vs 'market price' distinction felt clear in the example but I'm still fuzzy on exactly what stat formula they're running — like is it PPG only or full box score?",
+        "'Buying raises the price for the next person' — so is this a bonding curve thing? That part went over my head a little and I didn't fully process the implication",
+        "'AWAITING TIP-OFF' at the very top — I almost read that as an error state or like the site wasn't loaded yet, took me a second to realize it meant tonight's games haven't happened"
+      ],
+      "first_impression_elements": [
+        "The 'Claim $100 →' button — big, obvious, first thing I wanted to click",
+        "'AWAITING TIP-OFF' banner because it felt live and real-time, like something was actually about to happen",
+        "The LeBron undervalued example with the actual dollar numbers — that made the whole concept click instantly"
+      ],
+      "ignored_elements": [
+        "The '↓Terms explained' link — I saw it but did not read it, I trust the 'no real money' line enough",
+        "The 'Feedback' button in the corner — completely invisible to me mentally",
+        "The 'ThesisBeing right early — and staying right — pays better than being right once' line — I skimmed past it like a tagline, didn't stop to think about what it actually means"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 8
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:00:02.304Z",
+    "user_id": "bot-02",
+    "q1_what_am_i_buying": "Okay so like, it's fake money so I'm not buying anything real, but basically I'm buying a little token tied to a player — like a Tatum token — and it represents what the app thinks he's worth based on his actual stats. It's not a real stock or anything, it's more like a fantasy sports position but dressed up like the stock market.",
+    "q2_what_moves_price": "Two things from what I can tell — the stats move some kind of 'fair value' price every day, so if JT drops 40 and 8 assists the computer bumps his fair value up. But also other people buying and selling moves the actual market price, like if everyone piles in on Tatum the price goes up, and if people are sleeping on him it stays low. That gap between the two is supposedly where you make your move.",
+    "q3_hold_week": "Honestly I'm not totally sure — I think the price just keeps updating based on his stats each day, so if he keeps cooking all week the fair value keeps climbing? But I don't actually know if there's like a timer or if it just sits there waiting for me to sell. The app said 'staying right pays better than being right once' so I think holding can be good, but I'm guessing a little here.",
+    "q4_fair_vs_market": "Fair value is what the computer calculates from his real stats — like the app's version of what Tatum is actually worth. Market price is what other people in the app are actually paying for him, which can be higher or lower depending on hype. If the market price is lower than fair value it shows green and says undervalued, which means people are sleeping and you should buy before they catch on — that's literally the whole game.",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 8,
+        "first_impression_elements": [
+          "That massive bold headline with 'real stats' popping in orange — immediately grabbed me, very ESPN-energy",
+          "The yellow-orange 'Claim $100' button is SO loud in a good way, my eyes went straight there",
+          "The dark grid background feels like a scoreboard or trading terminal, which is actually really cool for the vibe"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' ticker bar at the top — I clocked it but didn't really read it",
+          "The 'How it works' secondary link felt small and easy to skip past",
+          "The fine print row below the button with the dots and disclaimers"
+        ],
+        "visual_notes": "Okay this is giving serious sports-meets-crypto energy and I am HERE for it — the dark background with the grid lines plus that orange accent color is genuinely slick, not thrown together. The type hierarchy is doing real work: massive headline, clear subtext, one dominant CTA, no clutter. The only thing that bugs me is there's a lot of empty space below the fold before the '10-second version' explainer kicks in, which makes it feel slightly unfinished on desktop, like the page ran out of steam mid-scroll."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "user_id": "bot-14",
+  "display_name": "Ellie Vance",
+  "archetype": "skeptic",
+  "viewport": "mobile",
+  "entries": [],
+  "checkpoint": null,
+  "visual_assessments": [],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ]
+  }
+}

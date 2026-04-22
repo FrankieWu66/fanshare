@@ -1,0 +1,62 @@
+{
+  "user_id": "bot-06",
+  "display_name": "Tyrese Wood",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "BgmThQPZ6HtDeYiauwkw2GxMM9uM4aYZYYKb3WxCqa5v",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:15.963Z",
+      "user_id": "bot-06",
+      "step": "landed",
+      "what_they_read": "I caught 'Trade player tokens that move with real stats' up top, then the '10-second version' block that spelled out it's a pretend stock market for NBA players using $100 of fake money. Also read the three-step how-it-works section pretty carefully.",
+      "their_interpretation": "Okay so this is basically a paper-trading sim but instead of stocks it's NBA players — a computer prices each player from their actual stats, the crowd trades around that price, and if I spot the gap before everyone else does, my fake money grows. No real money involved, which they're saying loudly and repeatedly.",
+      "their_decision": "I'd click 'Claim $100 →' and see what the actual trade interface looks like before I commit any real opinion on this.",
+      "their_rationale": "They said no signup, no password, no seed phrase — that's a low enough friction cost that I'll just poke around. The repeated 'no real money' language reads less like a scam disclaimer and more like they're trying to lower my guard, which in this context actually works because there's nothing to steal.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'Fair-value price (from stats)' — I'd want to know exactly which stats and what the formula is before I trust the signal; 'fair value' is doing a lot of work here",
+        "'The market decides what it actually trades at' — who IS the market on a devnet demo? Other real users? Bots? That changes whether the gap signal means anything",
+        "'Buying raises the price for the next person' — this sounds like a bonding curve mechanic but they never say that; I'm inferring and I could be wrong",
+        "'AWAITING TIP-OFF' in the header — is this a live countdown or just flavor text? Unclear if I can trade right now or have to wait",
+        "No mention of what blockchain or why SOL would be relevant here — I own SOL so I'm wondering if wallet connection is coming later and they're just hiding it"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — it's the obvious CTA and I clocked it immediately",
+        "'No account yet · $100 · no real money · no seed phrase' subtext under the button — that line did real work for my trust level",
+        "The LeBron $5.59 vs $4.20 example in step 02 — concrete numbers made the concept click faster than the abstract explanation above it"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — I saw it but figured it was boilerplate and I'd read it after I see the actual product",
+        "'💬Feedback' button — completely ignored, felt like a dev tool not meant for me",
+        "'AWAITING TIP-OFF' banner — registered it peripherally but didn't stop to parse what it was telling me to do or not do"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop"
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:00:24.752Z",
+    "user_id": "bot-06",
+    "q1_what_am_i_buying": "From what I read, I'm buying a token that represents a player — not a real share of anything, just a fake-money position in a pretend market. It's like a placeholder that tracks whether the market price and the stat-based fair value converge. No real ownership, no real asset — it's practice mode.",
+    "q2_what_moves_price": "Two things as far as I can tell: the fair-value price moves when real stats update — so a big game should push that number. And the market price moves when other users buy or sell tokens, because the app literally says buying raises the price for the next person and selling lowers it. So it's both stat-driven and crowd-driven.",
+    "q3_hold_week": "Honestly the app didn't spell this out explicitly, so I'm guessing — I think the fair-value price keeps updating daily as LeBron's real stats come in, and the market price keeps shifting as other users trade. If I just hold and don't sell, my position's value probably floats with those changes, but I don't fully know if there's a time decay or expiration mechanic. That part wasn't explained anywhere I saw.",
+    "q4_fair_vs_market": "Fair value is what the computer calculates from actual NBA stats — kind of like a model price. Market price is what other users in the app are actually paying right now based on their trades. The gap between those two numbers is supposed to be the opportunity — if fair value is higher than market price, the app flags it green as undervalued, and you're betting the market will eventually catch up to the stats.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

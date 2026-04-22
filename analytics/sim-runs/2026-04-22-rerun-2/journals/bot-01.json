@@ -1,0 +1,84 @@
+{
+  "user_id": "bot-01",
+  "display_name": "Alex Rivera",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "FdNpiuJJHFnKqoneSYRDeDheV2xGhkoiT5y1CcexPndC",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:05.981Z",
+      "user_id": "bot-01",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top, then the LeBron example — stats say he's worth $5.59 but market's at $4.20. That hit different. Also caught 'No real money, no seed phrase' pretty fast.",
+      "their_interpretation": "Okay so it's basically a fantasy stock market for NBA players — fake money, no wallet drama, just vibes and basketball IQ. The gap between what stats say a player's worth vs what the market's paying is where you make your move.",
+      "their_decision": "I'm clicking Claim $100, no hesitation.",
+      "their_rationale": "No seed phrase means I don't have to connect a wallet or risk anything real, and they literally used LeBron as the example — that's not an accident, they know their audience. The vibe feels clean enough, and $100 of fake money to prove I know ball? Easy yes.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'fair-value price' — I get the concept but who's the 'computer' setting it? Feels hand-wavy",
+        "'The gap is your edge' — sounds slick but I want to know if the gap can just... never close",
+        "'Buying raises the price for the next person' — wait, is this an AMM thing? Bonding curve? They didn't say that explicitly and now I'm side-eyeing it a little"
+      ],
+      "first_impression_elements": [
+        "LeBron $5.59 vs $4.20 undervalued example — that grabbed me immediately",
+        "Big 'Claim $100 →' button with 'no real money · no seed phrase' right underneath it",
+        "'AWAITING TIP-OFF' countdown energy at the top — made it feel live and urgent"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — didn't even look at it",
+        "'💬Feedback' button — zero interest right now",
+        "The 'How it works' anchor link — I just read the page, didn't need to jump anywhere"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 8
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:59:55.844Z",
+    "user_id": "bot-01",
+    "q1_what_am_i_buying": "It's like a fake stock for a player — LeBron has a token and I'm buying a piece of that. It's not real money, it's play money, but the token moves with his actual stats on the court. So basically I'm betting on his performance without actually betting.",
+    "q2_what_moves_price": "Two things I think — his real stats push some 'fair value' number, and then other people buying or selling moves the market price. Like if everyone's hyped on LeBron and buying, the price goes up. If people are sleeping on him, it stays low. My buying literally raises the price for the next person, the app said that.",
+    "q3_hold_week": "Honestly I'm not totally sure. I think the fair value keeps updating with his stats every day, so if he goes off this week the fair value climbs. But the market price? That depends on what other people do. I'd probably just watch it and see — if he's balling I'm not selling anyway.",
+    "q4_fair_vs_market": "Fair value is what the computer says he's worth based on his stats — like a calculated number. Market price is what people are actually paying for the token right now. If the market is lower than fair value it shows green and says undervalued, meaning people are sleeping — that's when you buy and wait for them to catch up.",
+    "overall_confidence": 0.55,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 8,
+        "first_impression_elements": [
+          "That massive bold headline with the orange 'real stats.' pop — hits hard immediately",
+          "The yellow/gold 'Claim $100' CTA button — stands out clean against the dark background",
+          "The grid background texture — gives it that Bloomberg terminal / trading app energy"
+        ],
+        "ignored_elements": [
+          "The 'How it works ↓' secondary link — didn't even register at first",
+          "The fine print row below the CTA with the dot separators"
+        ],
+        "visual_notes": "Dark mode trading aesthetic is dialed in — feels like something I'd actually use to track LeBron's numbers. The orange accent on 'real stats.' is chef's kiss color discipline, matches the sports energy. The 10-second explainer block at the bottom is a smart touch but the spacing between the CTA and that section feels a little empty, like the page has a gap in its midsection."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

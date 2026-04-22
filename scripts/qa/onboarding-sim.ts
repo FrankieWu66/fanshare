@@ -601,7 +601,7 @@ function renderSummary(results: AgentResult[], startedAt: string, endedAt: strin
 
   // Aesthetic trust distribution (first assessment per agent = /invite)
   const trust = results
-    .map((r) => r.visualAssessments[0]?.data as { visual_professionalism?: number; trust_signal_strength?: number; would_show_friend?: number } | undefined)
+    .map((r) => r.visualAssessments[0]?.data as { visual_professionalism?: number; trust_signal_strength?: number; trust_inventory_completeness?: number; would_show_friend?: number } | undefined)
     .filter((x): x is NonNullable<typeof x> => !!x);
   const mean = (arr: number[]) => (arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
   const median = (arr: number[]) => {
@@ -611,6 +611,7 @@ function renderSummary(results: AgentResult[], startedAt: string, endedAt: strin
   };
   const prof = trust.map((t) => t.visual_professionalism ?? 5);
   const tsig = trust.map((t) => t.trust_signal_strength ?? 5);
+  const tinv = trust.map((t) => t.trust_inventory_completeness ?? 5);
   const wshw = trust.map((t) => t.would_show_friend ?? 5);
 
   return [
@@ -648,6 +649,7 @@ function renderSummary(results: AgentResult[], startedAt: string, endedAt: strin
     `|---|---|---|`,
     `| visual_professionalism | ${mean(prof).toFixed(1)} / 10 | ${median(prof).toFixed(1)} |`,
     `| trust_signal_strength | ${mean(tsig).toFixed(1)} / 10 | ${median(tsig).toFixed(1)} |`,
+    `| trust_inventory_completeness | ${mean(tinv).toFixed(1)} / 10 | ${median(tinv).toFixed(1)} |`,
     `| would_show_friend | ${mean(wshw).toFixed(1)} / 10 | ${median(wshw).toFixed(1)} |`,
     ``,
     `## 5. Desktop vs Mobile — funnel split`,

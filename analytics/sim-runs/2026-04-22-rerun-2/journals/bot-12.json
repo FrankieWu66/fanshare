@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-12",
+  "display_name": "Riley Park",
+  "archetype": "skeptic",
+  "viewport": "desktop",
+  "wallet_address": "9MRVa6VFbFVXzXv9Eq9m4nzijYWv5sQ8nusvDd8eY2zD",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:28.120Z",
+      "user_id": "bot-12",
+      "step": "landed",
+      "what_they_read": "Big headline says 'Trade player tokens that move with real stats' and there's a '$100 in practice money' offer with a 'Claim $100' button. Underneath that there's a plain-English explainer calling it a 'pretend stock market for NBA players.'",
+      "their_interpretation": "So it's a fake trading sim using NBA stats — no real money, no wallet, just play money to mess around with player prices. The 'no seed phrase' line is doing a lot of work trying to reassure me, which honestly makes me more curious why they felt the need to say it.",
+      "their_decision": "I'm hovering over 'Claim $100' but I haven't clicked it yet — I'm scrolling for the catch first.",
+      "their_rationale": "The 'no signup, no password — it just appears' line is either genuinely frictionless or the setup for an email-harvesting drip campaign I'll regret in six months. I need to see what actually happens before I hand over anything.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'fair-value price' vs 'market price' distinction sounds intuitive but I'd want to know exactly what stats formula they're using — 'a computer turns stats into a fair price' is vague enough to be meaningless",
+        "'The gap is your edge' — edge over what? The algorithm? Other users? Both?",
+        "'Buying raises the price for the next person' — so this is a bonding curve mechanic? That's not explained, just asserted",
+        "fanshares.xyz — .xyz domain is a yellow flag for me, historically scammy TLD even if it's unfair",
+        "'AWAITING TIP-OFF' in the header — is that a real game state or decorative? I genuinely can't tell"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — first thing my eye landed on, which is exactly what they wanted and exactly why I distrust it",
+        "'No account yet · $100 · no real money · no seed phrase' subtext under the button — this is the line doing the most trust-lifting on the page",
+        "'AWAITING TIP-OFF' status badge — it's either live data or set dressing, and I can't tell which from here"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — I'll read it but only after I've finished being suspicious of everything else first",
+        "💬Feedback button — not my problem until I decide this is worth my time",
+        "The LeBron $5.59 vs $4.20 example — I skimmed it, didn't absorb it, felt like marketing copy padding"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 6,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:00:55.878Z",
+    "user_id": "bot-12",
+    "q1_what_am_i_buying": "A pretend token tied to a fake price — no real asset, no ownership, nothing you can withdraw. It's a number that goes up or down based on stats and what other people in the app are doing. Which, fine, they said that, but 'token' is doing a lot of heavy lifting here.",
+    "q2_what_moves_price": "Two things from what I can tell: the stat-based 'fair value' updates daily from real game numbers, and then the market price moves when people actually buy or sell — buying pushes it up, selling pushes it down. So it's part algorithm, part crowd behavior, which is exactly the combo that makes me nervous.",
+    "q3_hold_week": "Honestly I don't know — the app didn't explain what happens if you just sit there. I'd guess the fair value keeps updating with his stats each day, and the market price drifts based on other people trading. But whether my position gains or loses without me doing anything? They didn't say, and I'm not assuming.",
+    "q4_fair_vs_market": "Fair value is the computer's math — it reads LeBron's actual stats and spits out a number. Market price is what people in the app are actually paying for the token. The gap between those two is supposedly the 'edge,' but that only works if the market eventually agrees with the computer, which is a big if.",
+    "overall_confidence": 0.32,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 6,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The orange 'real stats.' accent — loud, deliberate, doing the heavy lifting",
+          "'Claim $100' CTA button — amber, chunky, impossible to miss, also the first thing I'm suspicious of",
+          "Dark grid background — gives it a Bloomberg-terminal-trying-to-be-cool vibe"
+        ],
+        "ignored_elements": [
+          "The 'How it works ↓' ghost link — too low contrast, I barely registered it",
+          "The 'NEW HERE? 10-SECOND VERSION' explainer block — scrolled past it mentally before reading it"
+        ],
+        "visual_notes": "Tight, intentional dark-mode layout with good typographic hierarchy — whoever set the type knew what they were doing. The 'no real money · no seed phrase' micro-copy is the only thing keeping me from closing the tab immediately, but there's no logo, no domain anchor, nothing telling me who built this. Clean craft, zero identity. That's the exact combo that precedes a rugpull."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

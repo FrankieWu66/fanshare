@@ -1,0 +1,87 @@
+{
+  "user_id": "bot-05",
+  "display_name": "Jordan Chen",
+  "archetype": "value",
+  "viewport": "mobile",
+  "wallet_address": "5MBDRGfoENA5ALUQVi3YkTSSi5Ea3tmbLDzD5zZLkBUA",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:14.204Z",
+      "user_id": "bot-05",
+      "step": "landed",
+      "what_they_read": "I read the main pitch — 'Trade player tokens that move with real stats' — and then drilled into the 10-second explainer that calls it a 'pretend stock market for NBA players' where a computer converts stats into a fair price daily. I also clocked the three-step flow and the LeBron example with the $5.59 vs $4.20 spread.",
+      "their_interpretation": "So this is basically a paper-trading sim where the 'fair value' is algo-generated from box-score stats, and the 'market price' is crowd-driven — the gap between those two numbers is the signal I'd be trading against. That's a spread-capture mechanic, and I actually understand that framing pretty cleanly.",
+      "their_decision": "I'd click 'Claim $100' and poke around the player cards to see how they're actually computing that fair-value price.",
+      "their_rationale": "No real money, no seed phrase, no account — the friction cost is essentially zero, and the core concept maps onto something I already reason about (fair value vs market price). I want to stress-test whether the stat-to-price model is any good before I decide if this is worth my attention.",
+      "confidence": 0.78,
+      "confusion_notes": [
+        "'The gap is your edge — if you're right, and early' — early relative to what time window? One game? A season?",
+        "How exactly does a player's stats get converted to a dollar fair-value price? The formula or methodology is not shown anywhere on this page.",
+        "'Buying raises the price for the next person' — is this an AMM / bonding curve, or just a simple order book? That distinction matters for sizing.",
+        "'AWAITING TIP-OFF — Prices move after tonight's games' — does this mean the fair-value price only updates once per day post-game, or in real time during the game?",
+        "No mention of what blockchain or whether the $100 is SOL-denominated or a custom in-app currency — I own SOL so I'm wondering if this connects to my wallet at all or if it's purely off-chain play money."
+      ],
+      "first_impression_elements": [
+        "The LeBron $5.59 vs $4.20 example — concrete numbers made the spread concept immediately tangible",
+        "The 'No account yet · $100 · no real money · no seed phrase' line under the Claim button — that's a tight trust signal in one breath",
+        "The 'AWAITING TIP-OFF' status banner — signals the product is live and time-sensitive, which creates mild urgency"
+      ],
+      "ignored_elements": [
+        "The '↓Terms explained' link — I noticed it exists but didn't tap it on first pass",
+        "The '💬Feedback' button — felt like a meta-product element, not relevant to my evaluation right now",
+        "'How it works' anchor link — I got the same info by just reading down the page so the jump link felt redundant"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "mobile",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:00:10.508Z",
+    "user_id": "bot-05",
+    "q1_what_am_i_buying": "From what the app explained, I'm buying a token that represents a player — not a real share of anything, just a unit of fake money tied to that player's performance. It's practice mode, so there's no actual asset here, just a position in a pretend market that tracks whether the market price and the stat-based fair value converge.",
+    "q2_what_moves_price": "Two things seem to move it: the fair-value price shifts when real stats update daily, and the market price shifts when other users buy or sell — buying pushes it up, selling pushes it down. The app said your $100 barely moves a star like LeBron but can meaningfully move a role player, so liquidity and trade volume matter too.",
+    "q3_hold_week": "Honestly, the app didn't spell this out clearly. My best guess is the fair-value price keeps updating with his stats each day, and the market price drifts based on what other users are doing — so the gap could widen or close while I'm just sitting there. I'm not sure if there's any time decay or forced settlement; I'd want to see the actual trade page before I assumed holding was free.",
+    "q4_fair_vs_market": "Fair value is the computer's stat-based calculation of what a player is worth — it updates with real game data. Market price is what other users have actually been paying for the token, driven by sentiment and trading activity. The spread between those two numbers is the whole game — if fair value is $5.59 and market is $4.20, that's a $1.39 gap I'm betting will close.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The bold orange 'real stats.' accent in the headline — high contrast, immediately communicates the core value prop",
+          "The amber CTA button 'Claim $100 →' — large touch target, unmissable, good color discipline matching the accent system",
+          "The grid overlay on the dark background — subtle but adds a trading/data aesthetic that feels intentional"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' ticker bar at top — registered it but didn't parse it fully on first pass",
+          "The 'How it works ↓' secondary link — visually undersized next to the CTA, easy to skip",
+          "The 'NEW HERE? 10-SECOND VERSION' label at the bottom fold — partially cut off, low visual weight"
+        ],
+        "visual_notes": "Clean dark-mode execution with disciplined two-color system (white + amber) that feels native to fintech/trading contexts — the hierarchy from status badge to headline to body to CTA is tight and readable on mobile. The micro-copy beneath the CTA ('no real money · no seed phrase') does real trust work for a crypto-adjacent product without cluttering the layout. The grid background is a nice texture choice but risks feeling slightly generic; the overall craft is above average for this page type."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

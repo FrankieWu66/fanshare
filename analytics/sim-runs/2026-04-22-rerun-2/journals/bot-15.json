@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-15",
+  "display_name": "Priya Shah",
+  "archetype": "power",
+  "viewport": "desktop",
+  "wallet_address": "ApYBrU6SUsre2suaeDpWKaGDoKtzgCfysjq1PVP7sw5b",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:59:33.929Z",
+      "user_id": "bot-15",
+      "step": "landed",
+      "what_they_read": "Headline hit first: 'Trade player tokens that move with real stats.' Then the sub-copy — fair-value price vs market price, gap is your edge. Skimmed the three-step flow fast.",
+      "their_interpretation": "It's a paper-trading sim for NBA player tokens — algo sets a fair-value, crowd sets market price, I trade the spread. Basically a sports-flavored prediction market with fake PnL.",
+      "their_decision": "Click 'Claim $100 →' and get inside to see the actual order flow and spread mechanics.",
+      "their_rationale": "No seed phrase, no signup friction — zero cost to entry, and the core mechanic (fair-value vs market price = tradeable gap) is legit enough to poke at. I want to see the bid-ask on a live card before I decide if the spread is worth playing.",
+      "confidence": 0.88,
+      "confusion_notes": [
+        "'Buying raises the price for the next person' — is this AMM-style bonding curve or just sentiment weighting? Needs a one-liner on the pricing mechanism.",
+        "'Stats move a fair-value price' — which stats, what formula, what lag? If it's box-score next-day I need to know the update cadence before I size in.",
+        "'AWAITING TIP-OFF' — cute but is this a live countdown or static copy? Unclear if prices are actually frozen right now.",
+        "'The gap is your edge' — fine, but what's the liquidity? If I'm the market, spread is meaningless."
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — high contrast, first action anchor",
+        "'fair-value price vs market price' framing in the hero copy — that's the actual trade thesis in two words",
+        "'No account yet · $100 · no real money · no seed phrase' trust strip — scanned it in under a second, cleared my skepticism fast"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — I'll read it after I see the product",
+        "'💬Feedback' button — not relevant to me right now",
+        "The 'New here? 10-second version' explainer block — copy felt like it was written for someone who's never heard of a spread, skipped it"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:01:22.418Z",
+    "user_id": "bot-15",
+    "q1_what_am_i_buying": "Fake-money stake in a player token — it's a pretend share that tracks whether the market price and the stat-based fair value converge. No real equity, no real asset, just a position in the gap.",
+    "q2_what_moves_price": "Two things: actual trades on the platform — every buy nudges price up, every sell nudges it down — and the fair-value calc updating off real game stats. Whichever moves first is where I'm looking to front-run.",
+    "q3_hold_week": "Honestly not 100% sure — I assume fair value keeps recalculating off his nightly stats, and market price drifts based on what other users are doing. If nobody's trading him and his stats stay flat, the gap might just sit there. No idea if there's decay or expiry, app didn't say.",
+    "q4_fair_vs_market": "(no answer)",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "Orange 'real stats.' headline pop — high contrast, stops the scroll immediately",
+          "Yellow CTA button — chunky, impossible to miss, good bid-ask energy",
+          "Dark grid background — feels like a trading terminal, on-brand"
+        ],
+        "ignored_elements": [
+          "'AWAITING TIP-OFF' status bar at top — blends into the dark, easy to miss",
+          "'How it works ↓' secondary CTA — too low contrast next to the dominant button",
+          "Bottom explainer block — dense paragraph, didn't pull my eye"
+        ],
+        "visual_notes": "Clean dark terminal aesthetic with tight type hierarchy — the orange accent on 'real stats.' does real work and the CTA is properly sized. Micro-copy under the button ('no real money · no seed phrase') is a smart friction-killer, well-placed. Grid background adds depth without noise, but the page feels a bit empty mid-scroll — nothing between CTA and the explainer block to keep momentum."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}
