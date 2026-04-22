@@ -193,6 +193,7 @@ async function runAgent(
   let walletAddress: string | undefined;
   let tallySubmitted = false;
   let stepCount = 0;
+  let cp: CheckpointAnswer | undefined; // hoisted so it survives the try/finally scope
 
   const vpConfig = viewport === "mobile"
     ? devices["iPhone 13"]
@@ -303,32 +304,61 @@ async function runAgent(
       }
     }
 
-    // ── STEP 3: click "Claim $100" ────────────────────────────────────────────
+    // ── STEP 3: click "Claim $100" → opens modal → fill name → Start Trading ──
+    // The actual onboarding flow:
+    //   Click "Claim $100" → opens "Try FanShare" modal with name input
+    //   → fill name → click "Start Trading →" → wallet created + redirect to /
     try {
       const claimLoc = page.locator("button", { hasText: /claim .*\$100/i }).first();
       await claimLoc.click({ timeout: 10000 });
       markEvent("invite_cta_clicked");
+      await snapStep("modal-opened");
 
-      // Wait for navigation to /. Grant happens via /api/demo/register.
-      await page.waitForURL(/\/$|\/$/, { timeout: 30000 }).catch(() => { /* tolerate stale URL */ });
-      await snapStep("grant-claimed");
+      // Wait for modal: look for the "Start Trading" button
+      const startTradingBtn = page.locator("button", { hasText: /start trading/i }).first();
+      const modalVisible = await startTradingBtn.isVisible({ timeout: 5000 }).catch(() => false);
 
-      // Read wallet from localStorage to confirm registration succeeded
-      const walletJson = await page.evaluate(() => localStorage.getItem("fanshare_demo")).catch(() => null);
-      if (walletJson) {
-        try {
-          const parsed = JSON.parse(walletJson) as { address?: string };
-          walletAddress = parsed.address;
-          markEvent("grant_claimed", { wallet: walletAddress });
-        } catch {
-          /* couldn't parse — still mark the event from CTA since registration endpoint was hit */
+      if (modalVisible) {
+        // Fill the name field. Personas submit their own display name for the demo.
+        const nameField = page.locator("input[placeholder*='Jordan'], input[type='text']").first();
+        if (await nameField.isVisible({ timeout: 2000 }).catch(() => false)) {
+          await nameField.fill(bot.displayName, { timeout: 3000 });
+        }
+        // Click Start Trading
+        await startTradingBtn.click({ timeout: 5000 });
+
+        // Wait for navigation to home (URL should no longer be /invite)
+        await page.waitForFunction(
+          () => !window.location.pathname.includes("/invite"),
+          { timeout: 30000 },
+        ).catch(() => { /* tolerate stale URL */ });
+        await snapStep("grant-claimed");
+
+        // Read wallet from localStorage
+        const walletJson = await page.evaluate(() => localStorage.getItem("fanshare_demo")).catch(() => null);
+        if (walletJson) {
+          try {
+            const parsed = JSON.parse(walletJson) as { address?: string };
+            walletAddress = parsed.address;
+            markEvent("grant_claimed", { wallet: walletAddress });
+          } catch {
+            markEvent("grant_claimed");
+          }
+        } else {
+          // Fall back: CTA was clicked, even if localStorage read failed
           markEvent("grant_claimed");
         }
+      } else {
+        errors.push({
+          ts: new Date().toISOString(), user_id: bot.id,
+          context: "modal-not-visible",
+          message: "Claim $100 clicked but 'Start Trading' modal never appeared within 5s",
+        });
       }
     } catch (err) {
       errors.push({
         ts: new Date().toISOString(), user_id: bot.id,
-        context: "click:claim-$100", message: err instanceof Error ? err.message : String(err),
+        context: "click:claim-$100-flow", message: err instanceof Error ? err.message : String(err),
       });
     }
 
@@ -358,14 +388,15 @@ async function runAgent(
     }
 
     // ── STEP 5: mid-flow mental-model checkpoint ─────────────────────────────
-    const cp = await checkpoint(bot, inviteCopy, null).catch((err) => {
+    try {
+      cp = await checkpoint(bot, inviteCopy, null);
+      if (cp) feed.checkpoint(`${bot.id}·${viewport}`, cp.q4_fair_vs_market);
+    } catch (err) {
       errors.push({
         ts: new Date().toISOString(), user_id: bot.id,
         context: "checkpoint", message: err instanceof Error ? err.message : String(err),
       });
-      return undefined;
-    });
-    if (cp) feed.checkpoint(`${bot.id}·${viewport}`, cp.q4_fair_vs_market);
+    }
 
     // ── STEP 6: click Feedback button (Tally) ─────────────────────────────────
     // Only skeptics + specific flagged bots submit, but we click the button for
@@ -409,7 +440,7 @@ async function runAgent(
   const missing = onboardingEvents.filter((e) => !firedEventNames.includes(e));
 
   return {
-    bot, viewport, walletAddress, journal, checkpoint: undefined, // cp attached separately if wanted
+    bot, viewport, walletAddress, journal, checkpoint: cp,
     visualAssessments, events, errors, screenshotsDir: agentDir, tallySubmitted,
     smoothness: { fired: firedEventNames, missing },
   };
