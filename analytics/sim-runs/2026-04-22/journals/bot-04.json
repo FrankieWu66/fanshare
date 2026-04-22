@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-04",
+  "display_name": "Marcus Reid",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "Ayqjm1VsCWXd2KUdjYbEoWwppNKKaxaoYsptt3Unte3v",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:28.567Z",
+      "user_id": "bot-04",
+      "step": "landed",
+      "what_they_read": "Saw the ticker scrolling $LBJ $KD $SGA and the big 'Claim $100 →' button first, then the three-step breakdown. Caught 'devnet SOL' and 'no real money' somewhere in the fine print.",
+      "their_interpretation": "It's basically a fantasy stock market for NBA players but built on Solana — fake money, real player stats driving prices, and if you call the market wrong you get rekt in play money. Vibes like a paper trading sim but with that crypto token wrapper I actually fw.",
+      "their_decision": "Clicking 'Claim $100 →' right now, no hesitation.",
+      "their_rationale": "No wallet, no seed phrase, no signup — that's literally zero friction and zero risk, so why not. The ticker with real player tickers scrolling LIVE got me, feels like something's actually moving even if it's devnet.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'oracle updates' — what oracle, how often, who sets it?",
+        "'fair-value price' vs 'market price' gap — sounds clean in theory but I wanna see actual numbers moving before I trust the model",
+        "'0.667 SOL · $100' — why is that the conversion shown? Is devnet SOL pegged to something or is that just a display number?",
+        "Badges say 'preview-only for Demo 1' — so I can't actually earn them yet? Then why show them at all rn"
+      ],
+      "first_impression_elements": [
+        "scrolling live ticker with NBA player tickers ($LBJ, $KD, $SGA) — felt like a real exchange for a second",
+        "big 'Claim $100 →' button — obvious, clean, no sketchy vibes",
+        "'No wallet yet · no real money · no seed phrase' tagline under the button — removed all my hesitation instantly"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' section at the bottom",
+        "'💬Feedback' link",
+        "the full paragraph explaining how buying raises price for the next person",
+        "'How it works' anchor link — already read the steps inline so didn't need to click"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:20.131Z",
+    "user_id": "bot-04",
+    "q1_what_am_i_buying": "It's like a token for a player, LeBron or whoever, fake money stuff on Solana devnet. Not real shares or anything, just a pretend position that's worth something if the number goes up.",
+    "q2_what_moves_price": "Buying pushes it up, selling pushes it down — that part's clear. Stats do something to a 'fair value' price too but honestly I'm just watching for green candles and momentum from other people buying.",
+    "q3_hold_week": "No idea exactly, the app mentioned 'oracle updates' a few times so I guess the fair value price changes on some schedule? But I don't know how often that is or if holding does anything special besides maybe unlocking that Diamond Hands badge.",
+    "q4_fair_vs_market": "Fair value is what the computer thinks the player's worth based on stats, market price is what people are actually paying. Gap between them is supposed to be the play — but honestly I'm not sweating the math, if it's green I'm in.",
+    "overall_confidence": 0.3,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "Orange 'real stats.' text hits hard — pops against the dark background immediately",
+          "Live ticker scrolling across the top with green dot — looks like actual market data, got my attention",
+          "Big yellow 'Claim $100' button — that's the first thing I clicked mentally"
+        ],
+        "ignored_elements": [
+          "The grid background texture — didn't register at all",
+          "The 'NEW HERE? 10-SECOND VERSION' explainer block at the bottom — too much reading",
+          "The 'How it works' secondary CTA — why would I read that when there's free money"
+        ],
+        "visual_notes": "Dark mode crypto aesthetic is clean enough, feels like a legit trading terminal lite. The ticker bar up top makes it look alive which is good. But below the fold it gets sparse and empty — too much dead black space between the hero and the explainer, makes it feel unfinished, like a devnet project (which it literally says it is, which doesn't help trust)."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

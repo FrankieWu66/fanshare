@@ -1,0 +1,62 @@
+{
+  "user_id": "bot-15",
+  "display_name": "Priya Shah",
+  "archetype": "power",
+  "viewport": "desktop",
+  "wallet_address": "ApYBrU6SUsre2suaeDpWKaGDoKtzgCfysjq1PVP7sw5b",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:50.569Z",
+      "user_id": "bot-15",
+      "step": "landed",
+      "what_they_read": "Headline: 'Trade player tokens that move with real stats.' Then the three-step onboarding and the fair-value vs market-price mechanic. Skimmed the LeBron $5.59 example hard.",
+      "their_interpretation": "It's a fantasy sports AMM on devnet — stats oracle sets fair value, market price drifts, you fade the gap. Basically a spread trade on NBA player tokens with fake SOL.",
+      "their_decision": "Click 'Claim $100 →' right now.",
+      "their_rationale": "No wallet, no seed phrase, no signup — zero friction. Devnet SOL so no real exposure. The fair-value vs market-price mechanic is legit edge framing; I want to see the actual spreads on the cards before I decide if this is worth time.",
+      "confidence": 0.88,
+      "confusion_notes": [
+        "'oracle updates' — how frequent? That's the whole timing question for holds, not explained",
+        "All tickers showing 0.0% — is this a dead market or just pre-open? Makes me wonder if there's actually anyone to trade against",
+        "'0.667 SOL · $100' — why show SOL denomination if it's devnet? Slightly noisy",
+        "Badge unlock condition 'hold through 3 oracle updates' — no cadence given, could be 3 days or 3 weeks"
+      ],
+      "first_impression_elements": [
+        "Live ticker scrolling player tokens with prices — eye went there first, scanned for spread/volatility, saw all 0.0% and flagged it",
+        "Big 'Claim $100 →' button — clean CTA, no friction copy next to it",
+        "LeBron $5.59 fair-value example — concrete number made the mechanic click instantly"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' footer section",
+        "Badge descriptions beyond the unlock conditions",
+        "'💬Feedback' link",
+        "The 'New here? 10-second version' plain-language explainer block — didn't need it"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop"
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:40.147Z",
+    "user_id": "bot-15",
+    "q1_what_am_i_buying": "Fake token tied to a player — LeBron, KD, whoever. Play money, devnet SOL, no real skin. It's a position on whether the market's mispriced him relative to what his stats say he's worth.",
+    "q2_what_moves_price": "Two things — oracle pushes a new fair-value when stats update, and every buy/sell from other users nudges the market price directly. Big players like LeBron barely move on a single trade, role players rip harder. I'm watching both vectors.",
+    "q3_hold_week": "Honestly not 100% sure on the cadence — app says 'oracle updates' happen but doesn't tell me exactly when or how many per week. If his stats stay strong the fair-value should tick up, and if market catches up I'm in profit. Diamond Hands badge needs 3 oracle updates held, so there's that angle too.",
+    "q4_fair_vs_market": "Fair value is the computer's number — pure stats-to-price conversion, updated on some schedule. Market price is what the last trade actually cleared at. Gap between them is the edge — UNDERVALUED means market's sleeping, OVERVALUED means hype's run ahead of the numbers. I'm flipping that spread.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

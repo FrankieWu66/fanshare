@@ -46,3 +46,6 @@ npm-debug.log*
 # QA artifacts (ephemeral test outputs)
 qa-run-*.json
 telemetry-*.csv
+
+# sim screenshots — local only, regenerable from the run; design-violations.md captures the analysis
+analytics/sim-runs/*/screenshots/

@@ -1,0 +1,85 @@
+{
+  "user_id": "bot-02",
+  "display_name": "Maya Patel",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "4XVAEJgfF8anFbb4316JptqvYTkPXkaTT3ow2ixi27Zb",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:24.338Z",
+      "user_id": "bot-02",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top and then that ticker scrolling with LBJ, KD, AD — all the usual suspects. I also caught the big 'Get $100 in devnet SOL' and the three-step how-it-works section.",
+      "their_interpretation": "Okay so it's basically fantasy sports but instead of a draft you're trading like stocks — and the price moves based on actual game stats, not just vibes. The $100 is fake money, like a simulator, which honestly makes me feel better about clicking.",
+      "their_decision": "I'm clicking 'Claim $100' right now, no hesitation.",
+      "their_rationale": "It's devnet, it's fake money, there's no signup or seed phrase — zero downside — and if this thing has real stat feeds moving prices then I already have an edge because I watch every Celtics game. The only thing I'm annoyed about is Tatum isn't in that ticker, but I'm still in.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'devnet SOL' — I know what Solana is but 'devnet' sounds technical and I had to read the fine print to confirm it means fake",
+        "'oracle updates' in the Diamond Hands badge — what's an oracle, how often does it update, does that mean daily stats?",
+        "'fair-value price' vs 'market price' distinction — I get the concept but the first time I read it I thought they were the same thing",
+        "The ticker shows 0.0% change on everything — is this broken or is the market just not live yet? That made me pause for a second"
+      ],
+      "first_impression_elements": [
+        "The scrolling live ticker with player tickers like $LBJ and $KD — felt like Bloomberg for basketball and I was immediately intrigued",
+        "The big 'Claim $100 →' button — hard to miss, and '$100' is a number my brain just locks onto",
+        "'No wallet yet · no real money · no seed phrase' — that little line did a lot of work, it removed my biggest friction point instantly"
+      ],
+      "ignored_elements": [
+        "The 'Terms explained' dropdown at the bottom — I saw it but did not click it",
+        "The Feedback button — not even on my radar right now",
+        "The badges section — I skimmed it but 'preview-only for Demo 1' told me it doesn't matter yet so I moved on"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:20.617Z",
+    "user_id": "bot-02",
+    "q1_what_am_i_buying": "Okay so like, it's basically a pretend stock for a player? The app said every player has a token and it's tied to their real stats somehow, so I'm buying into Tatum's performance I think. It's not real money or anything, it's just fake dollars that go up if I'm right about him.",
+    "q2_what_moves_price": "Two things I think — the stats move some kind of fair-value price automatically, like a computer does that, and then also when people buy the price goes up and when they sell it goes down. So if JT drops 40 and 8 assists everyone's gonna rush in and it pumps, that's how I'm reading it.",
+    "q3_hold_week": "Honestly I'm not totally sure, the app mentioned something called oracle updates and there's a badge for holding through three of them, so I guess the fair-value price refreshes a few times? But I don't know how often that is or if the market price just sits there frozen until someone trades. I'd probably be watching it obsessively either way.",
+    "q4_fair_vs_market": "So fair value is what the computer says he's worth based on stats, and market price is what people are actually paying for him right now. If the market price is lower than fair value it shows green and says undervalued — that's your shot to buy before everyone else figures it out. The gap between those two numbers is basically where the opportunity lives.",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The giant bold headline with that orange 'real stats.' pop — that caught my eye immediately, very punchy",
+          "The live ticker scrolling across the top with player tokens and prices — feels like a real trading platform, love that energy",
+          "The bright yellow-orange 'Claim $100' button — impossible to miss, very clickable"
+        ],
+        "ignored_elements": [
+          "The grid background pattern — it's there but I literally did not register it until I looked twice",
+          "The 'LIVE · DEVNET' and 'INVITE · DEMO 1' status tags near the top — too small and low contrast to care about",
+          "The 'How it works' secondary link — the CTA button ate all my attention"
+        ],
+        "visual_notes": "Dark mode with that orange accent is giving Bloomberg-meets-streetwear vibes and I am here for it — it reads sporty and techy at the same time. The 'no real money' disclaimer line at the bottom actually hurts the trust vibe a little visually because it looks like fine print on a sketchy ad, even though it's meant to be reassuring. Overall the layout is clean but the lower half of the page feels empty and unfinished, like the hype drops off right when it should be building."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "user_id": "bot-10",
+  "display_name": "Nia Johnson",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "2wXCUj6erZK3i491qCENzwkRyJcQ1EAnxzjnNmenLc6x",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:40.599Z",
+      "user_id": "bot-10",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' at the top and then that big 'Claim $100 →' button basically screaming at me. I also caught the little paragraph that said 'FanShare is a pretend stock market for NBA players' which honestly was the only part that made sense.",
+      "their_interpretation": "Okay so it's like… fake money, fake trading, but with real NBA players? Like I'm not actually spending anything, I'm just pretending to buy and sell players like they're stocks or whatever. That part I actually get lol.",
+      "their_decision": "I'd click 'Claim $100 →' because it says no real money and no signup so like, what's the worst that happens.",
+      "their_rationale": "The '10-second version' paragraph literally told me it's fake money and no risk, so I'm not scared of losing anything real. And there's no password or signup which means I don't have to give them my email or whatever — that's actually what would've made me bounce.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'devnet SOL' — what is devnet? what is SOL? I see it says no real money but I don't know what SOL even IS",
+        "'0.667 SOL · $100' — why does it show both? is SOL the same as $100? are those two different things?",
+        "'oracle updates' — what is an oracle, that sounds like a video game thing not a finance thing",
+        "'fair-value price' — I kind of get it from context but it sounds very official and scary",
+        "'spread' — I thought this meant like a betting spread like on DraftKings, but here it seems to mean the gap between two prices? confusing",
+        "'token' — like a crypto thing? I don't own crypto so I don't really know what I'm claiming",
+        "'market price' — okay I've heard this but I don't know who sets it or why it's different from the fair-value price",
+        "the ticker at the top with $LBJ $KD etc — I recognized LBJ and KD but the dollar signs threw me off, like are those stock symbols?"
+      ],
+      "first_impression_elements": [
+        "big 'Claim $100 →' button — I saw this immediately, it's the most obvious thing on the page",
+        "the '10-second version' paragraph — it was the first thing that actually explained what this IS in words I understood",
+        "LBJ in the ticker at the top — I know LeBron so that made me feel like okay this is actually about basketball"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link at the bottom — I did not click that lol",
+        "the badges section — I skimmed it but 'preview-only for Demo 1' means nothing to me so I moved on",
+        "the 'Running on Solana devnet' footer text — saw it, didn't read it, sounds techy",
+        "'💬Feedback' button — didn't even register"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:36.707Z",
+    "user_id": "bot-10",
+    "q1_what_am_i_buying": "Okay so like... it's a token? For the player? The app said every player has one, so I think I'm buying a little piece of LeBron's stats basically — like not him as a person lol but like a fake stock that's connected to how he's playing. It's pretend money so it's not real but the token is real I think.",
+    "q2_what_moves_price": "Two things from what I read — the stats move some kind of 'fair price' every day, like a computer does that part. And then when people buy the price goes up and when they sell it goes down. So it's like both? The stats AND what other people are doing. I think.",
+    "q3_hold_week": "Honestly I'm not totally sure — the app mentioned something about 'oracle updates' which I don't really know what that means, but I think the fair price just keeps recalculating from his stats every day? So if LeBron balls out the number should go up on its own. There was a badge for holding through 3 of those update things so maybe something happens at each one.",
+    "q4_fair_vs_market": "So the fair value is what the computer says LeBron is worth based on his stats, and the market price is what people are actually paying for him right now. The app said if those two numbers don't match that's like your opportunity — so if everyone's sleeping on him and he's cheaper than his stats say, you buy and wait for people to catch up. That part actually made sense to me lol.",
+    "overall_confidence": 0.35,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The big orange 'real stats.' text — it pops and my eyes went straight there",
+          "The yellow 'Claim $100' button — huge and impossible to miss, I want to click it immediately",
+          "The scrolling ticker at the top with player tokens and prices — looks like a real stock app which is kinda cool"
+        ],
+        "ignored_elements": [
+          "The 'How it works' secondary link — the big button ate all my attention",
+          "The grid background pattern — didn't really register it was there",
+          "The small status dots and 'LIVE · DEVNET' nav text at the top"
+        ],
+        "visual_notes": "The dark theme with the orange accent feels sleek and modern, like a real finance app, which is exciting but also a little intimidating. The 'no real money · no seed phrase' disclaimer text is tiny and easy to miss, so it doesn't do much to calm nerves visually. The layout feels a bit empty below the CTA — there's a lot of dead black space before the explainer section, which makes it feel slightly unfinished."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "user_id": "bot-06",
+  "display_name": "Tyrese Wood",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "BgmThQPZ6HtDeYiauwkw2GxMM9uM4aYZYYKb3WxCqa5v",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:32.602Z",
+      "user_id": "bot-06",
+      "step": "landed",
+      "what_they_read": "I caught 'Trade player tokens that move with real stats' up top, then skimmed the three-step breakdown and the '10-second version' that calls it a pretend stock market for NBA players. The devnet/no real money disclaimers registered immediately because I was looking for them.",
+      "their_interpretation": "Okay so this is basically a paper-trading sim where a stats engine prices each player daily and the market price can drift from that — the gap is where you make or lose fake money. It's running on Solana devnet so my actual SOL wallet is irrelevant here, this is all play money.",
+      "their_decision": "I'd click 'How it works' first to read the full mechanic, then hit 'Claim $100' once I'm satisfied nothing sketchy is happening under the hood.",
+      "their_rationale": "The 'no signup, no password, no seed phrase' line is actually reassuring — that's a low attack surface for a scam — but I want to understand what 'oracle updates' means and how the fair-value price is actually calculated before I hand over any browser permissions or connect anything. The $100 number feels like a round demo figure, not a real offer, which makes it feel legit rather than sketchy.",
+      "confidence": 0.78,
+      "confusion_notes": [
+        "'oracle updates' — used in the Diamond Hands badge description with zero prior definition; I don't know if that's once a day, once a game, or what",
+        "Ticker abbreviations like $LD, $JE, $NJ, $GA — I recognize $LBJ, $SGA, $KD, $AD but the others are opaque; I'd need a roster lookup to know who I'm even looking at",
+        "'The market decides what it actually trades at' — who IS the market right now if zero badges are claimed? Am I trading against a bot or just myself?",
+        "'Badges are preview-only for Demo 1' — so I can't actually earn them yet? Then why is that a CTA to trade?"
+      ],
+      "first_impression_elements": [
+        "The scrolling live ticker with player token prices and 0.0% change — first thing my eyes went to, felt like a real trading terminal",
+        "The bold 'Claim $100 →' button — hard to miss, but the arrow made me wonder where exactly it's sending me",
+        "The '10-second version' plain-English explainer — that's the section I actually read word for word"
+      ],
+      "ignored_elements": [
+        "The '↓Terms explained' link at the bottom — I saw it but assumed it was a legal boilerplate footer and skipped it",
+        "The '💬Feedback' button — totally invisible to me in this pass",
+        "The badge section details beyond the first badge — I registered 'Three badges, zero claimed' and moved on"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:28.499Z",
+    "user_id": "bot-06",
+    "q1_what_am_i_buying": "From what I can tell, I'm buying a token that represents a player — like a pretend share of LeBron or SGA — and its value is tied to how that player performs statistically in real NBA games. It's not a real asset, just fake money on devnet Solana, so I'm essentially buying a position in a simulation that tracks real stats.",
+    "q2_what_moves_price": "Two things seem to move it: the 'fair-value price' which a computer recalculates from actual player stats on some schedule they call an oracle update, and then the market price which moves when other users buy or sell — buying pushes it up, selling pushes it down. The app specifically called out that your $100 moves a role player more than a star like LeBron, which tells me liquidity matters here.",
+    "q3_hold_week": "Honestly I'm not totally sure — the app mentions oracle updates but doesn't say how often those happen, so I don't know how many stat recalculations would hit in a week. I'd guess the fair-value price would shift with LeBron's actual game performances, but if nobody's trading him the market price might just sit still. I'd want to read more before I committed to a hold strategy.",
+    "q4_fair_vs_market": "Fair value is the computer's calculation of what a player is worth based on his real stats — LeBron shows $5.59 in the example. Market price is what other users have actually been paying for the token through their trades. The gap between those two numbers is supposed to be my edge — if fair value is higher than market price, the app flags it green as undervalued, meaning I think the market is sleeping on him and I'm betting it corrects.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The live ticker bar at the top with scrolling player token prices — that caught my eye immediately, feels like a real trading terminal",
+          "The bold orange 'real stats.' headline text — high contrast, punchy, hard to miss",
+          "The amber/yellow CTA button 'Claim $100' — stands out cleanly against the dark background"
+        ],
+        "ignored_elements": [
+          "The grid overlay background pattern — registered it exists but didn't really process it",
+          "The 'INVITE · DEMO 1' status badge in the nav — too small and low contrast to hold attention",
+          "The Feedback widget in the bottom right corner"
+        ],
+        "visual_notes": "The dark terminal aesthetic is cohesive and intentional — this reads like someone who knows what a Bloomberg terminal looks like and wanted that energy. The ticker at the top is doing real work for credibility. However, the hero section feels content-sparse below the fold, and the 'DEVNET' label plus the 'no real money' disclaimer row undercut trust signals visually — they scream beta/prototype, which makes me hesitant to imagine real money here even though that's explicitly not the ask yet."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

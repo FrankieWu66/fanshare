@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-05",
+  "display_name": "Jordan Chen",
+  "archetype": "value",
+  "viewport": "mobile",
+  "wallet_address": "5MBDRGfoENA5ALUQVi3YkTSSi5Ea3tmbLDzD5zZLkBUA",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:30.410Z",
+      "user_id": "bot-05",
+      "step": "landed",
+      "what_they_read": "I read the main pitch — 'Trade player tokens that move with real stats' — and then worked through the three-step flow and the LeBron example with the $5.59 fair-value versus $4.20 market-price gap. I also caught the devnet disclaimer at the bottom and the badge descriptions.",
+      "their_interpretation": "So this is basically a paper-trading sim where a pricing oracle converts NBA box scores into a fair-value number daily, and the market price drifts based on what other users actually pay — my job is to find the spread between those two numbers and position accordingly before the market corrects. The $100 is synthetic devnet SOL, zero real-money exposure.",
+      "their_decision": "I would click 'Claim $100 →' and proceed.",
+      "their_rationale": "The devnet disclaimer is explicit, the no-wallet-needed mechanic removes friction I'd normally worry about, and the core value proposition — exploit the spread between a stat-derived fair price and a crowd-set market price — is exactly the kind of inefficiency I'm interested in stress-testing. Zero downside on fake money with a potentially interesting data exercise is an easy yes.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'oracle updates' — how frequently does the fair-value price refresh? Daily is mentioned once but not confirmed as the cadence for all players.",
+        "Ticker shows all prices at 0.0% change — is the market genuinely flat right now, or is this a display artifact because no trades have happened yet on devnet?",
+        "'$LD', '$JE', '$GA', '$NJ' — I recognize SGA, LBJ, AD, KD but these four tickers are opaque to me without a legend. I'd have to guess or look them up.",
+        "'No wallet yet' label near the SOL balance — unclear whether that's my current state or a persistent UI element; slightly ambiguous as a status indicator.",
+        "Badges say 'preview-only for Demo 1' and 'earnable when we open beta' — so I can't actually earn them now? Then why is 'Three badges. Zero claimed so far.' framed as a live incentive?"
+      ],
+      "first_impression_elements": [
+        "The scrolling LIVE price ticker with player tickers and flat 0.0% changes — first thing my eye hit on mobile",
+        "The LeBron $5.59 vs $4.20 worked example — made the spread mechanic concrete immediately",
+        "The 'No real money · no seed phrase' line near the Claim button — that's the trust signal that actually moved me"
+      ],
+      "ignored_elements": [
+        "The '↓Terms explained' link — I saw it but didn't tap; the inline devnet disclaimer felt sufficient",
+        "The badge unlock conditions in detail — I registered they exist but didn't read the fine print since they're non-earnable in Demo 1",
+        "The '💬Feedback' button — completely ignored on first pass"
+      ],
+      "emotional_arc_phase": "reflective",
+      "viewport": "mobile",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:28.947Z",
+    "user_id": "bot-05",
+    "q1_what_am_i_buying": "From what I can tell, I'm buying a token that represents a kind of synthetic position on an NBA player — it's not a real asset, it's play money on devnet Solana. The token's value is supposed to track that player's real stats through some pricing formula the app runs. I don't fully know the mechanics under the hood, but it reads like a fantasy-sports instrument more than an actual security.",
+    "q2_what_moves_price": "Two things seem to move it: the 'oracle' or computer model that recalculates fair value from real stats, and actual buy/sell activity from other users in the market. The page was pretty clear that buying raises the market price for the next person and selling lowers it, so there's a demand-side component layered on top of the stats-driven fair-value signal.",
+    "q3_hold_week": "Honestly, I'm not sure — the app mentioned 'oracle updates' in the context of the Diamond Hands badge, so I assume the fair-value price gets recalculated periodically when new stats come in. If LeBron has a good week statistically, fair value might rise. But whether my held position automatically reflects that, or whether I'd need to sell and rebuy, the app didn't spell that out clearly enough for me to say with confidence.",
+    "q4_fair_vs_market": "Fair value is the price the app's algorithm computes from LeBron's actual on-court stats — it's the 'should be worth' number. Market price is what other users have actually been paying, driven by their trades. The gap between those two is what the app is calling my edge, and that spread is exactly what I'd be evaluating before putting any play money down — if it's less than 3%, I'm probably sitting on my hands.",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The bold orange 'real stats.' accent — high contrast, draws the eye immediately and signals the core value prop visually",
+          "The live ticker bar at the top with $LD and $JE prices — gives an immediate sense of a real, functioning market",
+          "The oversized amber CTA button 'Claim $100' — dominant and well-weighted against the dark background"
+        ],
+        "ignored_elements": [
+          "The subtle grid/graph paper background texture — barely registers, adds nothing meaningful",
+          "The 'INVITE · DEMO 1' label in the nav area — too small and low-contrast to process on first pass",
+          "The 'Feedback' floating button — bottom-right corner, visually dismissed as boilerplate"
+        ],
+        "visual_notes": "The dark-mode aesthetic is clean and intentional — feels closer to a trading terminal than a crypto meme project, which earns some trust points from me. However the 'DEVNET' label and 'no real money' fine print visually undercut the live ticker's credibility signal — the page is fighting itself between 'this is real' and 'this is a demo.' The mobile layout is tight and the CTA is well-sized for thumb reach, but there's no logo, no brand mark, nothing that anchors this as an established entity."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

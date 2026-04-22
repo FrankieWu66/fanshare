@@ -1,0 +1,62 @@
+{
+  "user_id": "bot-13",
+  "display_name": "Hana Kim",
+  "archetype": "skeptic",
+  "viewport": "desktop",
+  "wallet_address": "BtKsPE6WL8crbp7pu1kMEug3P4YFChP7sRmuu3PXUjsK",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:46.484Z",
+      "user_id": "bot-13",
+      "step": "landed",
+      "what_they_read": "I caught 'Get $100 in devnet SOL' and 'No real money, no seed phrase' almost immediately, then the 10-second explainer that literally calls itself a 'pretend stock market for NBA players.' The ticker at the top with all those $LBJ and $KD prices was hard to miss.",
+      "their_interpretation": "Okay so this is basically a sandbox — fake Solana tokens tied to NBA player stats, no actual money on the line, and they're handing out $100 of play money just to get you through the door. It's like a demo environment dressed up to feel like a real trading app.",
+      "their_decision": "I haven't clicked anything yet — I'm still reading and looking for the part where this goes sideways.",
+      "their_rationale": "The 'devnet' callout and the explicit 'no real money' language are doing real work here, but I've seen enough growth-hacky onboarding to know that 'no signup, no password — it just appears' is either genuinely frictionless or the moment they quietly snag my wallet address. I want to read the Terms section before I touch that Claim button.",
+      "confidence": 0.72,
+      "confusion_notes": [
+        "'devnet SOL' — I know what Solana is but 'devnet' is jargon that will lose 80% of the people this is supposedly for",
+        "'0.667 SOL · $100' — why show me the SOL denomination at all if this is fake money? Now I'm doing conversion math I didn't ask to do",
+        "'oracle updates' in the Diamond Hands badge description — oracle means what exactly here? A price feed? A real-time stat pull? Unexplained.",
+        "'fair-value price (from stats)' vs 'market price (what others paid)' — the concept is clear but I'd want to know *which* stats and *how often* they update before I trust the gap as a real signal",
+        "Badges are 'preview-only for Demo 1' but the CTA says 'Trade on Demo 1 to earn' — so can I earn them or not? Mixed message."
+      ],
+      "first_impression_elements": [
+        "The scrolling live ticker with $LBJ, $KD etc. — it looks legitimately alive even though everything is 0.0%, which is slightly uncanny",
+        "The big 'Claim $100 →' button — high contrast, first real CTA, hard to miss",
+        "The '10-second version' plain-English explainer — I actually appreciate that it exists, even if it reads a little condescending"
+      ],
+      "ignored_elements": [
+        "The badge section entirely — locked rewards for a demo feel like vaporware incentives",
+        "The 'How it works' anchor link — I already got the explanation inline, this felt redundant",
+        "The 'Invite · Demo 1' label in the nav — I clocked it but didn't process what it means for my experience"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop"
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:45.023Z",
+    "user_id": "bot-13",
+    "q1_what_am_i_buying": "As far as I can tell, I'm buying a little slice of a fake stock that's tied to an NBA player — like, $LBJ is LeBron's token. It's not a real asset, it's play money on devnet, so I'm basically buying a position in a pretend market. The app never actually said 'you own X shares' or anything like that, so I'm a little fuzzy on whether it's units, shares, or just a number that goes up and down.",
+    "q2_what_moves_price": "Two things, I think? The 'oracle' — which sounds like a computer crunching real stats — updates a fair-value price based on how the player is actually performing. And then separately, other users buying or selling moves the market price. The copy said buying raises the price for the next person, so it's partly just supply and demand from whoever's on the app. I'm genuinely not sure how often the stats update or what stats they're even using.",
+    "q3_hold_week": "Honestly, I don't know — and the app didn't really spell this out. There's a badge called 'Diamond Hands' for holding through three oracle updates, which implies the fair-value price gets recalculated periodically. So I'd guess my position just... sits there, and the fair value might drift up or down as LeBron's real stats change? But whether my market price moves if nobody's trading — no idea. That's a gap in the onboarding copy I'd actually flag.",
+    "q4_fair_vs_market": "Fair value is the computer's verdict — it looks at LeBron's actual stats and spits out a number, like $5.59. Market price is what people on the app are actually paying, which could be higher or lower depending on what other users think. The 'edge' is supposedly spotting when those two numbers disagree. It's a cute idea but the onboarding kind of glosses over how the fair value is calculated, which is kind of the whole thing I'd want to understand before trusting it.",
+    "overall_confidence": 0.38,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [],
+  "tally_submitted": true,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

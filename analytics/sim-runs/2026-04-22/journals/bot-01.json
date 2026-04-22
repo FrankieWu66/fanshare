@@ -1,0 +1,87 @@
+{
+  "user_id": "bot-01",
+  "display_name": "Alex Rivera",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "FdNpiuJJHFnKqoneSYRDeDheV2xGhkoiT5y1CcexPndC",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:22.779Z",
+      "user_id": "bot-01",
+      "step": "landed",
+      "what_they_read": "Headline hit me first — 'Trade player tokens that move with real stats.' Then I saw $LBJ $5.59 in the ticker and that big 'Claim $100' button. Read the '10-second version' block because it was short.",
+      "their_interpretation": "It's basically a fake stock market for NBA players — your basketball IQ is your edge. No real money, runs on Solana devnet, they drop you $100 in play money instantly, no signup needed.",
+      "their_decision": "I'm clicking 'Claim $100' right now.",
+      "their_rationale": "Zero friction — no wallet, no password, no seed phrase — and I already see $LBJ sitting at $5.59 which feels disrespectfully low. Free fake money to prove I know the market better than randos? Easy yes.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'devnet SOL' — I know what devnet is but casual fans will not, needs one more word of explanation",
+        "'oracle updates' in the Diamond Hands badge — what's an oracle here, how often does it update?",
+        "'fair-value price (from stats)' — which stats exactly? PER? Points only? Box score? Matters for my strategy",
+        "0.667 SOL · $100 — why show the SOL amount at all if it's fake? Slightly confusing pairing",
+        "The ticker shows '0.0%' for everything — is the market not open yet or is this just a dead demo?"
+      ],
+      "first_impression_elements": [
+        "$LBJ $5.59 in the live ticker — Lakers fan, I clocked that immediately",
+        "Big 'Claim $100 →' button — high contrast, impossible to miss",
+        "'No wallet yet · no real money · no seed phrase' trust strip under the button"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' section at the bottom",
+        "The 'Thesis' one-liner ('Being right early...')",
+        "The '💬Feedback' button",
+        "Badge unlock conditions — saw the badges, skimmed the unlock text"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 8
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:12.839Z",
+    "user_id": "bot-01",
+    "q1_what_am_i_buying": "It's like a fake stock for LeBron, bro. The app gives me play money and I'm buying a token that represents him — not like owning a piece of him or anything, just a pretend bet that his price goes up. It's fake SOL so no real cash on the line.",
+    "q2_what_moves_price": "Two things from what I can tell — his actual stats move some 'fair value' price that a computer calculates, and then other people buying or selling moves the market price too. So if I buy, I'm literally pushing the price up for the next person. That's kinda wild.",
+    "q3_hold_week": "Honestly I'm not 100% sure what happens mechanically — the app mentioned something about 'oracle updates' but didn't really explain how often those hit or what they do exactly. I'm guessing his fair value keeps updating with his real game stats, but I don't know if there's like a timer or anything. I'm just vibing and watching the numbers.",
+    "q4_fair_vs_market": "Fair value is what the computer thinks LeBron is worth based on his stats — right now that's $5.59. Market price is what people are actually paying for him. If the market is lower than fair value, the app calls it undervalued and that's supposed to be the opportunity — you buy low, wait for people to catch up, then cash out the gap.",
+    "overall_confidence": 0.42,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 8,
+        "first_impression_elements": [
+          "That orange 'real stats.' text hits hard — very crypto-bro energy, love it",
+          "The live ticker scrolling across the top with player tokens and prices — immediately feels like a real trading platform",
+          "That big yellow 'Claim $100' button — impossible to miss, makes me want to tap it right now"
+        ],
+        "ignored_elements": [
+          "The grid background pattern — barely noticed it",
+          "The 'How it works' secondary link — didn't care, just want to click the big button",
+          "The feedback widget in the bottom right corner"
+        ],
+        "visual_notes": "Dark mode with that orange accent is giving Bloomberg Terminal meets crypto exchange vibes — I'm here for it. The ticker at the top makes it feel legit and alive, like real money is moving. But it's pretty sparse below the fold, and 'DEVNET' next to LIVE is a yellow flag — feels early/unfinished, which makes me hesitate to trust it with actual funds."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

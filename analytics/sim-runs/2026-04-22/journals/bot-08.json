@@ -1,0 +1,85 @@
+{
+  "user_id": "bot-08",
+  "display_name": "Tomas Huerta",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "GxD5DAsj6gQ9A9EV6WxWjqo88w1rCXUsZdTFDyg29TYC",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:36.607Z",
+      "user_id": "bot-08",
+      "step": "landed",
+      "what_they_read": "I caught the main headline — 'Trade player tokens that move with real stats' — and then the plain-English explainer that called it a pretend stock market for NBA players where a computer sets fair-value prices daily. Also clocked the $100 devnet SOL offer and the three-step walkthrough.",
+      "their_interpretation": "So it's a paper-trading sim built on Solana devnet, except instead of stocks you're pricing NBA players against a stat-derived fair value — and the edge is finding where the market price diverges from that number. No real money involved, which they say clearly enough.",
+      "their_decision": "I'd click 'Claim $100' and see what the actual trade interface looks like.",
+      "their_rationale": "The devnet disclosure is right there in the ticker and the footer — they're not hiding it — and 'no wallet, no seed phrase, no signup' removes the usual friction I'd use to justify walking away. Low cost to look, and the gap-between-fair-value-and-market-price mechanic is exactly the kind of thing I find interesting.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'oracle updates' — I know what an oracle is in crypto context but they never define it here; when exactly does the fair-value price refresh?",
+        "The ticker shows all prices at 0.0% change — is that because nothing has traded yet, or is the feed broken, or is this just a cold-start demo?",
+        "$LD, $JE, $NJ — I can guess LBJ and KD and SGA but those three-letter tickers are opaque without a legend",
+        "'Badges are preview-only for Demo 1' — so I can earn them but not keep them? Or I can see them but not earn them? The unlock condition text and the disclaimer feel contradictory"
+      ],
+      "first_impression_elements": [
+        "The live ticker scrolling player tokens at the top — first thing my eye went to",
+        "The plain-English 'pretend stock market' paragraph — unusually honest framing for a crypto product",
+        "The LeBron undervalued example ($5.59 fair value vs $4.20 market) — made the mechanic concrete immediately"
+      ],
+      "ignored_elements": [
+        "The badges section — I skimmed it, didn't read the unlock conditions carefully",
+        "The '↓Terms explained' link — footer boilerplate, I'll look if something feels off later",
+        "The 'Three badges. Zero claimed so far.' subheading — registered it but didn't think much about it"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:30.704Z",
+    "user_id": "bot-08",
+    "q1_what_am_i_buying": "Far as I can tell, it's a fake token tied to a real player — like a pretend share of LeBron's statistical output. Not ownership of anything real, just a position in a game that tracks whether the market price lines up with what the stats say he's worth.",
+    "q2_what_moves_price": "Two things, seems like. The stats feed updates a 'fair value' number daily — that's the computer's read. Then regular buying and selling by other users nudges the actual market price up or down. Buy pressure lifts it, sell pressure drops it. Small players move more per dollar than stars, which I find interesting.",
+    "q3_hold_week": "Honestly I'm not totally sure — the app mentions something called 'oracle updates' that happen on some schedule, so I'd guess the fair value gets recalculated and if LeBron has a good week of games, maybe his fair value climbs. Whether the market price follows, that depends on other traders. I don't know the exact timing or how many updates hit in a week.",
+    "q4_fair_vs_market": "Fair value is what the algorithm says the player is worth based on real stats — the computer's cold read. Market price is what people are actually paying, which can drift higher or lower based on hype or panic. The gap between the two is where I want to live — buy when market's sleeping on a guy, wait for it to catch up.",
+    "overall_confidence": 0.52,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The orange 'real stats.' accent in the headline — high contrast, pulls the eye immediately",
+          "Live ticker scrolling across the top with player token prices — looks like a real trading terminal",
+          "The bold yellow CTA button 'Claim $100' — hard to miss, sits well against the dark background"
+        ],
+        "ignored_elements": [
+          "The 'How it works' secondary link — too low contrast, blends into the dark",
+          "The 'NEW HERE? 10-SECOND VERSION.' explainer block at the bottom — felt like fine print",
+          "The grid overlay background texture — decorative noise I looked past"
+        ],
+        "visual_notes": "Dark terminal aesthetic is coherent and deliberate — someone made real design choices here, not a template grab. The ticker gives it a trading-floor feel that earns some credibility visually. Trust ceiling is moderate though — no logos, no social proof imagery, and the 'DEVNET' tag in the nav quietly signals this is still early-stage infrastructure, which a careful eye will catch."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}
