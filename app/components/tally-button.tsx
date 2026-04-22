@@ -1,54 +1,103 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import Script from "next/script";
+import posthog from "posthog-js";
 import { track } from "../lib/analytics/track";
+import { useWallet } from "../lib/wallet/context";
+
+declare global {
+  interface Window {
+    Tally?: {
+      openPopup: (
+        formId: string,
+        options: {
+          layout?: "modal";
+          width?: number;
+          emoji?: { text: string; animation: string };
+          hiddenFields?: Record<string, string>;
+        },
+      ) => void;
+    };
+  }
+}
 
 /**
  * Tally floating feedback button — injected on every page.
  *
- * Renders nothing until NEXT_PUBLIC_TALLY_FORM_ID is set. Tally's embed.js
- * hooks any element with [data-tally-open="FORM_ID"] and turns it into a
- * popup trigger.
+ * Renders nothing until NEXT_PUBLIC_TALLY_FORM_ID is set.
  *
- * Why native capture-phase listener instead of React onClick:
- *   Tally's embed.js attaches a click handler on the button and stops
- *   propagation. React's delegated onClick (which listens at the root) never
- *   sees the event. We attach our `feedback_opened` listener in the capture
- *   phase so we fire before Tally's handler has a chance to stop it.
+ * Wiring contract (per /ceo/handoffs/2026-04-20-observability.md DoD):
+ *   - `feedback_opened` PostHog event fires on click (always, even if Tally fails to open)
+ *   - 4 hidden fields passed to Tally form: page_url, wallet_addr, session_id, session_source
+ *
+ * Why programmatic openPopup instead of declarative data-tally-open:
+ *   data-tally-open hands control to Tally's embed.js, which loads the form with
+ *   only originPage in the iframe URL — no way to pass per-click hidden fields.
+ *   Calling Tally.openPopup() from our own click handler lets us thread current
+ *   wallet, session, and source context into the form on every open.
  */
 export function TallyButton() {
   const formId = process.env.NEXT_PUBLIC_TALLY_FORM_ID;
-  const btnRef = useRef<HTMLButtonElement | null>(null);
-
-  useEffect(() => {
-    const el = btnRef.current;
-    if (!el) return;
-    const onClickCapture = () => {
-      track("feedback_opened");
-    };
-    el.addEventListener("click", onClickCapture, { capture: true });
-    return () => {
-      el.removeEventListener("click", onClickCapture, { capture: true });
-    };
-  }, []);
+  const { wallet } = useWallet();
 
   if (!formId) return null;
+
+  const handleClick = () => {
+    track("feedback_opened");
+
+    if (typeof window === "undefined" || !window.Tally) {
+      // Tally embed.js hasn't loaded yet — feedback_opened still fires so
+      // we capture the intent, user can retry once embed.js is ready.
+      return;
+    }
+
+    const pageUrl = window.location.href;
+    const walletAddr = wallet?.account.address ?? "";
+
+    let sessionId = "";
+    try {
+      // Newer PostHog SDK exposes get_session_id; fallback to distinct_id.
+      const ph = posthog as unknown as { get_session_id?: () => string };
+      sessionId = ph.get_session_id?.() ?? posthog.get_distinct_id() ?? "";
+    } catch {
+      sessionId = "";
+    }
+
+    const pathname = window.location.pathname;
+    const sessionSource = pathname === "/invite"
+      ? "invite"
+      : pathname === "/"
+        ? "home"
+        : pathname.startsWith("/trade")
+          ? "trade"
+          : pathname.startsWith("/leaderboard")
+            ? "leaderboard"
+            : pathname.startsWith("/portfolio")
+              ? "portfolio"
+              : "other";
+
+    window.Tally.openPopup(formId, {
+      layout: "modal",
+      width: 500,
+      emoji: { text: "📝", animation: "wave" },
+      hiddenFields: {
+        page_url: pageUrl,
+        wallet_addr: walletAddr,
+        session_id: sessionId,
+        session_source: sessionSource,
+      },
+    });
+  };
 
   return (
     <>
       <Script
         src="https://tally.so/widgets/embed.js"
-        strategy="lazyOnload"
+        strategy="afterInteractive"
       />
       <button
-        ref={btnRef}
         type="button"
-        data-tally-open={formId}
-        data-tally-layout="modal"
-        data-tally-width="500"
-        data-tally-emoji-text="📝"
-        data-tally-emoji-animation="wave"
+        onClick={handleClick}
         aria-label="Send feedback"
         className="fixed bottom-4 right-4 z-40 inline-flex h-11 cursor-pointer items-center gap-2 rounded-full border border-border bg-card px-4 text-xs font-semibold text-foreground shadow-lg shadow-black/20 transition hover:-translate-y-px hover:border-accent/50 hover:bg-cream max-sm:h-10 max-sm:px-3"
       >
