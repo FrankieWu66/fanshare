@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-14",
+  "display_name": "Ellie Vance",
+  "archetype": "skeptic",
+  "viewport": "mobile",
+  "wallet_address": "JCPoZLs5WQeCk9Xy5P9VwX4LgvfZduZDN8irQPcKNGrr",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:39:17.984Z",
+      "user_id": "bot-14",
+      "step": "landed",
+      "what_they_read": "I read the whole thing — 'Trade player tokens that move with real stats,' the $100 offer, the three-step breakdown, and that tiny disclaimer at the bottom about practice mode and no real money. I also clocked the URL: fanshares.xyz, not .com.",
+      "their_interpretation": "They're calling it a pretend stock market for NBA players where fake money tracks real stats — basically a fantasy sports skin on a trading UI, and they want me to click a button that creates an account with no signup, which is either very slick or very suspicious.",
+      "their_decision": "I'm not clicking Claim $100 yet — I'm going to tap 'How it works' and then '↓Terms explained' before I do anything.",
+      "their_rationale": "No signup, no password, account 'just appears' — that phrasing makes me want to know what IS being collected if there's no account; and .xyz domains have a history of being throwaway scam infrastructure, so I need more before I hand over any browser fingerprint or wallet connection I don't see mentioned yet.",
+      "confidence": 0.55,
+      "confusion_notes": [
+        "'The gap is your edge' — sounds like trading jargon dropped without enough setup for someone who isn't already fluent in market-making concepts",
+        "'No seed phrase' — why mention seed phrases at all if this is pure fake money? That phrase signals crypto to me and now I'm wondering what's actually under the hood",
+        "'A computer turns each player's real stats into a fair price' — what computer? What formula? 'A computer' is doing a lot of work here and I don't trust it",
+        "'Buying raises the price for the next person' — that's an AMM or bonding curve mechanic, which is a DeFi primitive; calling this 'practice mode' while using that structure feels like they're downplaying real mechanics",
+        "fanshares.xyz vs fanshare.xyz — I'm already second-guessing which domain is real and whether this is a phishing variant"
+      ],
+      "first_impression_elements": [
+        "The URL — fanshares.xyz registered immediately as a yellow flag before I read a word",
+        "'No signup, no password — it just appears' — that line stopped me cold, felt like a magic trick I should be suspicious of",
+        "'No seed phrase' disclaimer in the subheading — why is that there if there's no crypto?"
+      ],
+      "ignored_elements": [
+        "The 'AWAITING TIP-OFF' ticker or status badge at the top — felt decorative, skipped it",
+        "The LeBron $5.59 vs $4.20 example — I saw it but didn't process the math, my skepticism radar was already too loud",
+        "The 💬Feedback button — completely invisible to me, I have zero interest in giving feedback to a site I don't trust yet"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "mobile",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 4,
+      "would_show_friend": 5
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:40:26.571Z",
+    "user_id": "bot-14",
+    "q1_what_am_i_buying": "A fake token tied to a real player — it's play money moving around a pretend market. Not a share of anything, not an NFT, not a real asset. The copy's careful to say 'practice mode' about four times, so I'm buying nothing that matters outside this app.",
+    "q2_what_moves_price": "Two things, from what I can tell: the computer recalculates a 'fair value' from actual stats daily, and then other users buying or selling push the market price around independently. So it's both the algorithm and crowd behavior. What I don't know is how often stats update or how much weight any single trade carries.",
+    "q3_hold_week": "Honestly, the copy doesn't say. It talks about being 'right early' and 'staying right,' which implies holding has some logic, but there's zero explanation of what happens mechanically if I just sit on LeBron for seven days — does fair value drift, does the market price decay, do I earn anything? No idea. The copy skips that entirely.",
+    "q4_fair_vs_market": "Fair value is what the computer says the player is worth based on his stats. Market price is what other users have actually been paying. The gap between those two numbers is supposedly where you make or lose fake money — buy undervalued, wait for the market to catch up, sell. Simple enough concept, but the copy never explains what forces the market price to actually converge toward fair value, which feels like a pretty important hole.",
+    "overall_confidence": 0.38,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 4,
+        "would_show_friend": 5,
+        "first_impression_elements": [
+          "The oversized bold headline with orange accent on 'real stats' — it's punchy, I'll give it that",
+          "The amber CTA button 'Claim $100' is impossible to miss, almost aggressively so",
+          "The dark grid background gives it a Bloomberg-terminal-adjacent vibe that at least signals 'finance' not 'scam'"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' ticker bar at the top — felt like noise",
+          "The 'How it works' secondary link — too low contrast, my eye slid right past it",
+          "The Feedback bubble in the corner — immediately dismissed"
+        ],
+        "visual_notes": "The dark theme and typography hierarchy are competent — someone who knows design touched this. But the 'Claim $100' button on a page with zero logos, no nav, no visible brand identity reads like a squeeze page, and that makes me suspicious before I've even processed the copy. The 'no real money · no seed phrase' reassurance line is too small and too low — it's doing heavy lifting from the basement."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

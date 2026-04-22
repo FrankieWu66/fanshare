@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-12",
+  "display_name": "Riley Park",
+  "archetype": "skeptic",
+  "viewport": "desktop",
+  "wallet_address": "9MRVa6VFbFVXzXv9Eq9m4nzijYWv5sQ8nusvDd8eY2zD",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:39:13.877Z",
+      "user_id": "bot-12",
+      "step": "landed",
+      "what_they_read": "Big headline says 'Trade player tokens that move with real stats' and below that a promise of '$100 in practice money' with a 'Claim $100 →' button. Also caught the 'No account yet · $100 · no real money · no seed phrase' line under the button.",
+      "their_interpretation": "So it's a fake stock market for NBA players — no real cash, no wallet, just play money to mess around with player prices based on actual stats. The 'no seed phrase' part is doing a lot of heavy lifting to tell me this isn't a crypto trap.",
+      "their_decision": "I'm hovering over that Claim $100 button but I'm reading the Terms first.",
+      "their_rationale": "Every scam I've seen leads with free money and no friction — 'just click, no signup' is exactly the sentence that makes me slow down and look for what they're actually collecting. I need to see what clicking that button actually does before my cursor gets anywhere near it.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'The gap is your edge' — edge over what, the algorithm or other users? Not clear who I'm competing against.",
+        "'A fair-value price' computed by 'a computer' — what computer, what formula? That's vague enough to be meaningless.",
+        "'Buying raises the price for the next person' — so this is a bonding curve? That's not explained and it's the part that historically gets people wrecked.",
+        "'AWAITING TIP-OFF' at the top — is this a live countdown or just flavor text? I genuinely don't know.",
+        "No account, no password — then how do I get back to my $100 if I close the tab? That's a real question with no answer on this page."
+      ],
+      "first_impression_elements": [
+        "Big green 'Claim $100 →' button — first thing my eye went to, which is exactly why I don't trust it",
+        "'No account yet · $100 · no real money · no seed phrase' subtext — this is clearly written for people like me, which is either reassuring or a tell",
+        "'AWAITING TIP-OFF' banner — felt live and urgent, made me pause to figure out if something was actually happening"
+      ],
+      "ignored_elements": [
+        "The LeBron $5.59 vs $4.20 example — I skimmed it, didn't absorb it",
+        "'💬Feedback' link in the footer — completely invisible to me",
+        "The numbered 01/02/03 how-it-works section — I know I should read it but I scrolled past looking for the catch"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:40:06.744Z",
+    "user_id": "bot-12",
+    "q1_what_am_i_buying": "A pretend stake in a fake number tied to a real player — no actual asset, no ownership, nothing on a blockchain as far as I can tell. It's play money chasing a simulated price. Which, fine, they said that up front, I'll give them that.",
+    "q2_what_moves_price": "Two things apparently: the stats algorithm recalculates a 'fair value' daily, and then other users buying or selling nudge the actual market price. So it's partly the player's real performance and partly whatever the crowd is doing in the app.",
+    "q3_hold_week": "Honestly I don't know — the copy didn't say anything about what happens if you just sit there. Does the fair value keep updating against you? Does the market price drift? I'm guessing it changes but I'd want to read that somewhere before I touched anything.",
+    "q4_fair_vs_market": "Fair value is what the computer says the player is worth based on stats. Market price is what other users in the app have actually been paying. The gap between those two is supposedly where the opportunity lives — but who's setting the formula for fair value is a question I'd want answered before I trusted that gap.",
+    "overall_confidence": 0.3,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The oversized bold headline with orange accent — hard to miss, designed to grab",
+          "The yellow 'Claim $100' CTA button — too bright, too eager, my rug-pull radar pings",
+          "The dark grid background — someone watched too many fintech pitch decks but it's clean enough"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' ticker at the top — scrolled past it mentally",
+          "The 'How it works' secondary link — ironic, that's actually the one I'd click first",
+          "The 'NEW HERE? 10-SECOND VERSION' section at the bottom — didn't get there before my eyes stopped"
+        ],
+        "visual_notes": "Dark theme is competent but not distinctive — looks like a crypto project that learned from its mistakes, which is either reassuring or suspicious. The 'no real money · no seed phrase' micro-copy below the CTA is doing real trust work visually, but it's tiny and grey when it should be the loudest thing on the page. The button color screams 'free money' which, in my experience, means someone's paying somehow."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "user_id": "bot-07",
+  "display_name": "Diego Morales",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "5YKB39iDsWoCkPGbj7PDD3yJsNYVHZafcnD3GTfbvLyw",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:39:04.062Z",
+      "user_id": "bot-07",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top, then the three-step breakdown explaining fair-value price versus market price, and the $100 play-money offer with 'no real money, no seed phrase' underneath the button.",
+      "their_interpretation": "So basically this is a paper-trading game where a formula prices NBA players off their actual stats, and the market can drift from that number — and that gap is where you make or lose your fake money. It's not crypto in the scary sense, it's more like a fantasy sports simulator with a price discovery mechanic.",
+      "their_decision": "I'd click 'Claim $100' and see what the player cards actually look like.",
+      "their_rationale": "No account, no seed phrase, no real money — the downside is literally zero, and the value vs. market-price framing is exactly the kind of thing I already think about when I watch games. If KD's token is running hot I want to see what 'overvalued' looks like on the card.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'The gap is your edge' — sounds clean but I'm not sure yet whether the gap closes automatically when stats update or whether I have to sell manually before it corrects",
+        "'Buying raises the price for the next person' — is this a bonding-curve mechanic? That's not explained and it matters for how I size a position",
+        "'AWAITING TIP-OFF — prices move after tonight's games' — does that mean prices are frozen right now and I can't see live gaps yet, or just that the next update is tonight?"
+      ],
+      "first_impression_elements": [
+        "The 'fair-value price vs. market price' concept explained in plain language — that hooked me immediately",
+        "Big 'Claim $100 →' button with the '$100 · no real money · no seed phrase' reassurance line right below it",
+        "The LeBron $5.59 vs. $4.20 example — concrete numbers made the mechanic click fast"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link at the bottom — I'll read it eventually but not before I see the actual product",
+        "'💬Feedback' button — not my concern on a first visit",
+        "The 'ThesisBeing right early — and staying right — pays better than being right once' line — felt like flavor text, skimmed past it"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:39:56.141Z",
+    "user_id": "bot-07",
+    "q1_what_am_i_buying": "Far as I can tell, it's like a pretend share tied to a player — KD, LeBron, whoever. The app turns their real stats into some kind of price, and I'm buying into that. It's not a real stock, no real money, just a practice token that's supposed to reflect how that player is actually performing on the court.",
+    "q2_what_moves_price": "Two things from what I can see — the stats themselves push a 'fair value' price up or down, and then other people buying or selling in the market moves the actual trading price. The app said buying raises the price for the next person and selling lowers it, so it's kind of both the real-world stats AND what other users are doing.",
+    "q3_hold_week": "Honestly the app didn't spell this out clearly, so I'm guessing — if LeBron has a good week statistically, his fair value probably climbs, but the market price depends on what other people are doing too. If I just sit on it and don't sell, I assume my position just floats with whatever the price does. Whether that's good or bad I'd have to watch and see.",
+    "q4_fair_vs_market": "(no answer)",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The bold orange 'real stats.' accent in the headline — high contrast, pulls the eye immediately",
+          "The amber/yellow CTA button 'Claim $100' — chunky, hard to miss, good size",
+          "The dark grid background texture — gives it a Bloomberg terminal / trading desk feel"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' status bar at the very top — blends into the dark header",
+          "The 'How it works ↓' secondary link — visually undersized next to the CTA",
+          "The fine-print row below the CTA with dots and disclaimers"
+        ],
+        "visual_notes": "The dark theme with grid lines reads like a legit fintech product — clean hierarchy, good use of weight contrast in the headline. The trust floor is low though: no logo visible, no nav, no social proof imagery, nothing that signals an established brand behind this. For practice-mode fake money it's fine, but I wouldn't hand over a real account without seeing more visual credibility signals like a proper header or recognizable brand mark."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

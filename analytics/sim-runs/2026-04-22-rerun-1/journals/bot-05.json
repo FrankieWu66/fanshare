@@ -1,0 +1,85 @@
+{
+  "user_id": "bot-05",
+  "display_name": "Jordan Chen",
+  "archetype": "value",
+  "viewport": "mobile",
+  "wallet_address": "5MBDRGfoENA5ALUQVi3YkTSSi5Ea3tmbLDzD5zZLkBUA",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:39:00.645Z",
+      "user_id": "bot-05",
+      "step": "landed",
+      "what_they_read": "I read the full overlay carefully — the 'pretend stock market for NBA players' explainer, the three-step how-it-works, and the LeBron example with the $5.59 fair value versus $4.20 market price. The 'gap is your edge' framing caught my attention immediately.",
+      "their_interpretation": "So this is basically a paper-trading sim where a model generates a fair-value price from real stats, and the market price drifts based on what other users pay — the alpha is in identifying the spread between those two numbers before the crowd corrects it. That's a concept I actually understand and find interesting.",
+      "their_decision": "I'd click 'Claim $100' and proceed.",
+      "their_rationale": "The no-account, no-seed-phrase, no-real-money framing removes every friction point I'd normally flag as risk — and the LeBron fair-value example gave me a concrete mental model fast enough that I trust I understand the mechanic before committing even a click. The devnet signal plus 'practice mode' in the footer closes the loop on whether real money is involved.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'AWAITING TIP-OFF' at the top — I wasn't sure if that meant the app was broken or just waiting for tonight's games to start; the distinction matters for whether prices are live or stale",
+        "'Buying raises the price for the next person' — this reads like a bonding curve or AMM mechanic, but it's never named as such; I want to know the exact pricing formula before I trade seriously",
+        "'The gap is your edge — if you're right, and early' — 'early' is doing a lot of work here; early relative to what time horizon? One game? One season? Unclear.",
+        "'role player' price swing comment — implies liquidity tiers between stars and bench players, but no depth on how that's modeled"
+      ],
+      "first_impression_elements": [
+        "The LeBron $5.59 vs $4.20 fair-value/market-price example — concrete numbers made the mechanic click instantly",
+        "The '$100 · no real money · no seed phrase' sub-label under the Claim button — that trio of reassurances landed as a single trust signal",
+        "'AWAITING TIP-OFF' status badge at the top — first thing my eye hit, mildly alarming before I parsed it"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — I noted it exists but didn't tap it; I'd read it before any real-money version",
+        "'💬Feedback' button — completely ignored",
+        "The 'How it works' anchor link — I scrolled through the content organically so the nav link felt redundant"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "mobile",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:39:56.539Z",
+    "user_id": "bot-05",
+    "q1_what_am_i_buying": "As best I can tell, I'm buying a token that represents a player's statistical output — it's not a share of anything real, no ownership, no claim. It's more like a position in a pretend market where the token's value is tied to how that player's stats translate into a computed price. Fake money, fake asset, but the spread logic is real enough to work with.",
+    "q2_what_moves_price": "Two things seem to move it: the fair-value price updates when real stats come in — so a big game tonight should shift that number — and the market price moves when other users buy or sell tokens. The copy says buying raises price for the next person and selling lowers it, so it's partly crowd-driven, partly stat-driven. The gap between those two forces is what I'd be watching.",
+    "q3_hold_week": "Honestly, the app hasn't told me what happens mechanically if I just sit on a position. I'd assume the fair-value price keeps recalculating each day as LeBron's stats accumulate, and the market price drifts based on other traders. But whether my unrealized gain or loss updates in real time, or only locks in on a sell — I don't actually know that from what I've read. That's a question I'd want answered before I hold anything longer than a day.",
+    "q4_fair_vs_market": "Fair value is the computer's number — it's calculated from actual NBA stats, so it's meant to be an objective anchor. Market price is what other users in the app have collectively pushed the token to through their buying and selling. The gap between them is the whole thesis here: if fair value is $5.59 and market is $4.20, the market is supposedly underpricing what the stats say he's worth. My edge is spotting that gap before others do — but I'm aware the gap has to be meaningful, not just noise.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "Bold orange 'real stats.' accent in the headline — high contrast, immediately draws the eye and signals the core value prop visually",
+          "The amber CTA button 'Claim $100' is large and well-weighted, sits cleanly in the layout with good breathing room",
+          "The dark grid background gives a Bloomberg-terminal / data-dashboard aesthetic that feels intentional for a trading product"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' ticker bar at the top — it reads like a status widget but has no visual hierarchy to make me trust or engage with it",
+          "The 'How it works ↓' secondary link — visually undersized and low contrast next to the CTA, easy to scroll past",
+          "The 'Feedback' chat bubble in the bottom-right corner — generic widget, mentally filtered out immediately"
+        ],
+        "visual_notes": "The dark grid + orange palette is coherent and communicates 'serious trading tool' rather than a casual game, which earns partial trust visually. However, there are no logos, badges, partner marks, or UI previews visible — nothing that signals an actual product exists behind this screen, which keeps my trust ceiling low. On mobile the CTA is well-sized for thumb reach, but the scroll depth before any product proof is a concern — I'd need to see something below the fold before committing."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

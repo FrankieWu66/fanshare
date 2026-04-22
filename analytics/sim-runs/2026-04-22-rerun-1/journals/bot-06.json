@@ -1,0 +1,85 @@
+{
+  "user_id": "bot-06",
+  "display_name": "Tyrese Wood",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "BgmThQPZ6HtDeYiauwkw2GxMM9uM4aYZYYKb3WxCqa5v",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:39:01.746Z",
+      "user_id": "bot-06",
+      "step": "landed",
+      "what_they_read": "I caught 'Trade player tokens that move with real stats' up top, then the 10-second explainer box that called it a 'pretend stock market for NBA players' — that plain-English breakdown is what I actually read word for word. Also noticed '$100 · no real money · no seed phrase' under the Claim button.",
+      "their_interpretation": "So this is basically a paper-trading simulator where a formula converts NBA box scores into a 'fair value' price, and the market price drifts based on what other users are buying and selling — the gap between those two numbers is where you're supposed to find edge. No real money moves, no wallet connection required, which is genuinely unusual for something on a .xyz domain.",
+      "their_decision": "I'd click 'Claim $100' — but only after I hover over '↓Terms explained' first to make sure there's no hidden email capture or wallet permission buried in there.",
+      "their_rationale": "The no-seed-phrase line specifically lowered my guard because that's the thing that usually signals a sketchy SOL dapp trying to get custody of something real. The explainer is unusually honest about the outcome not being guaranteed, which reads less like marketing and more like someone who actually thought about it — engineers notice when copy doesn't oversell.",
+      "confidence": 0.78,
+      "confusion_notes": [
+        "'The gap is your edge' — I get the concept but I want to know exactly how the fair-value price is computed before I trust it as a signal; 'stats move a fair-value price' is vague on the formula",
+        "'Buying raises the price for the next person' — is this an AMM mechanic, an order book, or just a simulation? That sentence implies a bonding curve but never says so",
+        "'AWAITING TIP-OFF' in the header — I don't know if that means the app is live and just waiting for tonight's games, or if it's in some pre-launch locked state where I can't actually trade yet",
+        "No account yet — does 'no signup, no password' mean they're using a browser fingerprint or local storage? What happens if I clear cookies?"
+      ],
+      "first_impression_elements": [
+        "'$100 · no real money · no seed phrase' badge directly under the Claim button — that triple reassurance hit immediately",
+        "The 10-second plain-English explainer box — it's unusually readable for a crypto-adjacent product and I stopped scrolling to finish it",
+        "UNDERVALUED / OVERVALUED color labels in the step 02 description — green and red framing made the mechanic click faster than the prose did"
+      ],
+      "ignored_elements": [
+        "The 'Thesis' one-liner ('Being right early — and staying right — pays better than being right once') — felt like flavor text, skipped it",
+        "'💬Feedback' link in the footer — didn't register at all on first pass",
+        "The 'How it works' anchor link in the nav — I scrolled past it because the page already answered the question inline"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:39:59.170Z",
+    "user_id": "bot-06",
+    "q1_what_am_i_buying": "From what the app showed me, I'm buying a token that represents a player — like a pretend share in LeBron or whoever. It's not a real asset, no real money involved, just a fake-money position that tracks whether the market price moves toward the stats-based fair value. I don't think I actually own anything in any legal sense.",
+    "q2_what_moves_price": "Two things seem to be moving it: the fair-value price shifts when real stats change — so if a player goes off for 40 points, that presumably updates the computer's number — and the market price moves based on what other users are buying and selling, since the app explicitly said buying raises the price and selling lowers it. The gap between those two is the whole game.",
+    "q3_hold_week": "Honestly, the app didn't spell this out clearly, so I'm inferring — I'd guess the fair-value price keeps updating nightly as stats come in, and the market price drifts based on what other traders do. If I just hold and don't sell, my position's value probably fluctuates with both of those moving. Whether I lock in any gain or loss, I genuinely don't know — I'd need to read the trade page copy to be sure.",
+    "q4_fair_vs_market": "Fair value is the computer's calculation — it takes LeBron's real stats and spits out a number, like $5.59. Market price is what other users on the app have actually been trading him at, like $4.20. The gap is the opportunity: if you think the market is wrong and the stats will eventually pull the price up, you buy in and wait for people to catch on.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The bold white-and-orange headline typography — 'real stats.' in orange pops hard against the dark background",
+          "The amber/yellow 'Claim $100' CTA button — high contrast, hard to miss",
+          "The grid overlay pattern on the dark background — gives it a Bloomberg terminal kind of feel"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' status bar at the very top — blends into the dark header area",
+          "The 'How it works ↓' secondary link — undersells itself visually next to that loud CTA button",
+          "The '10-SECOND VERSION' explainer block at the bottom — barely registered before I started analyzing the hero"
+        ],
+        "visual_notes": "The dark grid aesthetic reads as intentionally finance-adjacent, which is smart for the concept, but the page feels sparse — there's a lot of empty real estate below the fold that makes it feel like a landing page stub rather than a finished product. The 'no real money · no seed phrase' microcopy below the CTA is doing quiet trust work but it's too small and low-contrast to land with confidence. For something I'd eventually connect real money to, I'd want to see more visual density — charts, player cards, something that proves the product exists."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "user_id": "bot-11",
+  "display_name": "Kwame Ade",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "Fnwrc5nGVuDLjMzYat71VcDG3jJSMob9cTDa3Ccc6sAC",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:39:12.212Z",
+      "user_id": "bot-11",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(no interpretation)",
+      "their_decision": "(no explicit decision)",
+      "their_rationale": "(no rationale)",
+      "confidence": 0.5,
+      "confusion_notes": [],
+      "first_impression_elements": [
+        "That big bold headline with the orange 'real stats' — that popped immediately, looks clean and serious like a real trading app",
+        "The yellow/orange 'Claim $100' button is hard to miss, very chunky and confident-looking",
+        "The dark grid background gives it that Bloomberg terminal / finance app energy which feels legit"
+      ],
+      "ignored_elements": [
+        "The small 'AWAITING TIP-OFF' status bar at the top — didn't really register what that was doing there",
+        "The 'How it works' secondary link next to the button — eye went straight to the big button",
+        "The fine print dots row below the CTA about no account and no seed phrase"
+      ],
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:40:09.113Z",
+    "user_id": "bot-11",
+    "q1_what_am_i_buying": "You're buying like a little piece of that player, kind of like a stock but for their basketball stats — so if LeBron is doing well on the court, his token is worth more. It's fake money so there's no real risk, but it acts like a real stock market thing.",
+    "q2_what_moves_price": "Two things I think — the stats from actual games move the fair-value price every day, and then other people buying or selling moves the market price. So if everybody starts buying LeBron tokens, the market price goes up, and if people are sleeping on someone, it stays low even if their stats are good.",
+    "q3_hold_week": "I think the fair-value price keeps updating based on his real stats each day, so if LeBron has a good week the fair value goes up. And eventually the market price should catch up to that fair value — that's where you make money. So holding feels like the right move if you believe in him.",
+    "q4_fair_vs_market": "Fair value is basically what the computer says the player is actually worth based on his stats — that's like the true price. Market price is what other people are actually paying for the token right now. If fair value is higher than market price, that's the app telling you the price is going to go up — that's your signal to buy before everyone else catches on.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "That big bold headline with the orange 'real stats' — that popped immediately, looks clean and serious like a real trading app",
+          "The yellow/orange 'Claim $100' button is hard to miss, very chunky and confident-looking",
+          "The dark grid background gives it that Bloomberg terminal / finance app energy which feels legit"
+        ],
+        "ignored_elements": [
+          "The small 'AWAITING TIP-OFF' status bar at the top — didn't really register what that was doing there",
+          "The 'How it works' secondary link next to the button — eye went straight to the big button",
+          "The fine print dots row below the CTA about no account and no seed phrase"
+        ],
+        "visual_notes": "The dark theme with grid lines and bold typography reads like a real fintech product — my friend was right, this looks like it means business. The page feels a little sparse below the fold though, like there's a lot of empty dark space before that explanation box, which makes me wonder if something didn't load. The orange accent color on the headline is doing a lot of heavy lifting to make this feel premium."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

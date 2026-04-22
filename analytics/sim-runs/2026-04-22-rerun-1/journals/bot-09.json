@@ -1,0 +1,91 @@
+{
+  "user_id": "bot-09",
+  "display_name": "Sam Jefferson",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "3F5GSRmWV1hXyefJKkJv5GDz6PwXeFhTo18RjXVEFgdQ",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:39:07.729Z",
+      "user_id": "bot-09",
+      "step": "landed",
+      "what_they_read": "I saw 'Get $100 in practice money' and 'No real money, no seed phrase' pretty much right away. Then I read the '10-second version' box that said it's like a pretend stock market for NBA players.",
+      "their_interpretation": "Okay so it sounds like they're giving me fake money to pretend-trade NBA players, kind of like a game? Like if I think LeBron is underpriced I buy him and if I'm right I 'win' fake money — no real cash involved.",
+      "their_decision": "I'd probably click 'Claim $100' after reading that 10-second explanation box, but slowly and with one eye on the URL bar.",
+      "their_rationale": "The 'no real money, no seed phrase' line helped a lot — I don't know what a seed phrase is but the fact they said I don't need one made me feel like I wasn't about to accidentally give away my bank account. And it's basketball, which I actually know.",
+      "confidence": 0.65,
+      "confusion_notes": [
+        "wait, what is a 'token' — like a coin? like a Chuck E. Cheese token? is this crypto?",
+        "'seed phrase' — they said I don't need one, but what even IS that? now I'm nervous it's a crypto thing",
+        "'fair-value price' vs 'market price' — I think I get it from the LeBron example but I had to re-read it twice",
+        "'SOL' — never mentioned on this page but the URL says fanshares.xyz and I'm wondering if this is secretly a crypto app",
+        "'devnet' — not on this page but if I click the button and suddenly see that word I will panic",
+        "'AWAITING TIP-OFF' at the top — is the app broken? is it loading? should I wait?",
+        "'The gap is your edge' — sounds cool but what does 'edge' mean in this context, like my advantage?",
+        "'your $100 only nudges a star like LeBron' — nudges the PRICE? so I'm actually affecting what others see? that's weird",
+        "no signup, no password — that sounds convenient but also like... how do they remember who I am if I close the tab?"
+      ],
+      "first_impression_elements": [
+        "big 'Claim $100 →' button — that was the first thing I actually focused on",
+        "the 'No real money · no seed phrase' line right under the button — I read that immediately after the button",
+        "the '10-second version' plain-English box explaining it like a pretend stock market — that's what made me stay"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link at the bottom — I saw it but did not click it",
+        "'ThesisBeing right early — and staying right — pays better than being right once.' — felt like a finance bro quote, skipped it",
+        "the 'How it works' anchor link at the top — I scrolled past it without clicking because the page already explained it below",
+        "'💬Feedback' button — didn't even register until I looked again"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:40:03.830Z",
+    "user_id": "bot-09",
+    "q1_what_am_i_buying": "Okay so... I think I'm buying like a fake share of a player? The app called it a 'player token' but it's not real money so I don't think it's like an actual stock. It's more like a pretend bet that the player is worth more than what other people paid for him? Wait, is it actually a token like crypto? I genuinely don't know, the app didn't really explain that part.",
+    "q2_what_moves_price": "From what I read, two things move it — the player's real stats change some 'fair value' price automatically, and then other people buying or selling also moves the market price. Like if I buy LeBron, the price goes up a little for the next person? That part was kind of wild to me. So it's both the stats AND what people are doing in the app.",
+    "q3_hold_week": "Honestly I'm not totally sure. I think the fair-value price keeps updating as his stats come in from real games, so it could go up or down depending on how he plays? But I don't know if there's like a timer or expiration or anything — the app didn't mention that. I'm kind of nervous I'd just be sitting there watching a number and not knowing if I should sell.",
+    "q4_fair_vs_market": "Okay I think I actually got this one — fair value is what the computer calculates from his real stats, and market price is what people in the app are actually paying for him. If those two numbers don't match, that gap is supposedly where you make money. Like if stats say he's worth $5.59 but everyone's only paying $4.20, you buy hoping the market price catches up to the stats price. At least that's what the LeBron example said.",
+    "overall_confidence": 0.32,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The big bold white and orange headline — 'real stats' in orange really pops, that's the first thing I saw",
+          "The yellow/orange 'Claim $100' button — it's big and chunky and my eyes went straight to it, looks clickable and safe-ish",
+          "The dark grid background — it feels kind of techy and serious, like a finance app or something"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' ticker bar at the very top — I didn't even register it at first",
+          "The 'How it works ↓' secondary link next to the button — it blends into the background too much",
+          "The small dot-and-text disclaimer line below the button about no account and no seed phrase"
+        ],
+        "visual_notes": "The dark theme with bold typography reads as intentionally designed — not thrown together — but it feels more like a crypto trading app than something a total beginner would trust immediately. The orange CTA button is the visual hero and does its job well. However the page feels sparse and empty below the fold, which makes it look unfinished and doesn't build much confidence that this is a real, established product."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

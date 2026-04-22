@@ -1,0 +1,61 @@
+{
+  "user_id": "bot-15",
+  "display_name": "Priya Shah",
+  "archetype": "power",
+  "viewport": "desktop",
+  "wallet_address": "ApYBrU6SUsre2suaeDpWKaGDoKtzgCfysjq1PVP7sw5b",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:39:19.724Z",
+      "user_id": "bot-15",
+      "step": "landed",
+      "what_they_read": "Headline hit first: 'Trade player tokens that move with real stats.' Then the $100 no-signup offer and the fair-value vs market-price mechanic explanation.",
+      "their_interpretation": "Basically a paper-trading sim where the pricing engine is NBA box scores — stat-derived fair value vs crowd-set market price, and you're fading the spread. No seed phrase, no KYC, devnet money. Got it.",
+      "their_decision": "Click 'Claim $100' and see what the order book actually looks like.",
+      "their_rationale": "Mechanic is legit — fair value vs market price is a real edge concept, not vaporware framing. No-signup frictionless entry means I'm in the app in under 10 seconds, which is the only way I'm testing anything new right now.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'The gap is your edge' — gap between what exactly? Took a second read to confirm it's fair-value delta, not bid-ask spread",
+        "'Buying raises the price for the next person' — is this AMM bonding curve or just order-book impact? Unclear what the actual pricing mechanism is under the hood",
+        "'AWAITING TIP-OFF' — is that a live countdown or just flavor copy? Didn't know if prices were actually frozen right now",
+        "No mention of how fair-value price is calculated — 'a computer turns stats into a price' is too hand-wavy for me to trust the signal"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — no-signup, no seed phrase call-out directly under it",
+        "'Fair-value price vs market price' framing in the step-02 card — that's the actual product in one sentence",
+        "'AWAITING TIP-OFF' status badge — made me think prices are live or about to move"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — practice mode, no real money, I already clocked that, don't need the fine print",
+        "'💬Feedback' button — not here to give feedback, here to trade",
+        "The 'Thesis' one-liner block — read it, it's filler, skipped"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop"
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:40:16.650Z",
+    "user_id": "bot-15",
+    "q1_what_am_i_buying": "Fake token tied to a player — play money, no real equity, no ownership. It's a pretend position that tracks whether the market price closes the gap to fair value. Think of it like a paper trade on a stat-driven spread.",
+    "q2_what_moves_price": "Two things — stats feed updates the fair-value side, and other users buying or selling moves the market price. Buy pressure rips it up, sell pressure dumps it. Star like LeBron barely nudges, role player can flip hard on one trade.",
+    "q3_hold_week": "Honestly not sure — I'd assume fair value recalculates daily as stats roll in, so the gap could widen or close while I'm sitting on it. App didn't spell out exactly what happens to the market price if nobody's trading. Could drift, could stale. I'd probably flip before then anyway.",
+    "q4_fair_vs_market": "Fair value is the computer's number — pure stats output, updated from real game data. Market price is what other users actually paid last. Gap between the two is the edge — you're betting the market catches up to fair, or overshoots it.",
+    "overall_confidence": 0.72,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

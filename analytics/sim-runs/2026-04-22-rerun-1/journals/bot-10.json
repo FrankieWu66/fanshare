@@ -1,0 +1,91 @@
+{
+  "user_id": "bot-10",
+  "display_name": "Nia Johnson",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "2wXCUj6erZK3i491qCENzwkRyJcQ1EAnxzjnNmenLc6x",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:39:09.858Z",
+      "user_id": "bot-10",
+      "step": "landed",
+      "what_they_read": "I saw 'Get $100 in practice money' and 'FanShare is a pretend stock market for NBA players' pretty much right away. Also caught the part about no real money and no signup.",
+      "their_interpretation": "Okay so it's like… fake money, fake trades, but with real NBA players? Like a game where I pretend to buy and sell players and if I pick right I 'win' fake money? That actually sounds kind of fun lol.",
+      "their_decision": "I'm clicking 'Claim $100 →' for sure.",
+      "their_rationale": "It literally says no real money and no password so like what do I have to lose? The button is right there and it says it just 'appears' which sounds easy enough for me.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'token' — I know it says player token but I don't really get what a token IS, like is it a thing I download or just a number on a screen?",
+        "'fair-value price' — what makes it fair? who decides that?",
+        "'the market' — what market? who are these other people trading?",
+        "'seed phrase' — they said no seed phrase which is good I guess but I have zero idea what that even is, sounds scary",
+        "'UNDERVALUED / OVERVALUED' — I kind of get it from the LeBron example but I'd need to see it on a real card to be sure",
+        "'the gap is your edge' — this sounds like sports betting spread talk and I'm not totally sure it's different",
+        "'practice mode' — is this like a tutorial that goes away? will my $100 disappear?",
+        "'devnet' — not visible on page but if I see it anywhere I will be lost",
+        "'Buying raises the price for the next person' — wait so I'm affecting other people's fake money? that's weird"
+      ],
+      "first_impression_elements": [
+        "big 'Claim $100 →' button — that was the first thing my eyes went to, obviously",
+        "the bold text '$100 · no real money · no seed phrase' right under the button — reassured me fast",
+        "the LeBron $5.59 vs $4.20 example — that made the whole thing click in like two seconds"
+      ],
+      "ignored_elements": [
+        "'AWAITING TIP-OFF Prices move after tonight's games' ticker at the top — I skimmed past it",
+        "'↓Terms explained' link — I did not click that, not even a little",
+        "the 'Thesis' section ('Being right early…') — felt like something a finance bro would care about, skipped it",
+        "'💬Feedback' button — didn't even register honestly"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:40:03.766Z",
+    "user_id": "bot-10",
+    "q1_what_am_i_buying": "Okay so like... I'm buying a token for a player? It's pretend money so it's not like a real stock or whatever, it's more like a fake share of a player that goes up if he does good I think. The app said something about stats turning into a price so I guess I'm buying into that number.",
+    "q2_what_moves_price": "From what I saw, the stats move the fair-value price — like if LeBron goes off for 40 points I'm guessing his number goes up. But also other people buying and selling moves the market price too, the app said buying raises it for the next person so it's kind of both? I'm a little fuzzy on which one actually matters for my money lol.",
+    "q3_hold_week": "Honestly I'm not totally sure — I think the price just keeps updating with his stats every day so it could go up or down depending on how he plays? The app didn't really explain what happens if you just sit on it, I'm guessing it's not frozen or anything. I might be wrong though, maybe nothing happens until I actually sell.",
+    "q4_fair_vs_market": "So fair value is like what the computer says the player is worth based on his actual stats, and market price is what people are actually paying for him in the app. If the market price is lower than fair value it shows green and means people are sleeping on him — that's supposed to be the opportunity. I think I get it but the 'gap is your edge' part still feels a little confusing to me if I'm being honest.",
+    "overall_confidence": 0.32,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The giant bold white and orange headline — 'real stats.' in orange jumped out immediately",
+          "The big yellow/orange 'Claim $100' button — that's the first thing I wanted to click",
+          "The dark grid background feels like a finance or crypto app which makes it look kinda serious"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' ticker bar at the very top — didn't register what it meant",
+          "The 'How it works ↓' secondary link next to the button — my eyes went straight past it",
+          "The small dot-bullet disclaimer text below the button about no account and no seed phrase"
+        ],
+        "visual_notes": "The dark theme with the orange accent color looks clean and intentional — like a sports app that's trying to feel premium. The massive CTA button is impossible to miss which is good, but the page feels pretty sparse and empty below the fold with a lot of dead dark space, which makes it feel slightly unfinished. There's nothing visual like logos, screenshots, or social proof imagery to make it feel legit enough to trust with even fake money."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

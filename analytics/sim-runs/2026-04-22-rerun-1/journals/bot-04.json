@@ -1,0 +1,85 @@
+{
+  "user_id": "bot-04",
+  "display_name": "Marcus Reid",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "Ayqjm1VsCWXd2KUdjYbEoWwppNKKaxaoYsptt3Unte3v",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:38:57.801Z",
+      "user_id": "bot-04",
+      "step": "landed",
+      "what_they_read": "Saw 'Trade player tokens that move with real stats' up top, then clocked '$100 no real money no seed phrase' right under the Claim button. Skimmed the LeBron $5.59 vs $4.20 example.",
+      "their_interpretation": "It's like a fantasy stock market for NBA dudes, fake money only, and they're handing out $100 play chips just to get me in — no wallet connect, no KYC, nothing. Basically a sandbox to flip player tokens based on whether the stat-price gap closes.",
+      "their_decision": "Clicking 'Claim $100 →' right now.",
+      "their_rationale": "No seed phrase means zero risk to my actual bag, and the vibe feels clean enough — 'AWAITING TIP-OFF' ticker energy got me. If number go up after tonight's games I wanna already be in.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'fair-value price' — okay I get the concept but how exactly does the algo calculate it from stats, like is it PER? usage rate? feels hand-wavy",
+        "'The gap is your edge' — edge over who? other users? the algo? both?",
+        "UNDERVALUED / OVERVALUED labels — who decides when the market 'catches up'? is there a timer or does it just drift forever",
+        "'Buying raises the price for the next person' — so it's bonding curve mechanics? they never say that word, slightly sus"
+      ],
+      "first_impression_elements": [
+        "'$100 · no real money · no seed phrase' badge under the Claim button",
+        "'AWAITING TIP-OFF' status tag — felt live, like something's actually about to happen",
+        "Big orange 'Claim $100 →' button"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link at the bottom",
+        "The 'ThesisBeing right early' paragraph — too many words",
+        "💬Feedback button"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:39:47.191Z",
+    "user_id": "bot-04",
+    "q1_what_am_i_buying": "Like a fake stock for a player I guess, tied to his stats somehow. It's play money so whatever, just vibes.",
+    "q2_what_moves_price": "People buying pushes it up, people selling drags it down. Stats do something too but honestly I'm just watching the candle.",
+    "q3_hold_week": "No idea honestly, I assume it just sits there? Maybe stats update it every day or something. I'm not a holder anyway lmao.",
+    "q4_fair_vs_market": "Fair value is what the computer says he's worth from stats, market price is what people actually paid. Gap between them is supposed to be where you make money — but I'm really just buying green and praying.",
+    "overall_confidence": 0.3,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "Big bold 'real stats.' in orange — that color pops hard, first thing my eyes went to",
+          "Yellow 'Claim $100' button is chunky and loud, hard to miss",
+          "Dark grid background gives it that Bloomberg terminal / trading app energy"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' ticker bar at the top — scrolled past it mentally",
+          "The 'How it works' secondary link — why would I read that",
+          "The small print below the button about no seed phrase etc"
+        ],
+        "visual_notes": "Dark mode with grid lines hits right, feels like a real trading terminal which is the vibe. Orange accent on the headline does the heavy lifting visually. Page feels a bit sparse below the fold though — not much going on, no charts, no price action, nothing moving. Where's the green candles bro."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

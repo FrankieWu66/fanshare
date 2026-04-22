@@ -1,0 +1,84 @@
+{
+  "user_id": "bot-02",
+  "display_name": "Maya Patel",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "4XVAEJgfF8anFbb4316JptqvYTkPXkaTT3ow2ixi27Zb",
+  "entries": [
+    {
+      "ts": "2026-04-22T22:38:53.838Z",
+      "user_id": "bot-02",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top and then that big 'Claim $100' button with the note that says no real money, no seed phrase. The little explainer box calling it 'a pretend stock market for NBA players' is what I actually read word for word.",
+      "their_interpretation": "Okay so it's basically fantasy sports but instead of drafting a team you're betting on whether the market is sleeping on a specific player — like if everyone's counting Tatum out after a slow week but his stats say he's still elite, I buy low and cash out when the market catches up. The $100 is fake, it's just a sandbox to prove you know ball.",
+      "their_decision": "I'm clicking Claim $100 right now.",
+      "their_rationale": "No seed phrase, no signup, no real money — there is literally zero reason not to try it, and if this is what I think it is, I already have opinions about who the market is sleeping on. The vibe feels clean and the copy is actually honest about the fact that outcomes aren't guaranteed, which weirdly makes me trust it more.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'fair-value price' vs 'market price' — I get the concept but I had to slow down on whether the computer's number or the crowd's number is the one I'm trading against",
+        "'Buying raises the price for the next person' — wait, so I'm also market-making? That's a bonding curve thing and it wasn't explained, just mentioned in passing",
+        "'AWAITING TIP-OFF' at the very top — I almost missed that this means prices haven't moved yet tonight, I thought it was a loading state at first"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — that's the first thing my eye landed on, it's doing a lot of work",
+        "The 'no real money · no seed phrase' line right under the button — that killed my skepticism immediately",
+        "The UNDERVALUED / OVERVALUED color system described in step 02 — green for buy, red for sell, that clicked fast because it's fantasy-brain friendly"
+      ],
+      "ignored_elements": [
+        "The '↓Terms explained' link — I didn't touch it, no real money means I don't care right now",
+        "The 'Thesis' section that says being right early pays better than being right once — I skimmed past it, felt like investor-speak and not relevant to me yet",
+        "The Feedback button — totally invisible to me at this stage, I'm in go mode not critique mode"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 6,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T22:39:48.215Z",
+    "user_id": "bot-02",
+    "q1_what_am_i_buying": "Okay so like, it's a fake token for a player — basically pretend shares in Jayson Tatum or whoever, bought with fake money the app gave me. It's not real stock, it's more like a fantasy sports position where the player's actual stats determine if your token is worth more or less.",
+    "q2_what_moves_price": "Two things I think? The stats move some kind of 'fair value' price that the computer calculates, and then other people buying and selling moves the actual market price. So if JT goes off for 40 and everyone rushes to buy him, the price shoots up — that part makes total sense to me.",
+    "q3_hold_week": "Honestly I'm not totally sure — I think the fair value keeps updating every day based on his stats, so if he's balling out all week it should go up? But I don't know if there's like interest or decay or anything the app does to your position over time, they didn't really explain that part.",
+    "q4_fair_vs_market": "Fair value is what the computer says the player is worth based on his real stats, and market price is what people are actually paying for the token right now. The gap between them is supposed to be where you make your move — if the market is sleeping on JT and his stats say he's worth more, you buy before everyone else figures it out.",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 6,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "That massive bold headline with the orange 'real stats' pop — it hits immediately, very sporty and energetic",
+          "The bright yellow-orange 'Claim $100' button is impossible to miss, super punchy against the dark background",
+          "The dark grid background gives it that Bloomberg-meets-sports-app vibe which honestly feels kinda cool"
+        ],
+        "ignored_elements": [
+          "The 'AWAITING TIP-OFF' ticker bar at the very top — my eyes skipped right past it",
+          "The 'How it works' secondary link next to the CTA — totally overshadowed by the big yellow button",
+          "The 10-second explainer text block at the bottom — felt like fine print energy, didn't pull me in visually"
+        ],
+        "visual_notes": "The dark theme with that orange-gold accent color is genuinely slick and feels right for a sports product — it's giving ESPN app meets crypto dashboard in a good way. The layout is clean and confident but there's a big empty void between the CTA and the explainer section that makes it feel slightly unfinished, like something should be there — a chart, a player card, something alive. The trust signals are minimal visually; there's no logo, no nav, no brand marks that would make me feel like this is a real established thing versus someone's side project."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}
