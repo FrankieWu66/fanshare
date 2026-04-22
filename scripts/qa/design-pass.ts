@@ -30,6 +30,7 @@ import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 dotenv.config({
   path: path.join(path.dirname(fileURLToPath(import.meta.url)), "../../.env.local"),
+  override: true,
 });
 
 import Anthropic from "@anthropic-ai/sdk";

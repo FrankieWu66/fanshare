@@ -31,6 +31,7 @@ import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 dotenv.config({
   path: path.join(path.dirname(fileURLToPath(import.meta.url)), "../../.env.local"),
+  override: true, // .env.local is source of truth; stale shell env must not win
 });
 
 import { chromium, type Browser, type BrowserContext, type Page, devices } from "playwright";
