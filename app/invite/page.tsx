@@ -120,8 +120,29 @@ export default function InvitePage() {
       />
 
       <div className="relative">
+        {/* ── Top-left wordmark (identity signal — added 2026-04-22 per Round 2
+            B-tight: rerun-2 sim flagged "no logo, no domain anchor, nothing
+            telling me who built this" as the dominant residual trust gap). ── */}
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 pt-5">
+          <Link
+            href="/invite"
+            className="inline-flex items-center gap-2 text-sm font-bold tracking-[-0.01em] text-foreground transition hover:opacity-80"
+            aria-label="FanShare home"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="3" rx="1" fill="var(--accent)" />
+              <rect x="3" y="10.5" width="13" height="3" rx="1" fill="var(--foreground)" />
+              <rect x="3" y="16" width="18" height="3" rx="1" fill="var(--accent)" opacity="0.55" />
+            </svg>
+            FanShare
+          </Link>
+          <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
+            Devnet · Practice mode
+          </span>
+        </div>
+
         {/* ── Market ticker strip ──────────────────────────────────────────── */}
-        <div className="mx-auto max-w-6xl px-6 pt-6">
+        <div className="mx-auto max-w-6xl px-6 pt-4">
           <MarketTicker movers={movers} />
         </div>
 
@@ -368,15 +389,30 @@ export default function InvitePage() {
 
         {/* ── Footer ───────────────────────────────────────────────────────── */}
         <footer className="border-t border-border-low">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-6 py-8 lg:py-10">
-            <span className="inline-flex items-center gap-2 text-sm font-bold tracking-[-0.01em] text-foreground">
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-                <rect x="3" y="5" width="18" height="3" rx="1" fill="var(--accent)" />
-                <rect x="3" y="10.5" width="13" height="3" rx="1" fill="var(--foreground)" />
-                <rect x="3" y="16" width="18" height="3" rx="1" fill="var(--accent)" opacity="0.55" />
-              </svg>
-              FanShare
-            </span>
+          <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 lg:py-10">
+            <div className="flex flex-wrap items-center justify-between gap-6">
+              <span className="inline-flex items-center gap-2 text-sm font-bold tracking-[-0.01em] text-foreground">
+                <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="3" rx="1" fill="var(--accent)" />
+                  <rect x="3" y="10.5" width="13" height="3" rx="1" fill="var(--foreground)" />
+                  <rect x="3" y="16" width="18" height="3" rx="1" fill="var(--accent)" opacity="0.55" />
+                </svg>
+                Built by FanShare
+              </span>
+              <nav className="flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
+                <Link href="/about" className="transition hover:text-foreground">
+                  About
+                </Link>
+                <span aria-hidden="true">·</span>
+                <Link href="/methodology" className="transition hover:text-foreground">
+                  Methodology
+                </Link>
+                <span aria-hidden="true">·</span>
+                <Link href="/invite" className="transition hover:text-foreground">
+                  Invite
+                </Link>
+              </nav>
+            </div>
             <p className="m-0 max-w-[560px] font-mono text-[11px] leading-[1.55] text-muted">
               {DISCLAIMER}
             </p>
