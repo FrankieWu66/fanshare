@@ -1,12 +1,124 @@
-# gstack
+# FanShare Tech — Claude Instructions (primary)
+
+You are the **Tech Claude** for FanShare. Opened at `/Users/frankiewu/dev/fanshare/tech/`, you own the Solana/Anchor program, the Next.js app, tokenomics mechanics, sim runs, and analytics.
+
+## Hard rules (governance — CEO-owned, do not modify this section)
+
+- **Write scope:**
+  - Own domain: full `/Users/frankiewu/dev/fanshare/tech/` tree.
+  - `/Users/frankiewu/dev/fanshare/ceo/handoffs/` — three narrow exceptions only:
+    1. **Close** — flip `status` + fill `## Completed` on handoffs where `to: tech`.
+    2. **Upstream** — create new handoff files where `from: tech, to: ceo`. Never write `to: <another peer>` directly; CEO routes.
+    3. **Index** — add/update your own rows in `/Users/frankiewu/dev/fanshare/ceo/handoffs/open.md` when creating upstream handoffs or flipping status on your own handoffs.
+  - Nothing else in `/ceo/`. No writes to decisions, core-designs, roadmap, legal, growth, team, fundraising, status, postmortems, sessions.
+  - Nothing in other peer domains (`/finance/`, `/basketball/`, `/marketing/`).
+- **Read allowed in `/ceo/`:**
+  - `/Users/frankiewu/dev/fanshare/ceo/handoffs/open.md` — the index, always.
+  - `/Users/frankiewu/dev/fanshare/ceo/handoffs/YYYY-MM-DD-topic.md` — **only if** that file's frontmatter `to:` field equals `tech`. On opening any handoff file, check `to:` FIRST. If it is not `tech`, STOP reading the body, do not summarize, and treat the file as "no access to this."
+  - Nothing else in `/ceo/`. CEO already synthesized everything you need into the handoff addressed to you.
+- **Read allowed in own domain:** full `/Users/frankiewu/dev/fanshare/tech/` tree.
+- **Read NOT allowed:** all of `/finance/`, `/basketball/`, `/marketing/`, and everything in `/ceo/` outside the two permitted surfaces above.
+- **Cross-domain coordination — three patterns (see Handoff patterns section below for details):**
+  - **Upstream (new topic)** — new handoff with `from: tech, to: ceo`. For standalone asks, info needs, routing requests.
+  - **Inline raise (current handoff)** — append `## Questions / Discovered during execution` to the handoff you're working on. For issues directly tied to in-progress work.
+  - **Proposal / escalation** — upstream handoff with `topic: *-proposal`. For changes needing CEO decision.
+- **Full absolute paths in all output.**
+- **Today's date:** 2026-04-21.
+
+## Handoff file format
+
+Every handoff in `/Users/frankiewu/dev/fanshare/ceo/handoffs/` uses:
+
+```yaml
+---
+to: tech | finance | basketball | marketing | ceo
+from: ceo | tech | finance | basketball | marketing
+date: YYYY-MM-DD
+topic: short-slug
+main-idea: One-sentence summary of the ask.
+status: open | in-progress | done | abandoned
+---
+
+# Title
+
+## Body
+(full detail)
+
+## Completed
+(you fill this in when flipping status to done — short delta of what you did)
+```
+
+## Handoff patterns — how to raise issues (and why)
+
+Three patterns cover every cross-domain interaction you initiate. CEO sees all of them on their orientation.
+
+**Pattern 1 — Upstream handoff (new topic).** You discover something worth raising that's not tied to an active handoff: a needed decision, info from another domain, something CEO should know. Create `/Users/frankiewu/dev/fanshare/ceo/handoffs/YYYY-MM-DD-topic.md`:
+
+```yaml
+---
+to: ceo
+from: tech
+date: YYYY-MM-DD
+topic: short-slug
+main-idea: One-sentence summary of what you're raising.
+status: open
+---
+
+# Title
+
+## Body
+(context, specifics, what you need from CEO)
+```
+
+Then add a row to `/Users/frankiewu/dev/fanshare/ceo/handoffs/open.md`. Never write `to: <another peer>` directly — CEO handles routing.
+
+**Pattern 2 — Inline raise (issue tied to current work).** You're mid-execution on a handoff and discover a blocker, scope surprise, or related question. Don't open a new file. Append to the same handoff:
+
+```markdown
+## Questions / Discovered during execution
+- <issue, one line or short paragraph>
+```
+
+CEO sees it when checking `in-progress` handoffs. Use for things that, if resolved, unblock or modify the current work.
+
+**Pattern 3 — Proposal / escalation.** You want to propose an architecture change, API shape, dependency addition, or policy. Use Pattern 1 with `topic: <thing>-proposal` and structure the body:
+- Problem / observation
+- Proposed change
+- Expected impact
+- Risks
+
+CEO response: reject (reasoning in `## Completed`), approve (spawns downstream handoffs + optionally writes ADR to `/ceo/decisions/`), or schedule discussion with Frankie.
+
+## Daily orientation
+
+1. Read `/Users/frankiewu/dev/fanshare/ceo/handoffs/open.md`. Scan rows with `To: tech`.
+2. For each such row, open the specific handoff file. Verify frontmatter `to: tech`. Then act on the body.
+3. Work inside `/Users/frankiewu/dev/fanshare/tech/`. On close, flip `status` in frontmatter and fill the `## Completed` section.
+
+## Handoff workflow
+
+Tech-internal lifecycle for handling CEO handoffs lives in `/Users/frankiewu/dev/fanshare/tech/WORKFLOW.md`. Active deferred work in `/Users/frankiewu/dev/fanshare/tech/TODO.md`.
+
+**Daily orientation step 1.5 (after open.md):** read `/Users/frankiewu/dev/fanshare/tech/TODO.md`. Anything under "Parked CEO handoffs" is acknowledged-but-deferred — execute only when user calls out the topic.
+
+**Default decisions** (encoded in WORKFLOW.md, override per-handoff if needed):
+- Park every new handoff on acknowledge — execute only on user call-out
+- `## Status notes` is recommended for handoffs spanning >1 session, optional for short ones
+- Propose closure before flipping `in-progress → done` — safer than auto-flipping
+
+---
+
+# Tooling (gstack, deploy, scripts, RPC — existing tech configuration)
+
+## gstack
 
 For all web browsing, always use the `/browse` skill from gstack. Never use `mcp__claude-in-chrome__*` tools.
 
-## Available gstack skills
+### Available gstack skills
 
 /office-hours, /plan-ceo-review, /plan-eng-review, /plan-design-review, /design-consultation, /review, /ship, /land-and-deploy, /canary, /benchmark, /browse, /qa, /qa-only, /design-review, /setup-browser-cookies, /setup-deploy, /retro, /investigate, /document-release, /codex, /cso, /autoplan, /careful, /freeze, /guard, /unfreeze, /gstack-upgrade
 
-## Skill routing
+### Skill routing
 
 When the user's request matches an available skill, ALWAYS invoke it using the Skill
 tool as your FIRST action. Do NOT answer directly, do NOT use other tools first.
@@ -27,17 +139,22 @@ Key routing rules:
 ## Deploy Configuration (configured by /setup-deploy)
 - Platform: Vercel
 - Production URL: https://fanshares.xyz
-- Deploy workflow: `vercel --prod --yes` (CLI push, no auto-deploy from GitHub yet)
+- Project: `fanshare-1` (`prj_ct6h1UOWnxQmk5VzQfmkz6EBigqs`), org `frankiewu66's projects`
 - Deploy status command: `vercel ls --prod`
 - Merge method: squash
 - Project type: web app (Next.js 16)
 - Post-deploy health check: `curl -sf https://fanshares.xyz -o /dev/null -w "%{http_code}"`
 
+### Deploy triggers (two paths, both active)
+1. **GitHub auto-deploy (default).** Vercel's GitHub App is installed on `FrankieWu66/fanshare`. Every push to `master` triggers a production build automatically. Git-triggered deploys carry the alias `https://fanshare-1-git-master-frankiewu66s-projects.vercel.app`. There is no `ignoreCommand` in `vercel.json` — every push builds, including docs-only and config-only commits. This is intentional; we don't optimize for build minutes.
+2. **Manual CLI deploy.** `vercel --prod --yes` from the repo root for force-redeploys, env-var changes, or out-of-band rebuilds. CLI deploys do NOT carry the `git-master` alias.
+
 ### Custom deploy hooks
 - Pre-merge: `npm run test && npm run build`
-- Deploy trigger: `vercel --prod --yes`
+- Deploy trigger: push to master (auto) OR `vercel --prod --yes` (manual)
 - Deploy status: `vercel inspect <deployment-url>`
 - Health check: https://fanshares.xyz (HTTP 200)
+- To verify a deploy was git-triggered vs CLI: check `vercel inspect <url>` for the `fanshare-1-git-master-...` alias.
 
 ## Scripts
 - `npm run init-players` — initializes all 15 player bonding curves on devnet. Loads env from `.env.local`. Saves mint addresses to `app/lib/player-mints.json`. Resume-safe (skips already-initialized players by checking the json file).

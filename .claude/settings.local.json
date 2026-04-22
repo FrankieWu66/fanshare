@@ -69,7 +69,9 @@
       "Bash(git -C /Users/frankiewu/dev/fanshare-claude status)",
       "Bash(git fetch *)",
       "Bash(vercel whoami *)",
-      "Bash(vercel ls *)"
+      "Bash(vercel ls *)",
+      "Skill(context-save)",
+      "Skill(context-save:*)"
     ]
   }
 }
