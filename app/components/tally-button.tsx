@@ -3,7 +3,6 @@
 import Script from "next/script";
 import posthog from "posthog-js";
 import { track } from "../lib/analytics/track";
-import { useWallet } from "../lib/wallet/context";
 
 declare global {
   interface Window {
@@ -21,6 +20,8 @@ declare global {
   }
 }
 
+const DEMO_STORAGE_KEY = "fanshare_demo";
+
 /**
  * Tally floating feedback button — injected on every page.
  *
@@ -35,11 +36,16 @@ declare global {
  *   only originPage in the iframe URL — no way to pass per-click hidden fields.
  *   Calling Tally.openPopup() from our own click handler lets us thread current
  *   wallet, session, and source context into the form on every open.
+ *
+ * Why localStorage read instead of useWallet():
+ *   This component renders on every page including /_not-found, which
+ *   prerenders at build time without WalletProvider in scope. useWallet()
+ *   throws there. Reading the demo wallet directly from localStorage is
+ *   safe (only runs in click handler, post-hydration) and avoids the
+ *   provider dependency.
  */
 export function TallyButton() {
   const formId = process.env.NEXT_PUBLIC_TALLY_FORM_ID;
-  const { wallet } = useWallet();
-
   if (!formId) return null;
 
   const handleClick = () => {
@@ -52,11 +58,20 @@ export function TallyButton() {
     }
 
     const pageUrl = window.location.href;
-    const walletAddr = wallet?.account.address ?? "";
+
+    let walletAddr = "";
+    try {
+      const raw = localStorage.getItem(DEMO_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { address?: string };
+        walletAddr = parsed?.address ?? "";
+      }
+    } catch {
+      walletAddr = "";
+    }
 
     let sessionId = "";
     try {
-      // Newer PostHog SDK exposes get_session_id; fallback to distinct_id.
       const ph = posthog as unknown as { get_session_id?: () => string };
       sessionId = ph.get_session_id?.() ?? posthog.get_distinct_id() ?? "";
     } catch {
