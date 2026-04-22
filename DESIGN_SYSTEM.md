@@ -47,11 +47,13 @@
 - **Light mode:** Not supported for v1. Dark-only matches crypto conventions and the arena aesthetic.
 
 ### Semantic Color Usage
-- Accent (#F59E0B): brand elements, "Undervalued" badges, active tab highlight, devnet badge, hover borders, supply progress bars
-- Positive (#22C55E): price-up indicators, buy buttons, transaction success alerts
-- Negative (#EF4444): price-down indicators, sell buttons, "Overvalued" badges, error alerts
+- Accent (#F59E0B): brand elements, "Undervalued" badges, active tab highlight, "Practice mode" indicator, hover borders, supply progress bars, **primary marketing CTA** (e.g., /invite "Claim $100")
+- Positive (#22C55E): price-up indicators, buy buttons (in-app trade widget), transaction success alerts
+- Negative (#EF4444): price-down indicators, sell buttons (in-app trade widget), "Overvalued" badges, error alerts
 - Info (#3B82F6): neutral data, oracle update notifications
 - Muted (#71717A): secondary text, labels, inactive UI, "Fair value" badges
+
+**Button color semantic split (decided 2026-04-22):** Buy/Sell buttons INSIDE the trade widget are positive/negative (green/red) because those are financial actions where color carries critical meaning about direction. Primary CTAs OUTSIDE the trade widget (marketing, onboarding, grant-claim) use amber — the brand color — because these are identity/conversion actions, not directional trades. Same system, two different semantic registers.
 
 ## Spacing
 - **Base unit:** 4px
@@ -99,6 +101,18 @@
 - Preview card: label/value rows in 12px
 - Buy button: full-width, positive green, bold
 - Sell button: full-width, negative red, bold
+
+### Primary Marketing CTA (Amber)
+- Use case: conversion action OUTSIDE the trade widget — onboarding, invite page, grant claim, future marketing surfaces. NOT for directional trade actions (those stay green/red per Trade Widget).
+- Shape: height 56px (`h-14`), radius `xl` (16px), horizontal padding 24px (`px-6`)
+- Fill: solid `--accent` (#F59E0B); hover `#FBBF24` (amber-400, brighter warm-up)
+- Text: `--accent-foreground` (warm near-black), DM Sans bold 16px, letter-spacing -0.005em
+- Shadow: `0 8px 32px -8px rgba(245,158,11,0.4)` default; hover deepens to `0 12px 40px -8px rgba(245,158,11,0.5)`
+- Motion: `hover:-translate-y-px` (1px lift), `active:translate-y-0`, 150ms ease-out
+- Label pattern: action verb + outcome noun + rightward arrow. Example: `"Claim $100 →"`, `"Start Trading →"`. Arrow is part of the label, not a separate icon.
+- Adjacent ghost link: secondary "how does this work" link sits immediately to the right, `h-11`, `text-[13px]`, muted → foreground on hover. Never full-width. Never amber.
+- Width: hug-content (`inline-flex`), NOT `w-full`. The Buy/Sell full-width pattern lives only inside the trade widget.
+- Limit: at most one amber CTA per viewport. If two primary actions are needed on the same screen, step back to the information architecture — the page has a scope problem, not a button problem.
 
 ### Alerts/Toasts
 - Success: green tint bg, green text, green border

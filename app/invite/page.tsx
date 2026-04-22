@@ -32,13 +32,13 @@ const GRANT_FLOOR_SOL = 0.3;
 const STEPS = [
   {
     n: "01",
-    title: "Get $100 in devnet SOL",
+    title: "Get $100 in practice money",
     body: "Click the button. We'll create a fake trading account for you and deposit $100 of play money. No signup, no password — it just appears.",
   },
   {
     n: "02",
     title: "Find a player the market has wrong",
-    body: "Every card shows a fair-value price (from stats) and a market price (what others paid). When they disagree, that's the opportunity. Green \"UNDERVALUED\" = market below fair value. Red \"OVERVALUED\" = above. Example: if stats say LeBron is worth $5.59 but the market is trading him at $4.20, you think others are sleeping on him — buy. When they catch up, you cash out the gap.",
+    body: "Every card shows a fair-value price (from stats) and a market price (what others paid). When they disagree, that's the opportunity. Green \"UNDERVALUED\" = market below fair value. Red \"OVERVALUED\" = above. Example: if stats say LeBron is worth $5.59 but the market is trading him at $4.20, you think others are sleeping on him — buy. When they catch up, you cash out the gap. Catching the gap is the skill. The outcome isn't guaranteed.",
   },
   {
     n: "03",
@@ -71,34 +71,13 @@ const TERMS = [
   },
 ] as const;
 
-const BADGES = [
-  {
-    key: "early",
-    name: "Early Adopter",
-    unlock: "Trade on Demo 1 to earn",
-    oneLine: "Among the first 15 to touch the platform. Locked in forever.",
-    color: "var(--accent)",
-  },
-  {
-    key: "sharp",
-    name: "Sharp Caller",
-    unlock: "5+ profitable trades at >20% spread",
-    oneLine: "You saw what the market missed, repeatedly.",
-    color: "var(--positive)",
-  },
-  {
-    key: "diamond",
-    name: "Diamond Hands",
-    unlock: "Hold a winning position through 3 oracle updates",
-    oneLine: "Conviction over churn.",
-    color: "#A855F7",
-  },
-] as const;
+// Badges section removed 2026-04-22 per /ceo/handoffs/2026-04-22-invite-copy-p0-implement.md
+// (P0 #5). Preview-only badges read as vaporware to sim agents + took copy real
+// estate without driving trust signal. Archived concept for post-Demo-1 feature
+// work, not currently on /invite.
 
 const DISCLAIMER =
-  "Running on Solana devnet. All SOL is test SOL. No real money, no financial risk, no financial advice.";
-const BADGE_FINE =
-  "Badges are preview-only for Demo 1. They'll be earnable when we open beta.";
+  "Practice mode. No real money, no financial risk, no financial advice.";
 
 export default function InvitePage() {
   const { wallet, isDemoMode } = useWallet();
@@ -151,9 +130,7 @@ export default function InvitePage() {
           <div className="flex flex-col gap-6">
             <div className="flex flex-wrap items-center gap-3 font-mono text-[11px] uppercase tracking-[0.12em] text-muted">
               <Dot color="positive" pulse />
-              <span>Live · Devnet</span>
-              <span style={{ color: "var(--border)" }}>·</span>
-              <span>Invite · Demo 1</span>
+              <span>Practice mode</span>
             </div>
             <h1
               className="m-0 font-display font-extrabold text-foreground"
@@ -217,13 +194,14 @@ export default function InvitePage() {
               </a>
             </div>
 
-            {/* Status strip (wallet + grant) — live data, unchanged from prior version */}
+            {/* Status strip (wallet + grant) — live data. SOL scrubbed from user-facing
+                display 2026-04-22 per P0 #3; SOL plumbing remains in code. */}
             <div className="mt-2 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs text-muted">
               <span className="inline-flex items-center gap-1.5">
                 <Dot color={isConnected ? "positive" : "muted"} />
                 {isConnected
-                  ? `Wallet connected${isDemoMode ? " · demo" : ""}`
-                  : "No wallet yet"}
+                  ? `Account ready${isDemoMode ? " · practice" : ""}`
+                  : "No account yet"}
               </span>
               {isConnected && (
                 <span className="inline-flex items-center gap-1.5">
@@ -231,18 +209,14 @@ export default function InvitePage() {
                   {grantReceived ? (
                     <>
                       Grant received ·{" "}
-                      <span className="font-semibold text-foreground">
-                        {balanceSol.toFixed(3)} SOL
-                      </span>
+                      <span className="font-semibold text-foreground">$100</span>
                     </>
-                  ) : balanceSol > 0 ? (
-                    <>Grant incoming… {balanceSol.toFixed(3)} SOL</>
                   ) : (
                     <>Grant incoming…</>
                   )}
                 </span>
               )}
-              <span>0.667 SOL · $100 · no real money · no seed phrase</span>
+              <span>$100 · no real money · no seed phrase</span>
             </div>
           </div>
         </header>
@@ -341,69 +315,10 @@ export default function InvitePage() {
           </div>
         </section>
 
-        {/* ── Badges (V3 Editorial wireframe plaques) ──────────────────────── */}
-        <section className="border-t border-border-low">
-          <div className="mx-auto max-w-6xl px-6 py-20 lg:py-24">
-            <Eyebrow>What you&apos;re playing for</Eyebrow>
-            <h2
-              className="m-0 mb-10 mt-5 font-display font-extrabold text-foreground"
-              style={{
-                fontSize: "clamp(28px, 3.6vw, 40px)",
-                lineHeight: 1.1,
-                letterSpacing: "-0.025em",
-              }}
-            >
-              Three badges. Zero claimed so far.
-            </h2>
-            <div className="grid gap-4 md:grid-cols-3">
-              {BADGES.map((b) => (
-                <div
-                  key={b.key}
-                  className="flex min-h-[200px] flex-col gap-4 rounded-xl border border-border bg-transparent p-6 transition-colors hover:border-border-low"
-                >
-                  <div
-                    className="flex items-center gap-2.5 font-mono text-[11px] font-bold uppercase tracking-[0.12em]"
-                    style={{ color: b.color }}
-                  >
-                    <svg
-                      viewBox="0 0 24 24"
-                      width="13"
-                      height="13"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden="true"
-                    >
-                      <rect x="4" y="11" width="16" height="10" rx="2" />
-                      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
-                    </svg>
-                    <span className="text-muted">Locked</span>
-                  </div>
-                  <div
-                    className="font-display text-[22px] font-extrabold text-foreground opacity-75"
-                    style={{ letterSpacing: "-0.02em", lineHeight: 1.1 }}
-                  >
-                    {b.name}
-                  </div>
-                  <p className="m-0 flex-1 text-[14px] leading-[1.55] text-muted">
-                    {b.oneLine}
-                  </p>
-                  <div className="border-t border-border-low pt-3.5 font-mono text-[11px] text-muted">
-                    <div className="mb-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-accent">
-                      Unlock
-                    </div>
-                    <div>{b.unlock}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="mt-6 max-w-[640px] text-[13px] text-muted">
-              {BADGE_FINE}
-            </p>
-          </div>
-        </section>
+        {/* ── Badges section removed 2026-04-22 per P0 #5 (invite-copy-p0-implement). ──
+            Preview-only badges read as vaporware to the 15/15 sim agents who all
+            ignored the section. Archive intent is to re-introduce as a real
+            feature post-Demo-1 when badges are actually earnable. ─────────── */}
 
         {/* ── Terms explained (collapsible, above disclaimer) ───────────────── */}
         <section className="border-t border-border-low">
@@ -494,15 +409,22 @@ interface Mover {
 }
 
 function MarketTicker({ movers }: { movers: Mover[] }) {
-  if (movers.length === 0) {
-    // Loading / no data — render a skeleton strip so layout doesn't jump
+  // Pre-market detection: "flat" = |spread%| < 0.05 (bonding curve float noise
+  // at T0). When every visible mover is flat AND there's no volume yet, the
+  // ticker was reading as "dead market" to agents instead of "waiting for
+  // tonight's stats" — updated 2026-04-22 per P0 #2 (invite-copy-p0-implement).
+  const preMarket =
+    movers.length === 0 ||
+    movers.every((m) => Math.abs(m.spreadPercent) < 0.05);
+
+  if (preMarket) {
     return (
       <div className="flex h-9 items-center gap-6 overflow-hidden border-y border-border-low bg-card/50 px-4 font-mono text-xs text-muted">
-        <span className="inline-flex items-center gap-1.5">
+        <span className="inline-flex items-center gap-1.5 text-accent">
           <Dot color="accent" pulse />
-          LIVE
+          AWAITING TIP-OFF
         </span>
-        <span>Markets warming up…</span>
+        <span>Prices move after tonight&apos;s games.</span>
       </div>
     );
   }
