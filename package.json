@@ -78,6 +78,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.10",
     "jsdom": "^29.0.1",
+    "playwright": "^1.59.1",
     "prettier": "^3.6.2",
     "solana-bankrun": "^0.4.0",
     "tailwindcss": "^4",
