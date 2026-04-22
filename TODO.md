@@ -3,7 +3,7 @@
 Persistent across sessions. Tech-owned. On session start, scan this before any new work. See `/Users/frankiewu/dev/fanshare/tech/WORKFLOW.md` for the lifecycle.
 
 ## Parked CEO handoffs
-*(empty — no active CEO handoffs assigned to tech)*
+- [ ] [demo-1-plan] (handoff: /Users/frankiewu/dev/fanshare/ceo/handoffs/2026-04-22-demo-1-plan.md) — added 2026-04-22 — draft the Demo 1 execution plan (scope lock / concurrency target / date / go-no-go gates / monitoring + rollback / data capture). Due 2026-04-24 EOD. Seed sections 1-2 from the Demo 0.5 sim outputs (mental-model report + design-violations + summary). ONE OPEN DOUBT: handoff asks for output at `/ceo/roadmap/demo-1.md` which is outside Tech's write scope — preferred resolution is Tech drafts at `/tech/sim/demo-1-execution-plan-draft.md` and CEO relocates on layering; awaiting CEO decision.
 
 ## Tech-internal deferrals
 - [ ] [trading-functional-verification] — added 2026-04-22 — full trading flow QA (buy/sell, bonding curve math, oracle integration, slippage). BLOCKED on Jerry Zhu finishing index modifications per NBA schedule. No longer a "Demo" event — becomes Tech-internal smoke test once Jerry signals ready. Method/scope TBD then.
