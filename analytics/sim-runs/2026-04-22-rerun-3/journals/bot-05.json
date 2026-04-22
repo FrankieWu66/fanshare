@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-05",
+  "display_name": "Jordan Chen",
+  "archetype": "value",
+  "viewport": "mobile",
+  "wallet_address": "5MBDRGfoENA5ALUQVi3YkTSSi5Ea3tmbLDzD5zZLkBUA",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:14:42.591Z",
+      "user_id": "bot-05",
+      "step": "landed",
+      "what_they_read": "I read the main headline 'Trade player tokens that move with real stats' and the three-step explainer, plus the plain-English 'New here? 10-second version' block that laid out what FanShare actually is. The LeBron $5.59 vs $4.20 example caught me specifically.",
+      "their_interpretation": "Okay, so this is a simulated market where a model prices NBA players by stats, the crowd prices them by sentiment, and the gap between those two numbers is where you make or lose fake money — that's actually a clean value-investing framing, not a lottery. No real money involved, no wallet connection required from what I can tell.",
+      "their_decision": "I'd click 'Claim $100 →' and proceed.",
+      "their_rationale": "The 'no seed phrase, no signup' language removed my biggest friction point — I was braced for a wallet-connect prompt — and 'devnet / practice mode' is repeated enough times that I believe this is genuinely a sandbox. The spread mechanic is the exact kind of signal I look for, so the product model makes sense to me on first read.",
+      "confidence": 0.78,
+      "confusion_notes": [
+        "'AWAITING TIP-OFF — Prices move after tonight's games': unclear whether this means I can't do anything until after the game, or just that prices will update then — am I walking into a locked state?",
+        "'Buying raises the price for the next person' — is this a bonding curve? An order book? The mechanism isn't named, and that matters for knowing whether my buy price equals my fair-value estimate or something else entirely.",
+        "'The gap is your edge — if you're right, and early' — 'early' is doing a lot of work here; early relative to what? Other users? A daily reset? I don't know the time horizon of a 'trade'.",
+        "'Your $100 only nudges a star like LeBron — but can meaningfully move a role player' — this implies price impact is a real mechanic, which suggests thin liquidity on role players. Is that a feature or a warning I should worry about?"
+      ],
+      "first_impression_elements": [
+        "The LeBron $5.59 vs $4.20 concrete dollar example in step 02 — that was the first thing that made the concept tangible",
+        "The 'No account yet · $100 · no real money · no seed phrase' line directly under the Claim button — that cluster of reassurances read as a checklist of my objections, answered pre-emptively",
+        "'AWAITING TIP-OFF' status badge — it felt like a live market signal, which made the product feel real even in devnet"
+      ],
+      "ignored_elements": [
+        "The 'Thesis' one-liner ('Being right early — and staying right — pays better than being right once') — felt like marketing copy, skipped it",
+        "Footer links: About, Methodology, Invite — I noted they exist but didn't tap any of them on first pass",
+        "The '↓Terms explained' toggle — I saw it but didn't open it; the inline plain-English block already answered my main concern about real money"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "mobile",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:15:39.942Z",
+    "user_id": "bot-05",
+    "q1_what_am_i_buying": "From what the app showed me, I'm buying a token tied to a real NBA player — it's not a share of anything tangible, more like a position in a pretend market where the token's value is derived from that player's actual stats. It's fake money, practice mode, so there's no real asset behind it — just a simulated price I can trade against.",
+    "q2_what_moves_price": "Two things, as far as I can tell: the fair-value price moves when the player's real stats change — the app says a computer recalculates that daily — and the market price moves when other users buy or sell, since buying pushes it up and selling pushes it down. The copy was explicit about that mechanic, especially noting that role players are more moveable than stars like LeBron.",
+    "q3_hold_week": "Honestly, the app didn't spell this out clearly for me. I'd assume the fair-value price keeps updating with nightly stats, and the market price drifts based on what other users do — but whether my position accrues anything passively, or just sits there waiting for me to sell, I'm not certain. I'd want to read the methodology page before committing to a hold strategy.",
+    "q4_fair_vs_market": "The app was pretty clear here — fair value is the computer's stat-derived price, what the player is 'worth' based on performance, and market price is what other users have actually been paying. The gap between those two is the edge the app is selling: if fair value is $5.59 and market is $4.20, the market is underpricing the player, and if you're right that it corrects, you profit. That spread is exactly what I care about before entering any position.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The bold amber/orange 'real stats.' accent — high contrast, immediately anchors the value prop visually",
+          "The 'Claim $100 →' CTA button — oversized, amber fill, impossible to miss above the fold on mobile",
+          "The grid overlay on the dark background — subtle but gives it a data/trading aesthetic that feels intentional"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' header label — reads as a status tag, eyes slid past it",
+          "The 'How it works ↓' secondary CTA — visually undersized next to the primary button, nearly invisible",
+          "The 'Feedback' pill in the bottom right — felt like UI chrome, not page content"
+        ],
+        "visual_notes": "Dark grid background with amber accent color is a disciplined two-color system that signals trading/fintech without being loud. Typography hierarchy is clean — the headline weight and the orange emphasis word do real work. The micro-copy row at the bottom ('no real money · no seed phrase') is a smart friction-reducer, though it's visually small enough that a quick scroller would miss it entirely on mobile."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "user_id": "bot-13",
+  "display_name": "Hana Kim",
+  "archetype": "skeptic",
+  "viewport": "desktop",
+  "wallet_address": "BtKsPE6WL8crbp7pu1kMEug3P4YFChP7sRmuu3PXUjsK",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:14:59.045Z",
+      "user_id": "bot-13",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(no interpretation)",
+      "their_decision": "(no explicit decision)",
+      "their_rationale": "(no rationale)",
+      "confidence": 0.5,
+      "confusion_notes": [],
+      "first_impression_elements": [
+        "The orange-on-dark headline — 'real stats.' in that chunky weight is doing a lot of heavy lifting and it works",
+        "The amber CTA button is impossible to miss, good contrast discipline, rounded corners feel intentional not lazy",
+        "The grid overlay background texture — subtle but gives it a trading-terminal aesthetic that reads as deliberate"
+      ],
+      "ignored_elements": [
+        "The 'DEVNET · PRACTICE MODE' nav items top-right — felt like system status noise, my eye slid past them",
+        "The 'How it works ↓' secondary CTA — visually understyled next to the button, I almost didn't register it as clickable"
+      ],
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 7,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:16:08.579Z",
+    "user_id": "bot-13",
+    "q1_what_am_i_buying": "As far as I can tell, I'm buying a fake token that represents a player — like a pretend share of LeBron James the statistical entity, not LeBron James the human. It's play money tied to a number the app generates from his real game stats. I didn't see anything on the trade page so I'm genuinely guessing at the mechanics beyond that.",
+    "q2_what_moves_price": "Two things, I think — the app's 'fair value' algorithm recalculates based on real NBA stats after games, and then other users buying or selling also nudge the market price up or down. The onboarding said buying raises the price for the next person, which is very 'pretend stock market' of them.",
+    "q3_hold_week": "Honestly? I don't know, and the app didn't tell me. I assume the fair-value price keeps updating as his stats come in each night, and the market price drifts based on what other users do — but whether my position automatically closes, expires, or just sits there forever, I have no idea. The onboarding copy was very enthusiastic about buying and not super clear on the holding experience.",
+    "q4_fair_vs_market": "Fair value is the computer's opinion — a price calculated from LeBron's actual stats. Market price is what other users in the app have actually been paying for his token, driven by their trades. The gap between the two is supposedly where the opportunity lives, which is a clean enough concept, though I'd love to know exactly what stats go into the fair-value formula because 'methodology' was a link I didn't click.",
+    "overall_confidence": 0.42,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The orange-on-dark headline — 'real stats.' in that chunky weight is doing a lot of heavy lifting and it works",
+          "The amber CTA button is impossible to miss, good contrast discipline, rounded corners feel intentional not lazy",
+          "The grid overlay background texture — subtle but gives it a trading-terminal aesthetic that reads as deliberate"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' nav items top-right — felt like system status noise, my eye slid past them",
+          "The 'How it works ↓' secondary CTA — visually understyled next to the button, I almost didn't register it as clickable"
+        ],
+        "visual_notes": "Dark grid + orange accent is a coherent visual language — someone made real type choices here, not defaults. The micro-copy row under the CTA ('no real money · no seed phrase') is doing quiet trust work and I appreciate the restraint. That said, the 'AWAITING TIP-OFF' status bar at the top reads like a dev artifact someone forgot to style into something polished — it breaks the otherwise clean craft."
+      }
+    }
+  ],
+  "tally_submitted": true,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

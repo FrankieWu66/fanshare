@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-02",
+  "display_name": "Maya Patel",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "4XVAEJgfF8anFbb4316JptqvYTkPXkaTT3ow2ixi27Zb",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:14:36.925Z",
+      "user_id": "bot-02",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top and then that big 'Claim $100' button basically screaming at me. I also caught the three-step breakdown — get money, find a mispriced player, buy or sell based on whether you think the hype is real.",
+      "their_interpretation": "Okay so it's basically fantasy sports but instead of drafting a team you're betting on whether a specific player is overrated or underrated right now — like, the market thinks LeBron is worth four bucks but the stats say five, so you buy and wait for people to catch up. That's actually kind of genius for someone who watches film and knows when a guy is about to pop off.",
+      "their_decision": "I'm clicking 'Claim $100' for sure.",
+      "their_rationale": "No signup, no password, no real money — there is literally zero downside here, and if Jayson Tatum is on this thing and the market is sleeping on him after a slow start I will be the first one buying that dip. The vibe feels clean and the explainer was actually readable, which matters.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'Devnet' in the top bar — I know that's a crypto thing but it felt a little technical for what is otherwise a very friendly page, like who is that label for",
+        "'Fair-value price from stats' — I get the concept but I'd want to know exactly which stats, like is it points only or does it factor in assists and defense because that changes everything for how I'd play",
+        "'Your $100 only nudges a star like LeBron' — wait so my trade actually moves the price? That part made me pause, I wasn't sure if I was trading against a real market or just a simulation of one",
+        "AWAITING TIP-OFF banner — cute but I didn't know if that meant I literally couldn't do anything yet or just that prices update tonight"
+      ],
+      "first_impression_elements": [
+        "The 'Claim $100' button — big, orange-ish energy, impossible to miss, first thing my eyes went to",
+        "'No account yet — $100 · no real money · no seed phrase' — that no seed phrase line hit different, immediately felt safer than 90 percent of crypto stuff I've seen",
+        "The LeBron undervalued example with the actual dollar prices — that made the whole concept click in like two seconds"
+      ],
+      "ignored_elements": [
+        "The 'About' and 'Methodology' links in the footer — not touching those right now, that's homework-mode energy",
+        "The 'Feedback' button in the corner — I'll use that if something breaks, not before",
+        "The 'Terms explained' dropdown — I saw it, I did not click it, I trust the vibe enough to move forward first"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 8
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:15:34.378Z",
+    "user_id": "bot-02",
+    "q1_what_am_i_buying": "Okay so like, it's fake money so it's not a REAL stock, but basically I'm buying a little token tied to a player — like a Jayson Tatum token — and its worth is connected to how he's actually performing stat-wise. It's like owning a piece of his game, but pretend. Think of it like a fantasy sports pick but it lives in a market.",
+    "q2_what_moves_price": "Two things from what I can tell — the stats move some kind of 'fair value' price that a computer calculates, and then OTHER people buying and selling move the actual market price. So if JT goes off for 40 and 8 assists, I'd guess his fair value jumps, and then if everyone rushes to buy him, the market price shoots up too. Riding that wave early is the whole point.",
+    "q3_hold_week": "Honestly I'm not totally sure — the app said prices move after games, so I assume his price keeps updating every day based on his stats? But if I just hold and don't sell, I think my gains or losses just sit there unrealized until I actually make a move. I don't know if there's like a timer or expiration, the app didn't really tell me that part.",
+    "q4_fair_vs_market": "Fair value is what the computer thinks JT is worth based on his actual stats — like a math grade for his game. Market price is what other people in the app are actually paying for his token right now, which is driven by hype and trading. The gap between those two numbers is where you make your move — if the market is sleeping on him but the stats say he's elite, you buy before everyone catches on.",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 8,
+        "first_impression_elements": [
+          "That massive orange 'real stats.' headline — it literally jumps out and grabs you, very hype energy",
+          "The yellow-orange 'Claim $100' button is SO loud in the best way, impossible to miss",
+          "The dark grid background gives it this sleek trading-floor vibe that feels legit and cool"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' nav items top right — my eyes skipped right past those",
+          "The 'How it works' secondary link next to the CTA — the button ate all the attention",
+          "The 'NEW HERE? 10-SECOND VERSION' section below the fold — didn't even register until I looked for it"
+        ],
+        "visual_notes": "Okay this is genuinely clean — the dark grid aesthetic with that orange-yellow accent color combo is giving Bloomberg-meets-sneaker-drop energy and I am HERE for it. The hierarchy is tight: big bold headline, one punchy CTA, micro-copy underneath that handles the 'wait is this real money' anxiety before I even had to ask. The 'AWAITING TIP-OFF' status bar is a cute live-game touch that makes it feel like something is actually happening right now."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

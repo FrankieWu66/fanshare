@@ -1,0 +1,80 @@
+{
+  "user_id": "bot-09",
+  "display_name": "Sam Jefferson",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "3F5GSRmWV1hXyefJKkJv5GDz6PwXeFhTo18RjXVEFgdQ",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:14:50.823Z",
+      "user_id": "bot-09",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(no interpretation)",
+      "their_decision": "(no explicit decision)",
+      "their_rationale": "(no rationale)",
+      "confidence": 0.5,
+      "confusion_notes": [],
+      "first_impression_elements": [
+        "The giant bold headline with 'real stats.' in orange — it pops immediately and feels energetic",
+        "The bright yellow 'Claim $100 →' button — my eyes went straight to it, looks clickable and safe",
+        "The dark grid background — feels techy and intentional, like a trading dashboard vibe"
+      ],
+      "ignored_elements": [
+        "The 'DEVNET · PRACTICE MODE' text in the top right nav — too small, didn't register",
+        "The 'AWAITING TIP-OFF' status bar — I noticed the orange dot but didn't read the text",
+        "The 'How it works ↓' secondary link — the yellow button completely overshadowed it"
+      ],
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:15:47.946Z",
+    "user_id": "bot-09",
+    "q1_what_am_i_buying": "Okay so like... I think I'm buying a pretend token for a player? The app said it's fake money so it's not like a real stock or anything. It's more like... a bet? A fake bet? Wait, does the token actually exist somewhere or is it just a number on the screen — I genuinely don't know, the app didn't really say.",
+    "q2_what_moves_price": "From what I read, two things move it — the stats the computer calculates every day, and also what other people are paying for it. Like if a bunch of people buy LeBron, the price goes up for the next person. And I think if he has a bad game his fair-value price drops? But I'm not totally sure how fast that happens or when exactly.",
+    "q3_hold_week": "Honestly I have no idea? The app said prices move after tonight's games so I guess the number would change each day based on his stats. But like... does it automatically sell? Does it just sit there? I don't know what happens if I just leave it. I didn't see anything about that on the page I was on.",
+    "q4_fair_vs_market": "Okay so fair value is what the computer thinks the player is worth based on his real stats, and market price is what people are actually paying for him. So if everyone's sleeping on a player, the market price is lower than what the stats say he's worth — and that gap is supposedly where you make money. I think I get that part, it's kind of like the player is on sale.",
+    "overall_confidence": 0.32,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The giant bold headline with 'real stats.' in orange — it pops immediately and feels energetic",
+          "The bright yellow 'Claim $100 →' button — my eyes went straight to it, looks clickable and safe",
+          "The dark grid background — feels techy and intentional, like a trading dashboard vibe"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' text in the top right nav — too small, didn't register",
+          "The 'AWAITING TIP-OFF' status bar — I noticed the orange dot but didn't read the text",
+          "The 'How it works ↓' secondary link — the yellow button completely overshadowed it"
+        ],
+        "visual_notes": "The dark theme with orange and yellow accent colors is cohesive and confident — this looks like someone who knew what they were doing. The micro-copy beneath the CTA ('$100 · no real money · no seed phrase') is doing real trust work for a crypto-adjacent product. The grid background adds texture without being distracting, though the overall layout feels slightly sparse above the fold with a lot of unused right-side real estate."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

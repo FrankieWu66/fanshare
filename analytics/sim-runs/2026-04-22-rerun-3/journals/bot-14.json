@@ -1,0 +1,88 @@
+{
+  "user_id": "bot-14",
+  "display_name": "Ellie Vance",
+  "archetype": "skeptic",
+  "viewport": "mobile",
+  "wallet_address": "JCPoZLs5WQeCk9Xy5P9VwX4LgvfZduZDN8irQPcKNGrr",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:15:01.057Z",
+      "user_id": "bot-14",
+      "step": "landed",
+      "what_they_read": "I read 'Trade player tokens that move with real stats' up top, then the 'New here? 10-second version' block because that's where they usually hide what the thing actually is. Also clocked 'No signup, no password — it just appears' immediately.",
+      "their_interpretation": "It's a fake stock market for NBA players using play money — no real cash, no crypto wallet nonsense. The $100 is pretend, which is the only reason I haven't already closed this tab.",
+      "their_decision": "I'm not clicking Claim $100 yet — I'm reading the Terms explained link first and checking what 'Devnet' means in the URL context.",
+      "their_rationale": "The copy is doing a lot of work to reassure me it's not real money, which paradoxically makes me want to verify that before I hand over anything — even just an email or a cookie. 'No signup, no password — it just appears' is either the most frictionless thing I've seen or a lie waiting to happen.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'Devnet' — is this a blockchain thing they're soft-pedaling? That word belongs to crypto infrastructure and it's sitting right in the header with zero explanation.",
+        "'The gap is your edge' — sounds slick but I had to re-read the 10-second block to understand what gap they mean.",
+        "'AWAITING TIP-OFF' — is this a live feature or placeholder? Feels like broken UI.",
+        "'fair-value price' vs 'market price' — the concept is explained but the word 'fair-value' implies a formula I can't audit.",
+        "No mention of who built this or any company name beyond 'FanShare' — About link exists but I haven't clicked it yet and that's a trust gap."
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — high contrast, unavoidable, first thing my thumb hovered near",
+        "'No real money, no risk' repeated twice in close proximity — they're clearly pre-empting my exact objection",
+        "'Devnet' badge next to 'FanShare' in the header — flagged it immediately as a crypto tell"
+      ],
+      "ignored_elements": [
+        "The 'Thesis' one-liner about being right early — felt like filler philosophy",
+        "The LeBron $5.59 vs $4.20 example — I'll read it if I decide to stay, not before",
+        "💬Feedback button — not my problem right now",
+        "Invite link in the footer nav — I'm the one who was invited, why am I seeing this"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "mobile",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 6,
+      "would_show_friend": 5
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:16:09.192Z",
+    "user_id": "bot-14",
+    "q1_what_am_i_buying": "A fake token tied to a fake account with fake money — the copy says 'practice mode' about six times, so I'm not buying anything real. It's a pretend position on a player that tracks their stats somehow. No seed phrase, no wallet, nothing I actually own.",
+    "q2_what_moves_price": "Two things apparently: the stats formula moves a 'fair value' price daily, and then other people buying or selling moves the actual market price. The copy says buying raises it for the next person, selling lowers it — so it's partly crowd behavior, partly whatever the stat algorithm does. I don't know the exact formula.",
+    "q3_hold_week": "Honestly I don't know — the copy doesn't say. I assume the fair-value price keeps updating with his real stats each day, and the market price drifts based on what other users do. Whether my position gains or loses depends on both. The copy never explains what happens if I just sit there.",
+    "q4_fair_vs_market": "Fair value is the computer's stat-based price — a formula I haven't seen. Market price is what other users are actually paying. The gap between them is supposedly the 'edge.' If the market is below fair value, the app flags it green as undervalued. Simple enough concept, but I'd want to see the methodology before I trust the fair-value number means anything.",
+    "overall_confidence": 0.42,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 6,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 5,
+        "first_impression_elements": [
+          "The bold orange 'real stats.' accent — it pops hard against the dark background, first thing my eye lands on",
+          "The amber CTA button 'Claim $100' — oversized, impossible to miss, slightly too loud for my taste",
+          "The 'AWAITING TIP-OFF' status bar with the pulsing orange dot — feels live, which is either clever or gimmicky"
+        ],
+        "ignored_elements": [
+          "The grid overlay texture on the dark background — I barely registered it",
+          "The 'How it works' secondary link — too low contrast, too small, I skimmed past it",
+          "The Feedback bubble in the corner — screams beta, which is not reassuring"
+        ],
+        "visual_notes": "The dark grid aesthetic is coherent and the orange-on-black color discipline is consistent, I'll give it that. But the 'DEVNET · PRACTICE MODE' badge sitting right in the header is a trust killer — it reads as unfinished product, not a feature. The micro-copy row at the bottom ('no real money · no seed phrase') is doing heavy lifting to counter that anxiety, but it's tiny and dim on mobile — exactly where I need reassurance, it's whispering."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

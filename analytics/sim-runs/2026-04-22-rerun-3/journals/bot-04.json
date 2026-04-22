@@ -1,0 +1,85 @@
+{
+  "user_id": "bot-04",
+  "display_name": "Marcus Reid",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "Ayqjm1VsCWXd2KUdjYbEoWwppNKKaxaoYsptt3Unte3v",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:14:40.557Z",
+      "user_id": "bot-04",
+      "step": "landed",
+      "what_they_read": "Saw 'Trade player tokens that move with real stats' up top, then the $100 free money offer with 'no real money, no seed phrase' underneath it. Skimmed the LeBron $5.59 vs $4.20 example.",
+      "their_interpretation": "It's like a fantasy sports sim but you're actually trading prices, not picking lineups — fake money, real NBA stats driving the numbers. Basically paper trading but for player hype.",
+      "their_decision": "Clicking Claim $100 right now.",
+      "their_rationale": "No seed phrase, no signup, free hundo drops instantly — zero friction, zero risk. If the vibe is even half decent I'm in to find a role player I can pump.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'fair-value price' vs 'market price' gap — gets it conceptually but the stat-to-price math is a black box, not explained",
+        "'AWAITING TIP-OFF' banner — unclear if the app is broken or just waiting for tonight's games to start",
+        "'Devnet' label — crypto brain says testnet, but is this actually on a chain or just a web2 sim? never clarified"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — obvious, clean, no hoops",
+        "'No seed phrase' callout — instantly lowered my guard",
+        "LeBron $5.59 vs $4.20 undervalued example — concrete, made the mechanic click fast"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — didn't touch it",
+        "About · Methodology · Invite footer links — didn't exist to me",
+        "The long 'Thesis' paragraph about being right early — too many words, scrolled past"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 8
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:15:30.826Z",
+    "user_id": "bot-04",
+    "q1_what_am_i_buying": "Like a fake stock for an NBA dude, tied to his stats somehow. Not real money, not real ownership — just a number that moves.",
+    "q2_what_moves_price": "People buying pushes it up, people selling drops it. Stats do something too but honestly I'm just watching the candle.",
+    "q3_hold_week": "No idea bro, I assume it just sits there? Maybe the stat thing updates it daily? I'd probably flip it before a week anyway.",
+    "q4_fair_vs_market": "Fair value is what the computer says based on stats, market price is what people actually paid. Gap between them is supposedly where you win — but I'm really just buying green and hoping.",
+    "overall_confidence": 0.3,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 8,
+        "first_impression_elements": [
+          "That orange 'real stats.' hit hard — instant eye magnet",
+          "Yellow CTA button pops against the dark grid background, can't miss it",
+          "Grid background texture gives it that Bloomberg terminal / trading app energy"
+        ],
+        "ignored_elements": [
+          "The 'How it works' secondary link — didn't even clock it at first",
+          "The fine print row about no account / no seed phrase",
+          "DEVNET · PRACTICE MODE nav items top right"
+        ],
+        "visual_notes": "Dark grid aesthetic goes hard, feels like a legit trading terminal which is exactly the vibe for this. Orange accent on the headline does the heavy lifting and the yellow CTA button is clean and punchy. Only thing holding it back is the left-heavy layout leaves a lot of dead dark space on the right — feels slightly unfinished, like the chart widget didn't load."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

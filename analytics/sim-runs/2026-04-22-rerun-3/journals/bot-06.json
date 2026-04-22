@@ -1,0 +1,85 @@
+{
+  "user_id": "bot-06",
+  "display_name": "Tyrese Wood",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "BgmThQPZ6HtDeYiauwkw2GxMM9uM4aYZYYKb3WxCqa5v",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:14:44.515Z",
+      "user_id": "bot-06",
+      "step": "landed",
+      "what_they_read": "I caught 'Trade player tokens that move with real stats' up top, then the three-step breakdown — especially the LeBron example with the $5.59 fair value versus $4.20 market price. That example is doing a lot of heavy lifting here.",
+      "their_interpretation": "So this is basically a paper-trading game where an algorithm prices NBA players off their actual box scores, and I'm betting on whether the crowd-price is wrong relative to that algorithm's number. No real money, no wallet connection — the $100 is just pretend chips to play with.",
+      "their_decision": "I'd click 'Claim $100' and poke around, but I'd immediately look for the Methodology link before I placed a single trade.",
+      "their_rationale": "The 'no seed phrase, no signup' line actually lowered my guard more than anything else — that's the thing that usually burns you on crypto stuff, and they're explicitly removing it. Still, I want to understand how the fair-value price is calculated before I trust the signal; if the formula is garbage the whole premise falls apart.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'The gap is your edge' — sounds cool but I had to re-read it twice to confirm it means the spread between algo price and market price, not some fee or slippage concept",
+        "'Buying raises the price for the next person' — is this a bonding curve? AMM? They don't name the mechanism and I want to know if that's by design or if they're hiding something",
+        "'AWAITING TIP-OFF — Prices move after tonight's games' — does that mean the tokens are frozen right now? Can I still trade or am I just window shopping until tip-off?",
+        "'Devnet' in the header — I know that's a Solana testnet term, so this is on-chain under the hood, but they never say that on the page. Feels like they're burying the crypto angle on purpose, which is fine but slightly odd"
+      ],
+      "first_impression_elements": [
+        "The LeBron $5.59 vs $4.20 concrete price example — that made the concept click faster than any of the paragraph copy",
+        "The 'No account yet · $100 · no real money · no seed phrase' trio of reassurances directly under the Claim button",
+        "'AWAITING TIP-OFF' status badge — it's the first dynamic thing on the page and my eye went there immediately wondering if the site was broken"
+      ],
+      "ignored_elements": [
+        "The 'Thesis' one-liner about being right early — felt like flavor text, skipped it",
+        "The '↓Terms explained' toggle — I noticed it exists but didn't expand it on first pass",
+        "The footer About and Invite nav links — registered they were there, didn't click"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:15:42.553Z",
+    "user_id": "bot-06",
+    "q1_what_am_i_buying": "From what I can tell, I'm buying a token that represents a player's statistical value — it's not a real asset, no ownership stake, just a position in a fake market where the price is supposed to track how well that player performs statistically. Think of it like a pretend stock where the underlying 'company' is the player's box score.",
+    "q2_what_moves_price": "Two things seem to move it: the fair-value price updates based on real stats — so if a player goes off for 40 points, the computer probably bumps their fair value up — and then the market price moves because other users are buying and selling. The app literally said buying raises the price for the next person, so it's partly supply and demand from other traders too.",
+    "q3_hold_week": "Honestly I'm not 100% sure — the app said prices move after tonight's games, so I'd guess the fair-value recalculates daily as stats come in, and the market price drifts based on what other people are doing. If LeBron has a great week, fair value probably climbs. Whether the market price follows is the question. I don't know if there's any time decay or holding cost the app didn't mention.",
+    "q4_fair_vs_market": "Fair value is the computer's calculation — it's crunching LeBron's actual stats and spitting out a number like $5.59. Market price is what real users are actually paying right now, like $4.20. The gap between those two is supposedly where you make money — if the market is underpricing a guy relative to his stats, you buy in and wait for the market to catch up. That's the core mechanic as I understand it.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The bold orange 'real stats.' text in the headline — high contrast, pulls focus immediately",
+          "The yellow 'Claim $100 →' CTA button — chunky, rounded, impossible to miss against the dark background",
+          "The grid overlay texture on the dark background — subtle but gives it a Bloomberg-terminal-meets-crypto-app feel"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' nav items top right — registered them but didn't dwell",
+          "The 'NEW HERE? 10-SECOND VERSION.' section starting to appear at the bottom fold — cut off, easy to scroll past"
+        ],
+        "visual_notes": "The dark grid background with orange/yellow accent color system is disciplined and consistent — this looks intentional, not cobbled together. The micro-copy beneath the CTA ('no real money · no seed phrase') is doing real trust work in a small footprint, which I appreciate as someone who reads every tooltip. The 'AWAITING TIP-OFF' status bar is a nice live-data signal that the product is actually running, though the yellow dot vs green dot color distinction between that and the PRACTICE MODE label feels slightly inconsistent and worth a second look."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-07",
+  "display_name": "Diego Morales",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "5YKB39iDsWoCkPGbj7PDD3yJsNYVHZafcnD3GTfbvLyw",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:14:47.093Z",
+      "user_id": "bot-07",
+      "step": "landed",
+      "what_they_read": "I caught 'Trade player tokens that move with real stats' at the top, then skimmed the '10-second version' box that called it a pretend stock market for NBA players with $100 of fake money. The LeBron example — stats say $5.59, market says $4.20 — is what actually slowed me down.",
+      "their_interpretation": "So it's basically a fantasy sports simulator but framed like a trading platform — you're not picking lineups, you're buying and selling player tokens based on whether the market has mispriced their real stats. The gap between fair-value price and market price is where you make or lose your fake money.",
+      "their_decision": "I'd click 'Claim $100' and see what the actual trade interface looks like.",
+      "their_rationale": "No real money, no seed phrase, no signup — that's three objections I usually have and they preemptively knocked them all out. The LeBron undervalued example clicked for me immediately because it's exactly the value-vs-hype framing I already think about; I want to see if the player cards actually show that gap clearly before I commit any time to it.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'Devnet' — I know this is a Solana term for a test network but it's not explained anywhere on the page; someone without SOL experience would have no idea what it signals",
+        "'AWAITING TIP-OFF — Prices move after tonight's games' — unclear whether this means the app is currently frozen or just updating on a schedule; felt like it might be broken",
+        "'Buying raises the price for the next person' — this sounds like a bonding curve mechanic but the page never names it; I'm inferring from SOL experience and it made me wonder if there's slippage I should care about even in practice mode",
+        "'The gap is your edge — if you're right, and early' — 'early' is doing a lot of work here and it's not defined; early relative to what, the daily stat update?"
+      ],
+      "first_impression_elements": [
+        "The LeBron $5.59 vs $4.20 undervalued example — concrete numbers made the concept land instantly",
+        "'No account yet · $100 · no real money · no seed phrase' subtext under the Claim button — that line did more trust-building than the headline",
+        "'AWAITING TIP-OFF' status badge — caught my eye because it looked like a live indicator and made me wonder if I was too early or the site was down"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — I saw it but didn't click; I figured it was legal boilerplate and the page already told me it's fake money",
+        "The 'Methodology' nav link — didn't register until I was re-reading; sounds like it explains the stat-to-price formula but I wasn't curious enough yet",
+        "'💬Feedback' button — completely ignored, felt like a dev tool not meant for me",
+        "The 'Built by FanShare' footer area — scrolled past it"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 8,
+      "trust_signal_strength": 7,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:15:44.019Z",
+    "user_id": "bot-07",
+    "q1_what_am_i_buying": "The way I understand it, I'm buying a token tied to a player's real stats — it's not equity in the player or anything like that, it's more like a position in how well their numbers translate to a price the app calculates. Fake money, fake token, but the stat connection is real.",
+    "q2_what_moves_price": "Two things from what I can tell — the stat-based fair value updates after real games, and then other traders buying or selling push the market price around independently. So if KD goes off for 35 and 8 assists, the fair value probably jumps, and if traders pile in, the market price jumps even more — sometimes past what the stats actually justify.",
+    "q3_hold_week": "Honestly the app didn't spell this out clearly, so I'm guessing — I'd assume the fair value keeps recalculating each day based on his stats, and the market price drifts based on what other people are doing. If I just sit on it, I'm along for the ride either way, good or bad. I don't know if there's any decay or time penalty for holding.",
+    "q4_fair_vs_market": "Fair value is what the computer says the player is worth based on actual stats — that's the anchor. Market price is what people are actually paying for the token right now, which can run above or below fair value depending on hype or neglect. The gap between those two numbers is where I'm trying to find my edge — buy when market is below fair value, sell when it overshoots.",
+    "overall_confidence": 0.55,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 8,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The bold orange 'real stats.' accent in the headline — high contrast, pulls the eye immediately",
+          "The amber/yellow CTA button with rounded corners — stands out cleanly against the dark grid background",
+          "The dark grid background texture — gives it a Bloomberg terminal / trading desk feel that fits the concept"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' nav items top right — read as low-stakes disclaimer noise",
+          "The 'NEW HERE? 10-SECOND VERSION.' section below the fold — didn't register until looking for it"
+        ],
+        "visual_notes": "The color discipline is tight — near-black background, white type, single orange accent, one yellow CTA. That restraint reads professional. The 'AWAITING TIP-OFF' status bar is a nice live-data touch that adds credibility without clutter. The micro-copy under the CTA ('no real money · no seed phrase') does real trust work in minimal space — exactly the right instinct for a practice-mode invite page."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

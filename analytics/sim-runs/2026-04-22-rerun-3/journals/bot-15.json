@@ -1,0 +1,62 @@
+{
+  "user_id": "bot-15",
+  "display_name": "Priya Shah",
+  "archetype": "power",
+  "viewport": "desktop",
+  "wallet_address": "ApYBrU6SUsre2suaeDpWKaGDoKtzgCfysjq1PVP7sw5b",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:15:02.617Z",
+      "user_id": "bot-15",
+      "step": "landed",
+      "what_they_read": "Headline hit first: 'Trade player tokens that move with real stats.' Then the three-step flow and the $100 no-signup offer. Skimmed the LeBron $5.59 vs $4.20 example fast.",
+      "their_interpretation": "It's a paper-trading sim for NBA player tokens — stat-derived fair value vs market price, you're playing the spread. Devnet, fake money, no wallet needed. Got it in maybe eight seconds.",
+      "their_decision": "Click 'Claim $100 →' right now.",
+      "their_rationale": "No seed phrase, no signup friction — that's the tell it's actually low-stakes. The fair-value vs market-price mechanic is legit tradeable logic and I want to see the order book depth and bid-ask spreads on role players immediately.",
+      "confidence": 0.88,
+      "confusion_notes": [
+        "'AWAITING TIP-OFF' — is that a live market-open gate or just flavor text? Will prices actually be frozen until tip-off tonight? Need to know if I can trade NOW.",
+        "'Buying raises the price for the next person' — is this an AMM bonding curve or a CLOB? Copy implies AMM but doesn't say it. Matters for sizing.",
+        "'The gap is your edge' — gap to what settlement? Does fair value update intraday or once daily post-game? Settlement cadence is critical and it's buried.",
+        "'Devnet' in the URL but 'Practice mode' on-page — two different framings for the same thing feels slightly sloppy"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — high contrast, above fold, zero friction promise",
+        "LeBron $5.59 vs $4.20 concrete price example — immediately parsed as spread trade",
+        "'No seed phrase' callout under the button — removed my main objection before I had it"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' accordion — skipped entirely",
+        "Footer links: About, Methodology, Invite — noise",
+        "'💬Feedback' button — not my problem right now",
+        "The long 'New here? 10-second version' paragraph — already knew what this was from the headline"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop"
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:15:57.755Z",
+    "user_id": "bot-15",
+    "q1_what_am_i_buying": "Fake-money stake in a player token — not equity, not a real asset, just a pretend position that tracks whether the market price closes the gap to the stat-based fair value. Practice mode, so nothing real behind it.",
+    "q2_what_moves_price": "Two levers from what I can see: stats update the fair-value side, and actual buys/sells move the market price — buying pushes it up, selling drags it down. Small-cap role players move faster on volume, stars need more flow to rip.",
+    "q3_hold_week": "Honestly the app hasn't told me what happens intraday or over multiple days explicitly — I'd guess fair value refreshes daily as real stats come in, so if LeBron keeps balling the fair value climbs, but if market price already ran ahead I'm just sitting on an overvalued bag. No clear answer on decay or expiry from what I've seen.",
+    "q4_fair_vs_market": "(no answer)",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

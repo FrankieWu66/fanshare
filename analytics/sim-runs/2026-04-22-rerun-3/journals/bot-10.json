@@ -1,0 +1,92 @@
+{
+  "user_id": "bot-10",
+  "display_name": "Nia Johnson",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "2wXCUj6erZK3i491qCENzwkRyJcQ1EAnxzjnNmenLc6x",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:14:52.793Z",
+      "user_id": "bot-10",
+      "step": "landed",
+      "what_they_read": "I saw 'FanShare is a pretend stock market for NBA players' and 'Get $100 in practice money — no real money, no seed phrase.' That 10-second version box basically explained the whole thing to me.",
+      "their_interpretation": "Okay so it's like... fake money, fake stocks, but for NBA players? Like if I think LeBron is gonna go off tonight I can 'buy' him and make fake money? That actually sounds kinda fun lol.",
+      "their_decision": "I'm clicking 'Claim $100 →' for sure.",
+      "their_rationale": "It says no real money like three times and there's no signup or password which means I literally have nothing to lose — worst case I just close the tab. Plus $100 of fake money to play with sounds way better than reading more.",
+      "confidence": 0.72,
+      "confusion_notes": [
+        "'seed phrase' — they said 'no seed phrase' like that's supposed to reassure me but I have zero idea what a seed phrase even is, so it didn't help or hurt lol",
+        "'Devnet' in the top bar — what is that? Is that like a network? A test thing? I just ignored it",
+        "'token' — I know what a token is at an arcade but player tokens feels different, is it like a coin? A stock? Both?",
+        "'fair-value price' vs 'market price' — I kind of got it from the LeBron example ($5.59 vs $4.20) but the words themselves felt like finance class",
+        "'the gap is your edge' — edge of what lol",
+        "'AWAITING TIP-OFF' banner — is the app broken? Is it not working yet? That made me nervous for a second",
+        "'Methodology' link in footer — no idea what that means, sounds like homework",
+        "'Buying raises the price for the next person' — wait so I'm affecting other people's money? Even fake money that felt weird"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — that was literally the first thing my eyes went to, free money button go brrr",
+        "The '10-second version' plain-English box — 'pretend stock market for NBA players' clicked immediately, that sentence did all the work",
+        "The LeBron $5.59 vs $4.20 example — made it feel real and concrete, I actually understood that one"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — I saw it but did not click it, terms are terms lol",
+        "The 'Thesis' section ('Being right early pays better than being right once') — felt like a motivational poster, scrolled past",
+        "About, Methodology, Invite links in the footer — footer stuff is invisible to me",
+        "'Practice mode. No real money, no financial risk, no financial advice.' disclaimer at the very bottom — didn't read it, already got the message from higher up",
+        "The 'Prices move after tonight's games' ticker detail — I noticed it but didn't think about what it meant"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 7,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:15:48.137Z",
+    "user_id": "bot-10",
+    "q1_what_am_i_buying": "Okay so like... I'm buying a token for a player? It said it's pretend money so it's not like a real stock, it's more like a fake share that's tied to how good the player is doing stat-wise. Honestly I'm not 100% sure what the token *is* is, like do I own a piece of something or is it just a number that goes up and down lol.",
+    "q2_what_moves_price": "Two things I think? Like the computer recalculates the fair price based on his actual stats from real games, AND other people buying or selling moves the market price too. The app said buying raises the price for the next person so if everyone's buying LeBron his price goes up, which, same as hype I guess.",
+    "q3_hold_week": "Honestly I don't really know? I'm guessing if LeBron has good games his fair price goes up and maybe the market follows? But the app didn't really explain what happens if you just... sit there. Like does it auto-update every day or do I have to do something? I'm kinda just hoping number goes up lol.",
+    "q4_fair_vs_market": "Okay so fair value is what the computer thinks he's worth based on his stats, and market price is what people are actually paying for him. If the market price is lower than fair value it shows green and says undervalued, meaning people are sleeping on him — and that's supposed to be my opportunity to buy before everyone catches on.",
+    "overall_confidence": 0.35,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 7,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "That big orange 'real stats.' text — it literally pops off the dark background, first thing my eyes went to",
+          "The yellow 'Claim $100' button — chunky and impossible to miss, my finger basically moved toward it automatically",
+          "The dark grid background — feels kind of techy and cool, like a Bloomberg terminal or something"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' text in the top right corner — tiny and I have no idea what that means",
+          "The 'AWAITING TIP-OFF' status bar — I saw the orange dot but didn't really read it",
+          "The 'How it works ↓' secondary link — the yellow button ate all my attention"
+        ],
+        "visual_notes": "The dark theme with orange-and-yellow accent combo is genuinely sharp and feels intentional, not random. The type hierarchy is doing real work — the headline is huge and confident, the subtext is readable, and the CTA button has great contrast and weight. The grid background adds texture without being distracting, though the overall page feels a little sparse above the fold in a way that might make a first-timer wonder if it fully loaded."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}
