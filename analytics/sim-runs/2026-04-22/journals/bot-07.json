@@ -1,0 +1,84 @@
+{
+  "user_id": "bot-07",
+  "display_name": "Diego Morales",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "5YKB39iDsWoCkPGbj7PDD3yJsNYVHZafcnD3GTfbvLyw",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:34.483Z",
+      "user_id": "bot-07",
+      "step": "landed",
+      "what_they_read": "The headline says 'Trade player tokens that move with real stats' and then there's a plain-English breakdown calling it a 'pretend stock market for NBA players' where a computer sets a fair-value price from stats and the market can disagree. The $100 offer is framed as devnet SOL — fake money, no wallet needed.",
+      "their_interpretation": "Okay so this is basically a fantasy sports app but instead of drafting a team you're trading individual player tokens like stocks, and the angle is finding players the market has mispriced relative to their actual stat output. The $100 is play money on Solana's test network — I know what devnet is, so that part checks out immediately.",
+      "their_decision": "I'd click 'Claim $100' and see what the trading interface looks like.",
+      "their_rationale": "No wallet, no seed phrase, no real money — the risk is literally zero and I already know enough about Solana to trust 'devnet SOL' isn't touching my actual holdings. The value angle they're pitching — find a player the market has wrong — is exactly how I think about KD sitting at $5.78, which is the first thing I noticed in that ticker.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'oracle updates' — I get the concept vaguely from DeFi but they never explain what triggers one or how often it happens, which matters a lot for the 'Diamond Hands' badge strategy",
+        "The ticker shows '$KD$5.78 — 0.0%' with zero percent change — is this live or is the market just not moving yet because nobody's traded? '0.0%' on everything feels like a placeholder and I can't tell if this is real data or demo filler",
+        "'The gap is your edge' — fine, but gap between what and what exactly? They explain it later in step 2 but the hero copy assumes I already know the two-price model"
+      ],
+      "first_impression_elements": [
+        "$KD$5.78 in the scrolling ticker — first thing I clocked, made me lean in",
+        "The plain-English 'New here? 10-second version' block — unusually honest framing for a crypto product, that built trust fast",
+        "Big 'Claim $100 →' button with 'no real money · no seed phrase' right underneath it"
+      ],
+      "ignored_elements": [
+        "The three badges section — saw it, didn't read it, badges feel like a later-problem",
+        "'↓Terms explained' link at the bottom",
+        "The 'Feedback' button entirely"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:34.907Z",
+    "user_id": "bot-07",
+    "q1_what_am_i_buying": "From what I can tell, I'm buying a fake token tied to an NBA player — it's like a pretend stock representing that player. The app's using play money so there's no real asset behind it, just a number that's supposed to reflect how that player is performing statistically.",
+    "q2_what_moves_price": "Two things seem to move it — the fair-value price shifts when the player's real stats update, and the market price moves when other users buy or sell. The app mentioned buying raises the price for the next person and selling lowers it, so it's partly a supply-demand thing on top of the stat-based calculation.",
+    "q3_hold_week": "Honestly I'm not totally sure — the app mentioned something called 'oracle updates' in the badge section, which sounds like periodic stat refreshes, so I'd guess the fair-value price would update a few times over a week as real game stats come in. Whether the market price drifts without me doing anything, I don't know, the app didn't spell that out clearly.",
+    "q4_fair_vs_market": "(no answer)",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The bold orange 'real stats.' typography — high contrast, pulls the eye immediately",
+          "Live ticker bar at the top with scrolling player token prices — feels like a real trading terminal",
+          "The bright yellow/orange CTA button 'Claim $100' — hard to miss, good size"
+        ],
+        "ignored_elements": [
+          "The grid/dot background texture — registered it but didn't process it",
+          "The 'How it works ↓' secondary link — visually undersells itself next to the CTA",
+          "The bottom 'NEW HERE? 10-SECOND VERSION.' explainer block — felt like fine print at first glance"
+        ],
+        "visual_notes": "The dark terminal aesthetic with the live ticker creates a credible trading-app feel that earns some trust visually, but the 'DEVNET' label and 'no real money' disclaimer in the status bar undercut any sense of real financial weight. Layout is clean and intentional — not thrown together — but the lower half of the viewport is mostly empty dark space, which makes the page feel unfinished. For a demo product it punches above its weight visually."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

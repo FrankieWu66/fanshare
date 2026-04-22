@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-12",
+  "display_name": "Riley Park",
+  "archetype": "skeptic",
+  "viewport": "desktop",
+  "wallet_address": "9MRVa6VFbFVXzXv9Eq9m4nzijYWv5sQ8nusvDd8eY2zD",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:44.216Z",
+      "user_id": "bot-12",
+      "step": "landed",
+      "what_they_read": "Big headline says 'Trade player tokens that move with real stats' and then there's a 'Claim $100' button with fine print underneath saying 'no real money, no seed phrase.' There's also a ticker scrolling player tokens with prices and a 0.0% change on all of them.",
+      "their_interpretation": "Okay so it's a fake trading sim for NBA players — Solana devnet, play money, no wallet required. The $100 isn't real, which is either reassuring or the thing they say before they ask for your email and start the funnel.",
+      "their_decision": "I'm hovering over 'Claim $100' but I haven't clicked it — I'm scrolling down to read the terms first.",
+      "their_rationale": "Every rugpull I've seen led with free money and no signup friction, so that's exactly what makes me slow down here. The 'devnet' and 'test SOL' language is a real trust signal — someone who's lying doesn't usually bother with accurate blockchain terminology — but 'no seed phrase' and 'no signup' means they're handling custody somehow, and I want to know what they're collecting before I touch that button.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'devnet SOL' — I know what devnet is but most people landing here won't, and it's doing a lot of trust work without being explained",
+        "'oracle updates' in the Diamond Hands badge — what oracle, how often, who controls it",
+        "All tickers show exactly 0.0% change — is this a live feed or a static demo placeholder? If it's live, why is nothing moving?",
+        "'The gap is your edge' — sounds slick but gap between what and what exactly, I had to read step 02 to understand that",
+        "'Badges are preview-only for Demo 1' — so I can't actually earn anything right now? Then what am I doing here"
+      ],
+      "first_impression_elements": [
+        "Claim $100 → button — big, high contrast, impossible to miss, also immediately suspicious",
+        "Scrolling ticker with real player abbreviations and prices — felt live, made it look legit before I read anything",
+        "'No real money, no seed phrase' subtext under the button — that's the line that kept me on the page instead of closing the tab"
+      ],
+      "ignored_elements": [
+        "The three badges section — didn't engage until I scrolled, and when I saw 'Zero claimed so far' I clocked it as a social proof vacuum",
+        "The 'How it works' anchor link — redundant once I started reading the page linearly",
+        "💬Feedback button — that's for people who've already decided to stay"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 4,
+      "would_show_friend": 5
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:37.782Z",
+    "user_id": "bot-12",
+    "q1_what_am_i_buying": "Fake money buys a fake token tied to a real player's stats — so basically a pretend stock for LeBron or whoever, running on test SOL that's worth nothing. I'm not buying the player, I'm not buying real crypto, I'm buying a number that moves based on a computer's math. Which is fine, I guess, as long as the computer doesn't disappear with my $100 of Monopoly money.",
+    "q2_what_moves_price": "Two things from what I can tell: the 'oracle' — their word, not mine — recalculates a fair-value price from real stats daily, and then other users buying or selling push the market price around separately. So if I buy, I nudge the market price up a little for the next person. Whether those two prices ever actually converge is something the app says but hasn't really proven to me yet.",
+    "q3_hold_week": "Honestly I don't fully know — the app mentions 'oracle updates' a few times and something about holding through three of them for a badge, so I assume the fair-value price keeps refreshing as his real stats come in. But what happens to my position if nobody else is trading and the market price just sits there? No idea. The app didn't spell that out, or I missed it.",
+    "q4_fair_vs_market": "Fair value is what their stats algorithm says a player is worth — a number the computer spits out. Market price is what people actually paid, which is pushed around by trades. The gap between them is supposedly my edge, like if LeBron's stats say $5.59 but everyone's trading him at $4.20, I buy and wait for the market to 'catch up.' Whether it ever does catch up, or who decides when it does — that part I'm still squinting at.",
+    "overall_confidence": 0.35,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 4,
+        "would_show_friend": 5,
+        "first_impression_elements": [
+          "The amber/orange 'real stats.' text in the hero — high contrast, hard to miss",
+          "Live ticker bar at the top scrolling player token prices — looks like a real trading terminal",
+          "Big yellow 'Claim $100' CTA button — immediately suspicious of what I'm actually claiming"
+        ],
+        "ignored_elements": [
+          "The grid background texture — decorative noise I tuned out instantly",
+          "The 'How it works ↓' secondary link — didn't pull my eye at all",
+          "The Feedback widget in the bottom right corner"
+        ],
+        "visual_notes": "Dark terminal aesthetic is competent — someone who knows design touched this. But the layout is sparse below the fold, which makes it feel half-built, and 'LIVE · DEVNET' in the nav is the kind of thing that makes me close tabs — devnet means not real, which means this whole thing could evaporate tomorrow. The ticker bar is the one element that earns visual credibility; everything else looks like a landing page template with a coat of black paint."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

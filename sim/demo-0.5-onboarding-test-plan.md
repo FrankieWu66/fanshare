@@ -66,7 +66,11 @@ These sit alongside the vocabulary-focused persona probes. They probe whether th
 
 **Per-step screenshot capture:** every agent action (landing, scroll, click, form fill, submit) triggers a screenshot saved to `analytics/sim-runs/2026-04-22/screenshots/agent-NN/step-MM.png`. Storage ~500MB per 15-agent run. Required for the post-run designer pass to retrace visual journey and correlate with journal entries.
 
-**LLM choice:** Sonnet 4.6 default for reasoning fidelity. Haiku 4.5 acceptable for cost-sensitive runs (faster + cheaper, slightly less nuanced reasoning). Specify in harness env: `MODEL=claude-sonnet-4-6` or `MODEL=claude-haiku-4-5-20251001`.
+**LLM choice (LOCKED 2026-04-22):** **Sonnet 4.6 baseline + Haiku 4.5 iteration.** First run uses Sonnet for deepest reasoning and gold-standard design findings. After shipping /invite copy edits, re-runs use Haiku 4.5 (~$0.50/run with caching, same SDK, same prompt cache) to validate the copy changes cheaply. ~10 iteration runs = ~$5 total. Budget for Demo 0.5 + 10 iterations: ~$8.
+
+Specify model in harness env: `ANTHROPIC_MODEL=claude-sonnet-4-6` (baseline) or `ANTHROPIC_MODEL=claude-haiku-4-5-20251001` (iteration). Switch by changing the env var — no code change needed.
+
+Llama and other providers rejected for this sim: qualitative depth is the primary goal, shallower models produce shallower signal, and Anthropic prompt caching (5× savings) isn't available on non-Anthropic providers. Llama stays a candidate for future throughput-oriented sims where breadth > depth.
 
 **Prompt caching (HARD REQUIREMENT):** shared persona prompt stub + site description + task scaffold must be wrapped in `cache_control: { type: "ephemeral" }` per Anthropic SDK. All 15 agents share the same prefix, so caching cuts cost ~5-10× (paid once per 5-min window, read-cache at 10% of input price thereafter). Without caching the run costs ~$10; with caching ~$2-3. Claude API best practice. See [Anthropic prompt caching docs](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching).
 

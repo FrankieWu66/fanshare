@@ -1,0 +1,79 @@
+{
+  "user_id": "bot-09",
+  "display_name": "Sam Jefferson",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "3F5GSRmWV1hXyefJKkJv5GDz6PwXeFhTo18RjXVEFgdQ",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:38.670Z",
+      "user_id": "bot-09",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(no interpretation)",
+      "their_decision": "(no explicit decision)",
+      "their_rationale": "(no rationale)",
+      "confidence": 0.5,
+      "confusion_notes": [],
+      "first_impression_elements": [
+        "The big orange 'real stats.' text — it popped immediately, felt energetic and sporty",
+        "The yellow 'Claim $100' button — my eyes went straight to it, looks clickable and safe-ish",
+        "The scrolling ticker at the top with dollar signs and numbers — looks like a real stock market thing which is kinda cool"
+      ],
+      "ignored_elements": [
+        "The grid background pattern — didn't really register it as anything meaningful",
+        "The 'LIVE · DEVNET' status indicator in the top left — too small, didn't notice it at first",
+        "The 'How it works ↓' secondary link — the yellow button completely overshadowed it"
+      ],
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:35.688Z",
+    "user_id": "bot-09",
+    "q1_what_am_i_buying": "Okay so... I think I'm buying like a fake token that represents a player? Like LeBron has his own little token called $LBJ and it's worth $5.59 right now, but I don't think that's real dollars — wait, is it? The app said no real money so I guess it's fake dollars. It's basically like a pretend stock for a basketball player, not like I own a piece of him or anything.",
+    "q2_what_moves_price": "Two things I think? Like the app said a computer looks at his real stats and makes a 'fair price' every day, so if LeBron plays great his fair price probably goes up. But also when people buy the price goes up and when they sell it goes down — the app literally said buying raises the price for the next person. So it's both the stats AND what other people are doing in the app.",
+    "q3_hold_week": "Honestly I'm not totally sure? I think the fair-value price might change because his stats keep updating — the app mentioned something called 'oracle updates' which I don't really know what that means, like is that a daily thing? But the market price I guess just stays wherever it is unless someone buys or sells. So maybe holding is good if his stats get better but I genuinely don't know if anything forces the prices to meet up.",
+    "q4_fair_vs_market": "Okay so fair value is what the computer calculates from his actual stats, and market price is what people in the app are actually paying for the token. The gap between them is supposedly my 'edge' — like if stats say LeBron is worth $5.59 but everyone's only paying $4.20, I buy hoping the market price catches up to the fair value. Wait but what if it never catches up? The app didn't really explain that part.",
+    "overall_confidence": 0.28,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The big orange 'real stats.' text — it popped immediately, felt energetic and sporty",
+          "The yellow 'Claim $100' button — my eyes went straight to it, looks clickable and safe-ish",
+          "The scrolling ticker at the top with dollar signs and numbers — looks like a real stock market thing which is kinda cool"
+        ],
+        "ignored_elements": [
+          "The grid background pattern — didn't really register it as anything meaningful",
+          "The 'LIVE · DEVNET' status indicator in the top left — too small, didn't notice it at first",
+          "The 'How it works ↓' secondary link — the yellow button completely overshadowed it"
+        ],
+        "visual_notes": "The dark theme with orange and yellow accents looks intentional and sporty — not thrown together, but also not polished enough to feel like a bank or something I'd trust with real money. The layout feels a little bare below the hero, like the page just kind of... stops. The ticker bar at the top is a nice touch that makes it feel live and real, but overall it reads more like a cool side project than a fully launched product."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

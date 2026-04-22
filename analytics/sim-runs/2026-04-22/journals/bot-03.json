@@ -1,0 +1,84 @@
+{
+  "user_id": "bot-03",
+  "display_name": "Chris Banks",
+  "archetype": "hype",
+  "viewport": "mobile",
+  "wallet_address": "7JovE5N424z23ch5bPA28e7U95MsTvwmaUUZYaJcWCVU",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:26.582Z",
+      "user_id": "bot-03",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top and then the three-step breakdown — get $100 fake money, find a mispriced player, buy or sell based on whether the stats or the hype wins. The LeBron example at $5.59 fair value vs $4.20 market price is what actually made it click.",
+      "their_interpretation": "So it's basically like a fantasy stock market for NBA players — the computer sets a 'real' price from stats, the market sets another price from what people are paying, and if you spot the gap before everyone else does, you win fake money. No real cash on the line, just bragging rights and apparently some badges.",
+      "their_decision": "I'm clicking 'Claim $100 →' right now.",
+      "their_rationale": "The 'no wallet yet, no seed phrase, no signup' thing actually made me trust it more — if this was a scam they'd be trying to get my wallet connected immediately. Plus it's Solana devnet, I've seen that before, that's literally just a sandbox, so there's nothing to lose and I want to see if the market is sleeping on Joel the way I think it is.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'oracle updates' — I know what an oracle is in crypto roughly but 'hold through 3 oracle updates' means nothing to me yet, like how often does that happen, daily?",
+        "'devnet SOL' — I get that it's fake but the ticker showing live prices with 0.0% movement everywhere made me briefly wonder if the market is actually dead or if this is just a fresh demo with no activity yet",
+        "The ticker abbreviations — I figured out $LBJ and $KD and $AD fast, but $LD, $JE, $GA, $NJ took me a second and I'm still not 100% on all of them"
+      ],
+      "first_impression_elements": [
+        "The scrolling live ticker with player token prices — $LBJ, $KD, $AD, that grabbed me instantly",
+        "Big 'Claim $100 →' button — hard to miss, and the 'no real money' line right under it",
+        "The LeBron $5.59 vs $4.20 example — that made the whole concept land in like two seconds"
+      ],
+      "ignored_elements": [
+        "The '↓Terms explained' section at the bottom — I saw it, didn't tap it",
+        "The badges section — I skimmed it but 'preview-only for Demo 1' told me it doesn't matter yet",
+        "The '💬Feedback' button — completely ignored"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "mobile",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:22.846Z",
+    "user_id": "bot-03",
+    "q1_what_am_i_buying": "Far as I can tell, it's like a pretend stock for a player — so if I buy Joel or LeBron, I'm grabbing a token that's supposed to represent how that dude is performing on the court. It's not real money or anything, just fake shares in a player's stats basically.",
+    "q2_what_moves_price": "Two things from what I can see — the computer recalculates a 'fair price' based on real stats, and then the market price moves when people like me actually buy or sell. So if everybody's sleeping on Joel and I buy, that nudges the price up a little for the next person.",
+    "q3_hold_week": "Honestly I'm not totally sure — I think the fair value price updates on some kind of schedule, like an 'oracle update' they mentioned, so it'd probably shift a few times over a week based on his stats. But I don't know exactly how often that happens or if my market price just sits there until someone else trades it.",
+    "q4_fair_vs_market": "Fair value is what the computer says a player is worth based on his actual stats — like LeBron at $5.59. Market price is what people are actually paying for the token right now. If the market price is lower than fair value, the app calls it undervalued and that's supposed to be your opportunity to get in before everyone catches up.",
+    "overall_confidence": 0.42,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "That big bold headline with the orange 'real stats' pop — hits immediately, very clean",
+          "The live ticker bar at the top with $LD and $JE prices — feels like a real trading app, not some janky crypto thing",
+          "The yellow 'Claim $100' button is massive and impossible to miss — good energy"
+        ],
+        "ignored_elements": [
+          "The subtle grid background texture — didn't register until I looked hard",
+          "The 'How it works' secondary link — eye went straight past it to the CTA",
+          "The 'NEW HERE? 10-SECOND VERSION' text at the very bottom — got cut off, basically invisible"
+        ],
+        "visual_notes": "Dark mode with orange accents is giving me Bloomberg terminal meets crypto exchange vibes — that's actually a good look for this kind of app. The 'DEVNET · INVITE · DEMO 1' tag up top is a little rough, makes it feel early/beta which could spook some people before they even read anything. The 'no real money · no seed phrase' line at the bottom is doing some trust work but it's tiny — if that's the safety net, it deserves more visual weight on mobile."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

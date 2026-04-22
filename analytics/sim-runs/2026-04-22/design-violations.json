@@ -1,0 +1,278 @@
+[
+  {
+    "agent_id": "bot-01",
+    "screenshot": "analytics/sim-runs/2026-04-22/screenshots/bot-01/step-01-landed.png",
+    "viewport": "desktop",
+    "violations": [
+      {
+        "category": "color",
+        "severity": "medium",
+        "what": "The 'Claim $100' CTA button uses a solid amber (#F59E0B) fill with dark text, but the spec designates amber as the brand accent and specifies Buy buttons should be full-width positive green (#22C55E) and Sell buttons negative red. A primary CTA button in solid amber is not defined in the component patterns.",
+        "spec_reference": "Accent (#F59E0B): brand elements, 'Undervalued' badges, active tab highlight, devnet badge, hover borders, supply progress bars. Buy button: full-width, positive green, bold.",
+        "suggested_fix": "Reserve solid amber fill for brand/accent elements only; use a green (#22C55E) or amber-outlined style for the primary CTA, or explicitly define an amber CTA variant in the component patterns."
+      },
+      {
+        "category": "typography",
+        "severity": "low",
+        "what": "The hero headline appears to use a sans-serif geometric font consistent with Cabinet Grotesk, but the body copy and subtitle text appear to be rendered in a system or fallback sans-serif rather than DM Sans, which has a distinct optical character.",
+        "spec_reference": "Body: DM Sans (400/500/600/700) — clean, readable, excellent tabular-nums support for prices. Loaded from Google Fonts.",
+        "suggested_fix": "Confirm DM Sans is loading correctly from Google Fonts and applied to all body/paragraph text elements."
+      },
+      {
+        "category": "color",
+        "severity": "low",
+        "what": "The ticker bar at the top appears to have a near-black background that looks slightly cooler/bluer than the specified warm near-black (#09090B), and the border separating it from the content area appears more prominent than the spec's subtle #1E1E22 border.",
+        "spec_reference": "Background: #09090B — warm near-black (not cold blue-black). Border: #1E1E22 — subtle separation.",
+        "suggested_fix": "Verify the ticker bar background is exactly #09090B and its bottom border is #1E1E22 without additional shadow or opacity adjustments that shift the perceived color."
+      },
+      {
+        "category": "typography",
+        "severity": "medium",
+        "what": "The ticker bar prices (e.g., '$6.18', '$7.81') appear to be rendered in a proportional sans-serif font rather than Geist Mono, which is specified for all price and data display.",
+        "spec_reference": "Data/Tables: Geist Mono (400/500) — crisp monospace for prices, token amounts, addresses. Mono data: 14px / 0.875rem (prices, amounts).",
+        "suggested_fix": "Apply font-family: var(--font-mono) and font-size: 0.875rem to all price values in the ticker bar."
+      },
+      {
+        "category": "color",
+        "severity": "low",
+        "what": "The 'NEW HERE? 10-SECOND VERSION.' label text appears in a muted gray that may be lighter than the specified muted color #71717A, and the decorative line beside it appears white/light rather than using the border color.",
+        "spec_reference": "Muted text: #71717A — readable gray. Border: #1E1E22 — subtle separation.",
+        "suggested_fix": "Set the section label text to exactly #71717A and the decorative line to #1E1E22 or the border variable."
+      },
+      {
+        "category": "spacing",
+        "severity": "low",
+        "what": "The hero section has a large empty area below the CTA buttons before the 'NEW HERE?' section, which appears to exceed the specified section gap of 48px (3xl) and may be using unintended padding.",
+        "spec_reference": "Section gap: 48px. Scale: 2xs(2px) xs(4px) sm(8px) md(16px) lg(24px) xl(32px) 2xl(48px) 3xl(64px).",
+        "suggested_fix": "Reduce the vertical gap between the hero CTA area and the explainer section to 48px (--spacing-2xl) as specified."
+      },
+      {
+        "category": "accessibility",
+        "severity": "medium",
+        "what": "The 'How it works ↓' ghost/text button has no visible border, background, or underline, making it difficult to distinguish as an interactive element, and the contrast of the gray text against the dark background may be insufficient.",
+        "spec_reference": "Muted text: #71717A — readable gray. Accessibility is implied by the spec's emphasis on readable, data-dense UI for crypto-native users.",
+        "suggested_fix": "Add a visible affordance (underline, border, or hover state) to the 'How it works' link and ensure its text color meets WCAG AA contrast ratio against the background."
+      }
+    ],
+    "overall_alignment": 7,
+    "summary": "The rendered page captures the core aesthetic direction well — warm near-black background, amber accent on the hero text, Cabinet Grotesk display font, and the scoreboard energy described in the spec. The primary violations are the solid amber CTA button (amber is designated as an accent, not a primary action fill), missing Geist Mono on ticker prices, and a few spacing/contrast issues. Overall the page feels on-brand but needs refinement in color semantic usage and typography application for data elements."
+  },
+  {
+    "agent_id": "bot-02",
+    "screenshot": "analytics/sim-runs/2026-04-22/screenshots/bot-02/step-01-landed.png",
+    "viewport": "desktop",
+    "violations": [
+      {
+        "category": "color",
+        "severity": "medium",
+        "what": "The 'Claim $100 →' button uses a solid amber/orange fill (#F59E0B area) as background with dark text. The spec defines the accent color for brand elements but specifies Buy button as full-width positive green and Sell button as negative red. No CTA button style with solid amber fill is defined in the component patterns.",
+        "spec_reference": "Buy button: full-width, positive green, bold. Sell button: full-width, negative red, bold. Accent (#F59E0B): brand elements, 'Undervalued' badges, active tab highlight, devnet badge, hover borders, supply progress bars",
+        "suggested_fix": "Clarify whether this invite CTA should use the positive green (#22C55E) per the button spec, or formally define an amber CTA variant in the design system."
+      },
+      {
+        "category": "typography",
+        "severity": "low",
+        "what": "The hero headline appears to be rendering at a very large size consistent with the spec's hero scale, but the 'NEW HERE? 10-SECOND VERSION.' label appears to be in all-caps spaced lettering which is not defined in the typography scale or component patterns.",
+        "spec_reference": "UI/Labels: DM Sans (same as body). Scale: Caption: 11px / 0.6875rem",
+        "suggested_fix": "Ensure the section label uses DM Sans at the defined Caption (11px) or Small (13px) scale without custom letter-spacing treatments not defined in the spec."
+      },
+      {
+        "category": "color",
+        "severity": "low",
+        "what": "The ticker bar at the top appears to have a slightly lighter background than the main page background, suggesting it may be using a surface color (#141417) or a different value, which is acceptable, but the border separating it is very subtle and may not match the defined border color #1E1E22.",
+        "spec_reference": "Background: #09090B — warm near-black. Surface/Card: #141417 — elevated dark surface. Border: #1E1E22 — subtle separation",
+        "suggested_fix": "Verify the ticker bar background is #141417 (surface) and its bottom border is exactly #1E1E22."
+      },
+      {
+        "category": "typography",
+        "severity": "low",
+        "what": "The ticker bar price data (e.g., '$6.18 — 0.0%') appears to use a monospace font which is correct, but the size looks smaller than the specified Mono small (10px) or Mono data (14px) — it appears to be around 12-13px, which falls between defined scale values.",
+        "spec_reference": "Mono data: 14px / 0.875rem (prices, amounts). Mono small: 10px / 0.625rem (badges, labels)",
+        "suggested_fix": "Set ticker price text to either Geist Mono 14px (mono data) or 10px (mono small) to align with the defined type scale."
+      },
+      {
+        "category": "component",
+        "severity": "low",
+        "what": "The 'LIVE · DEVNET' badge area shows a green dot and text inline without a visible badge container with amber styling. The spec specifies the devnet badge should use the accent amber color.",
+        "spec_reference": "Accent (#F59E0B): brand elements, 'Undervalued' badges, active tab highlight, devnet badge, hover borders, supply progress bars",
+        "suggested_fix": "Apply amber (#F59E0B) accent color to the DEVNET badge text or background to match the semantic color usage spec."
+      },
+      {
+        "category": "spacing",
+        "severity": "low",
+        "what": "The spacing between the hero headline and the body paragraph, and between the body paragraph and the CTA button, appears visually consistent but the gap between the CTA section and the 'NEW HERE?' section below looks larger than the defined section gap of 48px.",
+        "spec_reference": "Section gap: 48px. Scale: 2xl(48px) 3xl(64px)",
+        "suggested_fix": "Ensure the gap between the hero CTA area and the explanatory section below uses exactly 48px (--spacing-2xl) as defined in the spacing scale."
+      }
+    ],
+    "overall_alignment": 7,
+    "summary": "The rendered invite page largely follows the design system's dark aesthetic, warm near-black background, amber accent usage in the hero text, and typography hierarchy. The main concern is the solid amber-filled CTA button which doesn't map cleanly to any defined button pattern in the spec (which only defines green buy and red sell buttons), and the DEVNET badge lacks the specified amber accent treatment. Minor typography scale and spacing deviations are present but the overall mood, color palette, and industrial-sports aesthetic are well executed."
+  },
+  {
+    "agent_id": "bot-03",
+    "screenshot": "analytics/sim-runs/2026-04-22/screenshots/bot-03/step-01-landed.png",
+    "viewport": "mobile",
+    "violations": [
+      {
+        "category": "component",
+        "severity": "high",
+        "what": "The 'Claim $100' button uses a fully filled amber background with rounded corners (~24px radius), but the spec defines buttons with radius-md (8px) and the Buy button pattern uses positive green (#22C55E) for primary CTAs. This CTA is neither green nor following the 8px radius spec.",
+        "spec_reference": "Border radius: md: 8px (buttons, inputs, inner cards); Buy button: full-width, positive green, bold",
+        "suggested_fix": "Change the CTA button border-radius to 8px and evaluate whether the amber fill is intentional for this invite page or should follow the green buy-button pattern."
+      },
+      {
+        "category": "color",
+        "severity": "medium",
+        "what": "The nav dot indicator next to 'LIVE · DEVNET' is green (#22C55E or similar), but per the spec the devnet badge should use the amber accent color (#F59E0B) for the devnet badge specifically.",
+        "spec_reference": "Semantic Color Usage — Accent (#F59E0B): brand elements, 'Undervalued' badges, active tab highlight, devnet badge, hover borders, supply progress bars",
+        "suggested_fix": "Change the LIVE/DEVNET indicator dot color from green to amber (#F59E0B)."
+      },
+      {
+        "category": "typography",
+        "severity": "medium",
+        "what": "The hero headline 'Trade player tokens that move with real stats.' appears to be rendered at a very large size (visually ~56-64px on mobile), but on mobile the spec calls for a clamp down to 40px minimum. The font also appears to be a heavy sans but it's unclear if Cabinet Grotesk 800 weight is loading correctly vs. a fallback.",
+        "spec_reference": "Hero: 64px / 4rem (clamp 40px-64px); Display/Hero: Cabinet Grotesk (800 weight) — loaded from Fontshare CDN",
+        "suggested_fix": "Verify Cabinet Grotesk 800 is loading from Fontshare CDN and confirm the clamp is applied so mobile renders between 40px–64px."
+      },
+      {
+        "category": "typography",
+        "severity": "medium",
+        "what": "The body paragraph text ('Every player has a token. Stats move a fair-value price...') appears larger than the spec's 15px body size, and the inline bold emphasis ('Stats move a fair-value price.') uses white (#FAFAF9) while the surrounding text appears muted gray — this mixed treatment is not defined in the spec.",
+        "spec_reference": "Body: 15px / 0.9375rem; Primary text: #FAFAF9; Body font: DM Sans (400/500/600/700)",
+        "suggested_fix": "Set body text to 15px DM Sans 400 in #FAFAF9 (or muted #71717A for secondary copy) and ensure the bold inline emphasis follows a consistent defined pattern."
+      },
+      {
+        "category": "color",
+        "severity": "low",
+        "what": "The background appears to be a very dark near-black with a visible grid/dot pattern overlay, which is not specified in the design system. The spec calls for #09090B background with subtle grain texture on cards only, not a full-page grid pattern.",
+        "spec_reference": "Background: #09090B — warm near-black; Decoration level: Intentional (subtle grain texture on cards, not flat)",
+        "suggested_fix": "Remove or reduce the full-page grid overlay; apply subtle grain texture only to card surfaces per the spec."
+      },
+      {
+        "category": "typography",
+        "severity": "low",
+        "what": "The ticker bar at the top shows '$LD $6.18 — 0.0%' and '$JE $7.81 — 0.0%' but the font does not appear to be Geist Mono as specified for prices and data.",
+        "spec_reference": "Data/Tables: Geist Mono (400/500) — crisp monospace for prices, token amounts, addresses; Mono data: 14px / 0.875rem (prices, amounts)",
+        "suggested_fix": "Apply Geist Mono at 14px to all ticker price and percentage values in the top bar."
+      },
+      {
+        "category": "spacing",
+        "severity": "low",
+        "what": "The 'NEW HERE? 10-SECOND VERSION.' text at the bottom appears to be cut off and very small (caption-level), and the bottom section spacing feels inconsistent with the 48px section gap defined in the spec.",
+        "spec_reference": "Section gap: 48px; Caption: 11px / 0.6875rem",
+        "suggested_fix": "Ensure the bottom section has a full 48px gap from the preceding content and the caption text is fully visible at 11px."
+      }
+    ],
+    "overall_alignment": 6,
+    "summary": "The page captures the general dark aesthetic and amber accent direction of the FanShare design system, with good use of amber for the hero text highlight and CTA. However, several violations exist: the CTA button radius is too large (~24px vs spec's 8px), the devnet indicator uses green instead of the specified amber, and the full-page grid background decoration deviates from the card-only grain texture spec. Typography loading (Cabinet Grotesk, Geist Mono) should be verified as some elements appear to use fallback fonts."
+  },
+  {
+    "agent_id": "bot-04",
+    "screenshot": "analytics/sim-runs/2026-04-22/screenshots/bot-04/step-01-landed.png",
+    "viewport": "desktop",
+    "violations": [
+      {
+        "category": "color",
+        "severity": "high",
+        "what": "The 'Claim $100 →' button uses a solid amber/orange fill (#F59E0B or similar) as the button background with dark text. The spec defines the Buy button as 'full-width, positive green' (#22C55E) and Sell button as negative red. There is no spec definition for an amber-filled CTA button; amber is reserved for accents, badges, and active tab highlights — not button backgrounds.",
+        "spec_reference": "Accent (#F59E0B): brand elements, 'Undervalued' badges, active tab highlight, devnet badge, hover borders, supply progress bars. Buy button: full-width, positive green, bold.",
+        "suggested_fix": "Change the primary CTA button background to the positive green (#22C55E) or define a separate amber CTA variant explicitly in the spec; as rendered it misuses the accent color for a button fill."
+      },
+      {
+        "category": "typography",
+        "severity": "medium",
+        "what": "The hero headline 'Trade player tokens that move with real stats.' appears to be rendered at approximately 64–72px and looks correct in weight, but the body paragraph text appears to be rendered at roughly 16px rather than the spec-defined 15px body size, and the font appears to be DM Sans which is correct.",
+        "spec_reference": "Body: 15px / 0.9375rem",
+        "suggested_fix": "Set the body paragraph font-size to exactly 15px (0.9375rem) to match the spec scale."
+      },
+      {
+        "category": "color",
+        "severity": "medium",
+        "what": "The background of the page appears to be a very dark near-black but with a visible grid/graph-paper overlay pattern. The spec defines the background as flat #09090B with no mention of a grid texture overlay; only 'subtle grain texture on cards' is mentioned as intentional decoration.",
+        "spec_reference": "Background: #09090B — warm near-black (not cold blue-black). Decoration level: Intentional (subtle grain texture on cards, not flat).",
+        "suggested_fix": "Remove the grid overlay from the page background or restrict it to card surfaces only, as the spec only permits grain texture on cards, not a full-page grid pattern."
+      },
+      {
+        "category": "component",
+        "severity": "medium",
+        "what": "The 'DEVNET' badge in the nav bar appears to be rendered as plain text with a green dot, without the amber accent color treatment. The spec explicitly calls out the devnet badge as an amber accent use case.",
+        "spec_reference": "Accent (#F59E0B): brand elements, 'Undervalued' badges, active tab highlight, devnet badge, hover borders, supply progress bars.",
+        "suggested_fix": "Style the DEVNET badge with amber (#F59E0B) text or background using accent-subtle (rgba(245,158,11,0.15)) to match the semantic color usage spec."
+      },
+      {
+        "category": "typography",
+        "severity": "low",
+        "what": "The ticker bar at the top shows price data (e.g. '$LD $6.18 — 0.0%') which should use Geist Mono for mono data at 14px, but the rendering appears to use a proportional sans-serif font rather than monospace.",
+        "spec_reference": "Data/Tables: Geist Mono (400/500) — crisp monospace for prices, token amounts, addresses. Mono data: 14px / 0.875rem (prices, amounts).",
+        "suggested_fix": "Apply font-family: var(--font-mono) and font-size: 0.875rem to all price/ticker data in the scrolling ticker bar."
+      },
+      {
+        "category": "spacing",
+        "severity": "low",
+        "what": "The 'NEW HERE? 10-SECOND VERSION.' section label uses spaced uppercase lettering which is not defined in the type scale, and the section gap between the hero area and this section appears smaller than the spec's 48px section gap.",
+        "spec_reference": "Section gap: 48px",
+        "suggested_fix": "Ensure the vertical gap between the hero/CTA section and the explainer section is exactly 48px as defined in the spacing scale."
+      }
+    ],
+    "overall_alignment": 6,
+    "summary": "The page captures the correct dark warm-black aesthetic, amber accent color for the hero text highlight, and Cabinet Grotesk display font energy reasonably well. However, the most significant violation is the amber-filled primary CTA button, which misappropriates the accent color for a button background role not defined in the spec — the spec reserves amber for badges and accents, not button fills. Additional issues include the full-page grid overlay (spec only permits grain texture on cards), the DEVNET badge not using amber styling, and ticker data not rendered in Geist Mono."
+  },
+  {
+    "agent_id": "bot-05",
+    "screenshot": "analytics/sim-runs/2026-04-22/screenshots/bot-05/step-01-landed.png",
+    "viewport": "mobile",
+    "violations": [
+      {
+        "category": "component",
+        "severity": "high",
+        "what": "The 'Claim $100' button uses a fully filled amber background with black text and a very large border radius (~24px+), resembling a pill/capsule shape. The spec defines buttons with radius-md (8px) and does not specify a filled amber CTA button style — the trade widget buy button should be positive green (#22C55E), and amber is reserved for brand accents, badges, and active tab highlights.",
+        "spec_reference": "Buy button: full-width, positive green, bold. Accent (#F59E0B): brand elements, 'Undervalued' badges, active tab highlight, devnet badge, hover borders, supply progress bars. Border radius md: 8px (buttons, inputs, inner cards)",
+        "suggested_fix": "Change the CTA button border-radius to 8px (radius-md) and reconsider whether this primary action button should use amber fill or a different color per semantic usage rules."
+      },
+      {
+        "category": "color",
+        "severity": "medium",
+        "what": "The 'LIVE · DEVNET' nav indicator dot is green (#22C55E or similar), but the spec states the devnet badge should use the amber accent color (#F59E0B).",
+        "spec_reference": "Accent (#F59E0B): brand elements, 'Undervalued' badges, active tab highlight, devnet badge, hover borders, supply progress bars",
+        "suggested_fix": "Change the DEVNET indicator dot color from green to amber (#F59E0B)."
+      },
+      {
+        "category": "typography",
+        "severity": "medium",
+        "what": "The hero headline 'Trade player tokens that move with real stats.' appears to be rendered in a sans-serif font but it is unclear if it is Cabinet Grotesk at 800 weight; the letterforms look potentially like a system or fallback font rather than the distinctive geometric Cabinet Grotesk. The spec requires Cabinet Grotesk 800 for display/hero text.",
+        "spec_reference": "Display/Hero: Cabinet Grotesk (800 weight) — geometric, strong, modern scoreboard energy. Loaded from Fontshare CDN.",
+        "suggested_fix": "Verify Cabinet Grotesk is loading correctly from Fontshare CDN and applied at font-weight 800 to the hero headline."
+      },
+      {
+        "category": "typography",
+        "severity": "low",
+        "what": "The ticker bar at the top shows price data ($6.18, $7.81) that appears to be in a proportional sans-serif font rather than Geist Mono, which the spec requires for prices and token amounts.",
+        "spec_reference": "Data/Tables: Geist Mono (400/500) — crisp monospace for prices, token amounts, addresses. Mono data: 14px / 0.875rem (prices, amounts)",
+        "suggested_fix": "Apply font-family: var(--font-mono) and font-size 14px to all price and percentage values in the ticker bar."
+      },
+      {
+        "category": "color",
+        "severity": "low",
+        "what": "The body text paragraph uses near-white (#FAFAF9 or similar) for the entire block, but the spec indicates 'Stats move a fair-value price.' appears bolded in white while the surrounding text is in a lighter/muted tone — the muted text color (#71717A) should be used for secondary/supporting body copy.",
+        "spec_reference": "Primary text: #FAFAF9 — warm white. Muted text: #71717A — readable gray.",
+        "suggested_fix": "Apply muted text color (#71717A) to the non-emphasized portions of the body paragraph to create proper visual hierarchy."
+      },
+      {
+        "category": "typography",
+        "severity": "low",
+        "what": "The nav labels 'LIVE · DEVNET · INVITE · DEMO 1' appear to be in all-caps with a small font, which may be appropriate, but the spec does not define an all-caps UI label style — DM Sans is specified for UI/Labels without mention of text-transform uppercase.",
+        "spec_reference": "UI/Labels: DM Sans (same as body). Small: 13px / 0.8125rem. Caption: 11px / 0.6875rem",
+        "suggested_fix": "Review whether all-caps styling is intentional; if so, document it in the spec, otherwise revert to sentence or title case per DM Sans label conventions."
+      },
+      {
+        "category": "spacing",
+        "severity": "low",
+        "what": "The bottom footer text 'NEW HERE? 10-SECOND VERSION.' appears very close to the viewport edge with minimal padding, potentially below the spec's card padding minimum of 16px on mobile.",
+        "spec_reference": "Card padding: 16px. Base unit: 4px. Density: Comfortable (not cramped)",
+        "suggested_fix": "Ensure at least 16px horizontal padding is applied to all content sections including the footer text on mobile viewports."
+      }
+    ],
+    "overall_alignment": 6,
+    "summary": "The page captures the general dark arena aesthetic and amber accent direction from the spec, with strong hero typography and correct background color usage. However, the primary CTA button violates spec in two ways — it uses a pill-shaped border radius instead of the specified 8px radius-md, and amber fill is not the designated color for primary action buttons per semantic color rules. The DEVNET indicator dot uses green instead of the spec-required amber, and price data in the ticker bar appears to use a proportional font rather than the required Geist Mono."
+  }
+]

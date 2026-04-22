@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-14",
+  "display_name": "Ellie Vance",
+  "archetype": "skeptic",
+  "viewport": "mobile",
+  "wallet_address": "JCPoZLs5WQeCk9Xy5P9VwX4LgvfZduZDN8irQPcKNGrr",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:48.142Z",
+      "user_id": "bot-14",
+      "step": "landed",
+      "what_they_read": "I read the main pitch — 'Trade player tokens that move with real stats' — and then immediately hunted for the catch. Found the devnet disclaimer buried near the bottom: 'All SOL is test SOL. No real money.'",
+      "their_interpretation": "Okay so it's a fake trading game using fake Solana tokens tied to NBA stats. The $100 isn't real money, it's play money they drop into a demo account — no wallet, no signup. I get it. That part's actually clear.",
+      "their_decision": "I haven't clicked anything yet. I'm still reading the terms section and staring at that ticker.",
+      "their_rationale": "The 'No signup, no password — it just appears' line is doing a lot of heavy lifting and I don't fully trust it. What does 'just appears' mean technically — are they creating a custodial wallet behind the scenes and I'm not seeing it? That's the thing I'd want answered before I hand over any attention.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'devnet SOL' — mentioned twice before they explain it's fake money; if I didn't know Solana I'd be lost by step one",
+        "'oracle updates' — never defined anywhere on this page, just dropped in the Diamond Hands badge requirement",
+        "'0.667 SOL · $100' — why show me the SOL denomination at all if this is supposed to feel simple? Now I'm doing math I didn't ask to do",
+        "'The gap is your edge' — sounds slick but what gap exactly? Fair-value vs market price isn't explained until step 02, so this line lands before I have context",
+        "Ticker symbols like $LD, $JE, $NJ — I don't know who these are without hovering, and on mobile I can't hover"
+      ],
+      "first_impression_elements": [
+        "The scrolling LIVE ticker at the top with all the 0.0% changes — screamed 'fake data' immediately, which is either honest or a red flag depending on my mood",
+        "Big 'Claim $100 →' button — visible fast, but I didn't trust it yet so I scrolled past",
+        "'No real money, no risk' in the plain-English explainer box — this is the first thing that actually lowered my blood pressure slightly"
+      ],
+      "ignored_elements": [
+        "The three badges section — I saw it, clocked it as gamification filler, moved on",
+        "'💬Feedback' button — not my job to give them feedback before I even know what this is",
+        "The 'How it works' anchor link — I just read the page linearly instead of clicking it"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "mobile",
+      "visual_professionalism": 6,
+      "trust_signal_strength": 4,
+      "would_show_friend": 5
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:57.796Z",
+    "user_id": "bot-14",
+    "q1_what_am_i_buying": "A fake token tied to a real player — play money, no actual asset. The copy says 'no real money' about four times so I believe that part. What I don't know is whether the token itself has any structure beyond a number on a screen.",
+    "q2_what_moves_price": "Two things apparently: the stats oracle recalculates a 'fair value' daily, and actual trades by users push the market price up or down. Buying raises it, selling lowers it. They said your $100 barely moves LeBron but can meaningfully move a role player — okay, fine, I'll take that at face value.",
+    "q3_hold_week": "Honestly I don't know. The copy mentions 'oracle updates' and a badge for holding through three of them, so presumably the fair value shifts as his real stats come in. Whether the market price drifts toward fair value on its own while I sit there — or just stays flat — the app didn't tell me that.",
+    "q4_fair_vs_market": "Fair value is what the computer thinks a player is worth based on stats. Market price is what other users actually paid. The gap between them is supposedly where you make or lose fake money. Simple enough concept, but I want to know how often the oracle updates and who built the formula — neither of which the copy bothered to explain.",
+    "overall_confidence": 0.38,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 6,
+        "trust_signal_strength": 4,
+        "would_show_friend": 5,
+        "first_impression_elements": [
+          "The oversized bold headline with orange accent on 'real stats' — aggressive but legible",
+          "The amber CTA button with glow effect — hard to miss, almost too loud",
+          "The live ticker bar at the top with dollar signs and green dot — trying to feel like Bloomberg, doesn't quite get there"
+        ],
+        "ignored_elements": [
+          "The faint grid background texture — decorative filler I didn't register until looking twice",
+          "'How it works' secondary link — visually undersized and easy to skip past",
+          "The 'NEW HERE? 10-SECOND VERSION' text at the very bottom — cut off, too small, too late"
+        ],
+        "visual_notes": "Dark theme is competent but not polished — the grid overlay feels like a template shortcut rather than a deliberate design choice. The 'DEVNET · INVITE · DEMO 1' label cluster reads like internal staging labels that were never cleaned up before launch, which immediately signals unfinished product to me. The 'No wallet yet' micro-copy at the bottom is doing trust work but visually it's too small and gray to land with any confidence."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "user_id": "bot-11",
+  "display_name": "Kwame Ade",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "Fnwrc5nGVuDLjMzYat71VcDG3jJSMob9cTDa3Ccc6sAC",
+  "entries": [
+    {
+      "ts": "2026-04-22T20:52:42.579Z",
+      "user_id": "bot-11",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(no interpretation)",
+      "their_decision": "(no explicit decision)",
+      "their_rationale": "(no rationale)",
+      "confidence": 0.5,
+      "confusion_notes": [],
+      "first_impression_elements": [
+        "The big orange 'real stats.' text in the headline — that popped immediately, felt like a sports app that means business",
+        "The live ticker scrolling across the top with player tokens and prices — looked like a real stock market thing, very cool",
+        "The yellow 'Claim $100' button — bright and obvious, first thing I wanted to click"
+      ],
+      "ignored_elements": [
+        "The grid background pattern — didn't really register it was there until I looked harder",
+        "The 'How it works' secondary link next to the button — my eyes went straight past it",
+        "The small status bar text at the bottom saying 'No wallet yet · 0.667 SOL · $100 · no real money · no seed phrase'"
+      ],
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T20:53:39.132Z",
+    "user_id": "bot-11",
+    "q1_what_am_i_buying": "You're buying like a little piece of that player, basically a token that's tied to how they're doing in real NBA games — so if LeBron is balling out, his token is worth more. It's not real stock or anything, it's fake money, but the token moves with his actual stats so it feels real.",
+    "q2_what_moves_price": "Two things from what I can tell — the stats move a 'fair value' price every day, like a computer is calculating what the player is actually worth, and then other people buying and selling moves the market price too. So if everybody starts buying LeBron, the price goes up for the next person.",
+    "q3_hold_week": "Honestly I'm not 100% sure, but I think the fair value keeps updating every day based on his stats, so if he has a good week the fair value climbs and the market price should follow it up. I don't think anything bad happens just from holding — you're just waiting for people to catch up to what the stats already know.",
+    "q4_fair_vs_market": "Fair value is basically what the app says the player is actually worth based on their stats, and market price is what people are actually paying for it right now. So if fair value is $5.59 and market price is $4.20, that's like a guarantee the price is gonna go up to $5.59 — that's your edge, you just gotta get in before everyone else figures it out.",
+    "overall_confidence": 0.62,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "The big orange 'real stats.' text in the headline — that popped immediately, felt like a sports app that means business",
+          "The live ticker scrolling across the top with player tokens and prices — looked like a real stock market thing, very cool",
+          "The yellow 'Claim $100' button — bright and obvious, first thing I wanted to click"
+        ],
+        "ignored_elements": [
+          "The grid background pattern — didn't really register it was there until I looked harder",
+          "The 'How it works' secondary link next to the button — my eyes went straight past it",
+          "The small status bar text at the bottom saying 'No wallet yet · 0.667 SOL · $100 · no real money · no seed phrase'"
+        ],
+        "visual_notes": "The dark theme with the orange accent feels sharp and modern, like a legit trading platform — my friend was right, this looks serious. The live ticker at the top makes it feel alive and real which is exciting. Only thing that gives me a little pause is there's no logo or brand mark I can see clearly, and the page feels a bit sparse below the fold — like where's the rest of it?"
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

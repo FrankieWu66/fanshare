@@ -41,15 +41,21 @@ export async function checkpoint(
 ): Promise<CheckpointAnswer> {
   const ts = new Date().toISOString();
   const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) return fallback(ts, bot);
+  if (!key) {
+    // HARD-FAIL (Demo 0.5 change 2026-04-22) — silent fallback was the 2026-04-20 bug.
+    throw new Error(
+      "ANTHROPIC_API_KEY is not set. bot-checkpoint requires real LLM reasoning. Set ANTHROPIC_API_KEY in .env.local before running.",
+    );
+  }
 
+  const modelToUse = process.env.ANTHROPIC_MODEL || MODEL;
   const client = new Anthropic({ apiKey: key });
   try {
     const res = await client.messages.create({
-      model: MODEL,
+      model: modelToUse,
       max_tokens: 800,
       temperature: 0.6,
-      system: systemPrompt(),
+      system: [{ type: "text", text: systemPrompt(), cache_control: { type: "ephemeral" } }],
       messages: [{ role: "user", content: userPrompt(bot, inviteCopy, playerCopy) }],
     });
     const first = res.content[0];
@@ -69,9 +75,17 @@ export async function checkpoint(
       flagged_wrong: parsed.flagged_wrong === true,
     };
   } catch (err) {
+    // LLM error mid-run — return a partial answer flagged with the error so the
+    // run continues (onboarding-sim tolerates missing checkpoints per bot).
     return {
-      ...fallback(ts, bot),
+      ts,
+      user_id: bot.id,
       q1_what_am_i_buying: `[error] ${err instanceof Error ? err.message : String(err)}`,
+      q2_what_moves_price: "(error)",
+      q3_hold_week: "(error)",
+      q4_fair_vs_market: "(error)",
+      overall_confidence: 0,
+      flagged_wrong: false,
     };
   }
 }
@@ -134,7 +148,10 @@ function str(v: unknown, fallback: string): string {
   return s.length > 0 ? s : fallback;
 }
 
-function fallback(ts: string, bot: BotUser): CheckpointAnswer {
+// fallback() removed 2026-04-22 — hard-fail above is the new contract.
+// If a test really needs a fallback (no key), branch on process.env.ANTHROPIC_API_KEY
+// at the call site, don't swallow silently inside checkpoint().
+function _unusedFallback(ts: string, bot: BotUser): CheckpointAnswer {
   return {
     ts,
     user_id: bot.id,
@@ -146,3 +163,4 @@ function fallback(ts: string, bot: BotUser): CheckpointAnswer {
     flagged_wrong: false,
   };
 }
+void _unusedFallback; // suppress lint warning; kept for documentation only
