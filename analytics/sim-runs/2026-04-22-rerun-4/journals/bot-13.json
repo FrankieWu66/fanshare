@@ -1,0 +1,87 @@
+{
+  "user_id": "bot-13",
+  "display_name": "Hana Kim",
+  "archetype": "skeptic",
+  "viewport": "desktop",
+  "wallet_address": "BtKsPE6WL8crbp7pu1kMEug3P4YFChP7sRmuu3PXUjsK",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:21.530Z",
+      "user_id": "bot-13",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top, then skimmed the 'New here? 10-second version' block that basically calls itself a pretend stock market for NBA players. The '$100 · no real money · no seed phrase' line under the button caught me immediately.",
+      "their_interpretation": "Okay so it's like a fantasy sports simulator dressed up in trading-app clothing — fake money, real NBA stats, you're betting on whether the 'market' has mispriced a player. No wallet, no actual cash on the line, which is either genuinely harmless or the setup for a bait-and-switch once I'm hooked.",
+      "their_decision": "I'm hovering over 'Claim $100 →' but I haven't clicked it yet — I'm reading the Terms section first.",
+      "their_rationale": "The 'no signup, no password — it just appears' copy is doing a lot of heavy lifting and I don't fully trust it; I want to know what 'it just appears' actually means for my browser data before I hand anything over, even implicitly.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'fair-value price' vs 'market price' distinction — I get the concept but I'm not sure how the computer actually calculates fair value from stats, and that gap feels important to trust the whole premise",
+        "'Devnet' in the header — is this a blockchain thing? Because they said no seed phrase but Devnet is a crypto term and now I'm side-eyeing",
+        "'AWAITING TIP-OFF · Prices move after tonight's games' — so nothing is live right now? Am I looking at a frozen demo of a demo?",
+        "'The gap is your edge' — edge over whom exactly? Other fake-money players? A bot? This is vague",
+        "'Buying raises the price for the next person' — this is an AMM mechanic, which is definitely crypto, so why are they hiding the word crypto?"
+      ],
+      "first_impression_elements": [
+        "Big bold '$100 · no real money · no seed phrase' reassurance line directly under the CTA button",
+        "'AWAITING TIP-OFF' status badge — felt urgent and live, grabbed me before I read anything else",
+        "The LeBron $5.59 vs $4.20 concrete example — this actually made the concept click faster than any of the heading copy"
+      ],
+      "ignored_elements": [
+        "The 'Thesis' section ('Being right early — and staying right — pays better than being right once') — reads like a motivational poster, skipped it",
+        "Footer links: About, Methodology, Invite — I'll go back to Methodology if I decide to trust this",
+        "The 💬Feedback button — ironic given my persona but I genuinely didn't register it on first pass"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 4,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:33:37.611Z",
+    "user_id": "bot-13",
+    "q1_what_am_i_buying": "[error] Connection error.",
+    "q2_what_moves_price": "(error)",
+    "q3_hold_week": "(error)",
+    "q4_fair_vs_market": "(error)",
+    "overall_confidence": 0,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 4,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "The bold orange 'real stats.' headline — high contrast, impossible to miss, does its job",
+          "The yellow CTA button 'Claim $100' — chunky, rounded, aggressively prominent against the dark grid",
+          "The grid background texture — dark, structured, gives it a Bloomberg-terminal-meets-crypto vibe"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' nav items top right — felt like developer scaffolding, not for me",
+          "The 'AWAITING TIP-OFF' status bar — noticed it but immediately filed it as ambient noise",
+          "The 'How it works ↓' secondary CTA — visually too quiet next to the yellow button to earn a click"
+        ],
+        "visual_notes": "The dark grid aesthetic is coherent and intentional — someone with taste built this — but the page is almost entirely hero copy with zero social proof, no logo mark beyond a text wordmark, and the 'DEVNET' label sitting in the nav is a quiet red flag that screams 'this is not production.' The 'no real money · no seed phrase' reassurance line is doing heavy lifting for a page that has nothing else to back it up — no user count, no press mention, no face behind the product."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

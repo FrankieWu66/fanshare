@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-15",
+  "display_name": "Priya Shah",
+  "archetype": "power",
+  "viewport": "desktop",
+  "wallet_address": "ApYBrU6SUsre2suaeDpWKaGDoKtzgCfysjq1PVP7sw5b",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:25.340Z",
+      "user_id": "bot-15",
+      "step": "landed",
+      "what_they_read": "Headline hit first: 'Trade player tokens that move with real stats.' Then the three-step flow and the $100 no-signup pitch. Scanned the LeBron $5.59 vs $4.20 example fast.",
+      "their_interpretation": "It's a paper-trading sim for NBA player pricing — stat-derived fair value vs. market price, you're arbing the gap. No real money, no wallet, no seed phrase — devnet wrapper, basically.",
+      "their_decision": "Click 'Claim $100' right now.",
+      "their_rationale": "No account friction, no seed phrase, instant $100 — zero cost to test the mechanic. The fair-value vs. market-price spread is a real tradeable concept and I want to see how tight the bid-ask actually is on a role player.",
+      "confidence": 0.88,
+      "confusion_notes": [
+        "'The market decides what it actually trades at' — who is the market here? Other demo users? AMM? Unclear liquidity source.",
+        "'Buying raises the price for the next person' — sounds bonding-curve-ish but never named. Want to know the exact pricing function before I size up.",
+        "'AWAITING TIP-OFF' status bar — is this a live-data dependency? Will tokens be frozen until tip-off? Could affect entry timing.",
+        "No mention of position limits or max hold — matters for sizing strategy."
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — instant CTA, no friction listed",
+        "LeBron $5.59 vs $4.20 undervalued example — concrete, scannable, made the mechanic click immediately",
+        "'No account yet · $100 · no real money · no seed phrase' badge — killed the trust concern in one line"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — skipped, it's a devnet demo, not deploying capital",
+        "About · Methodology · Invite footer links — back-burner, will check Methodology after I see the live card data",
+        "'Practice mode. No real money, no financial risk, no financial advice.' disclaimer — registered it peripherally, didn't read"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:33:37.617Z",
+    "user_id": "bot-15",
+    "q1_what_am_i_buying": "[error] Connection error.",
+    "q2_what_moves_price": "(error)",
+    "q3_hold_week": "(error)",
+    "q4_fair_vs_market": "(error)",
+    "overall_confidence": 0,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "Orange 'real stats.' headline — high contrast, eye rip straight to value prop",
+          "Yellow CTA button — stands out hard against dark grid bg, immediate action signal",
+          "DEVNET / PRACTICE MODE nav tags — flags this is pre-prod, raises eyebrows"
+        ],
+        "ignored_elements": [
+          "Grid background texture — decorative noise, zero signal",
+          "Feedback widget bottom-right — ignored completely",
+          "'AWAITING TIP-OFF' ticker bar — saw it, dismissed it"
+        ],
+        "visual_notes": "Dark theme with tight typographic hierarchy reads competent — someone knows what they're doing with contrast and scale. But the DEVNET label and 'no real money' disclaimer stack up fast as trust killers for anyone looking to actually trade; feels beta-at-best. Zero social proof, no logo mark beyond wordmark, no product screenshot — thin inventory for a financial-adjacent pitch."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

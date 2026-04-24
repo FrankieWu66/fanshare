@@ -35,7 +35,7 @@ export default function AboutPage() {
             FanShare
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-            Devnet · Practice mode
+            Practice mode
           </span>
         </div>
 
@@ -59,10 +59,10 @@ export default function AboutPage() {
 
           <p className="mt-8 text-base leading-[1.65] text-muted">
             FanShare turns NBA player performance into tradable tokens. A daily
-            oracle reads real box-score stats and computes a fair-value price for
-            each player. The market then trades around that signal on a Solana
-            bonding curve. The gap between fair value and market price is the
-            edge — and the game is figuring out which way the gap closes.
+            oracle reads individual box-score stats and computes a fair-value
+            price for each player. FanShare publishes that index and stands
+            aside — the market sets the traded price on a Solana bonding
+            curve. The gap between the two is your read.
           </p>
 
           <p className="mt-5 text-base leading-[1.65] text-muted">

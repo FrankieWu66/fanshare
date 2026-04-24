@@ -1,0 +1,87 @@
+{
+  "user_id": "bot-04",
+  "display_name": "Marcus Reid",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "Ayqjm1VsCWXd2KUdjYbEoWwppNKKaxaoYsptt3Unte3v",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:03.812Z",
+      "user_id": "bot-04",
+      "step": "landed",
+      "what_they_read": "Saw 'Trade player tokens that move with real stats' up top, then the $100 claim button, then skimmed the three-step breakdown. Caught the LeBron $5.59 vs $4.20 example.",
+      "their_interpretation": "It's like a paper-trading sim for NBA players but with a bonding-curve vibe — stats set a 'fair price' and the market drifts from it, and I'm trying to catch the spread. Basically fantasy sports meets degen trading, fake money only.",
+      "their_decision": "I'm clicking 'Claim $100 →' right now.",
+      "their_rationale": "No seed phrase, no signup, free fake hundo — zero downside to just getting in and poking around. If the UI is clean on the other side I'm probably staying.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'fair-value price' vs 'market price' distinction felt slightly blurry on first read — had to re-read the LeBron example to lock it in",
+        "'Buying raises the price for the next person' — is this a bonding curve or an order book? Not clear which mechanic is running under the hood",
+        "'AWAITING TIP-OFF · Prices move after tonight's games' — does that mean nothing is live right now? Am I just staring at static prices until the game ends?",
+        "'Devnet' label — I know what devnet means from crypto but a casual NBA fan might bounce off that word immediately"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — first thing my eyes went to, orange or prominent enough to anchor the page",
+        "'No account yet · $100 · no real money · no seed phrase' subtext under the button — that line did heavy lifting, made it feel low-friction",
+        "LeBron $5.59 vs $4.20 undervalued example — concrete number made the concept click fast"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — didn't even register it was there",
+        "Footer links: About, Methodology, Invite — scrolled right past",
+        "'Practice mode. No real money, no financial risk, no financial advice.' disclaimer at the bottom",
+        "'Built by FanShare' credit line"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:23:54.951Z",
+    "user_id": "bot-04",
+    "q1_what_am_i_buying": "Like a fake stock for an NBA dude, it moves with his stats or whatever. Not real money, just play tokens in some practice mode thing.",
+    "q2_what_moves_price": "Stats move some 'fair value' number the computer makes, but also when people buy it goes up and when they sell it drops. So hype moves it too, which is the part I care about.",
+    "q3_hold_week": "Honestly no idea, I assume the price just keeps updating as he plays games? Like if he goes off the token pumps? I don't really hold though, I'm in and out.",
+    "q4_fair_vs_market": "Fair value is what the app's computer thinks he's worth based on stats, market price is what people actually paid. The gap is supposedly where you make money but I'm mostly just buying green candles ngl.",
+    "overall_confidence": 0.42,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "Big orange 'real stats.' text hits hard — eye goes straight there",
+          "Yellow CTA button 'Claim $100' pops against the dark background",
+          "Grid background gives it that Bloomberg terminal / crypto dashboard energy"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' nav links top right",
+          "The 'NEW HERE? 10-SECOND VERSION.' explainer block below fold",
+          "The 'Feedback' widget bottom right"
+        ],
+        "visual_notes": "Dark grid aesthetic slaps for a crypto-adjacent product, feels like a trading terminal which is the right vibe. But there's basically zero social proof — no user count, no volume traded, nothing that says 'others are already aping in.' The 'PRACTICE MODE' badge is a slight vibe killer, makes it feel like a demo not a live market."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

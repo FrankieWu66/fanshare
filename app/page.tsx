@@ -97,9 +97,11 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <span className="text-sm font-bold tracking-tight">
               FanShare
-              <span className="ml-1 rounded bg-accent-subtle px-1.5 py-0.5 text-[10px] font-medium text-accent">
-                {cluster}
-              </span>
+              {status === "connected" && !isDemoMode && (
+                <span className="ml-1 rounded bg-accent-subtle px-1.5 py-0.5 text-[10px] font-medium text-accent">
+                  {cluster}
+                </span>
+              )}
             </span>
             <Link
               href="/leaderboard"
@@ -133,9 +135,9 @@ export default function Home() {
                 </span>
               </h1>
               <p className="max-w-xl text-base leading-relaxed text-muted">
-                Trade tokens pegged to NBA player performance. Price moves with
-                supply and demand. Stats index shows what each player is actually
-                worth.
+                Two prices per player: a fair-value index from box-score
+                stats, and a market price set by traders. The gap between
+                them is your read.
               </p>
             </div>
           </section>

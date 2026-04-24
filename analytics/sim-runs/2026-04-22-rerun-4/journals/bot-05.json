@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-05",
+  "display_name": "Jordan Chen",
+  "archetype": "value",
+  "viewport": "mobile",
+  "wallet_address": "5MBDRGfoENA5ALUQVi3YkTSSi5Ea3tmbLDzD5zZLkBUA",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:05.237Z",
+      "user_id": "bot-05",
+      "step": "landed",
+      "what_they_read": "I caught 'Trade player tokens that move with real stats' at the top, then the three-step breakdown — especially step 02 where it explains fair-value price versus market price and the LeBron $5.59 vs $4.20 example. That example did most of the explaining for me.",
+      "their_interpretation": "So this is essentially a paper-trading sandbox where the 'fundamental value' is algorithmically derived from box-score stats, and the market price is crowd-driven — the spread between those two numbers is the signal I'm supposed to exploit. It's like a fantasy sports layer bolted onto a bonding-curve-style pricing mechanism, but with fake money so there's zero financial exposure.",
+      "their_decision": "I'd click 'Claim $100' and get into the interface to see what the actual fair-value methodology looks like before I commit any real attention to it.",
+      "their_rationale": "The no-signup, no-seed-phrase, no-real-money framing eliminates every friction point I'd normally hesitate on — the downside is literally zero, and I'm already curious whether their stat-to-price model is naive (PPG only?) or something more sophisticated. I want to see the spread data on a real player card before I decide if this is worth my time.",
+      "confidence": 0.78,
+      "confusion_notes": [
+        "'Devnet' — I know this is a Solana term for a test network, but it's never explained on the page; a casual user probably reads right past it or gets spooked",
+        "'AWAITING TIP-OFF — Prices move after tonight's games' — is this real-time? daily batch? I don't know the update cadence",
+        "'Buying raises the price for the next person' — this sounds like a bonding curve or AMM mechanic, but the word 'bonding curve' never appears; I'm inferring the mechanism and I could be wrong",
+        "The 'Methodology' link in the footer — I want to click that immediately but it's tiny and easy to miss; if the stat-to-fair-value formula is opaque, the whole value proposition collapses for me"
+      ],
+      "first_impression_elements": [
+        "The LeBron $5.59 vs $4.20 concrete example — that's the first thing that made the concept click",
+        "'Claim $100 →' button — visible early, no-friction framing made it feel safe rather than sketchy",
+        "The fair-value vs market-price framing ('The gap is your edge') — that's the hook that speaks directly to how I already think about assets"
+      ],
+      "ignored_elements": [
+        "The 'FanShareDevnet · Practice mode' badge at the very top — I registered it peripherally but didn't dwell on it",
+        "'↓Terms explained' link — I noticed it exists but didn't tap it on first pass",
+        "The 'Built by FanShare · About · Methodology · Invite' footer row — almost certainly below the fold on mobile and I scrolled past it"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "mobile",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 4,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:24:01.889Z",
+    "user_id": "bot-05",
+    "q1_what_am_i_buying": "As best I can tell, I'm buying a token that represents a player's statistical performance — it's not equity in a person or a real asset, it's a fake-money position that tracks whether the market price and the stat-derived fair-value price converge. Think of it like a spread bet on whether other users are mispricing a player right now.",
+    "q2_what_moves_price": "Two things seem to move it: the fair-value price shifts when real NBA stats update daily, and the market price shifts when other users buy or sell — buying pushes it up, selling pushes it down. The copy specifically called out that your trades have more impact on role players than stars, which is an interesting asymmetry I want to keep in mind.",
+    "q3_hold_week": "Honestly, I'm not entirely sure — the page said prices move after games and stats update daily, so I'd expect the fair-value price to keep recalculating, but I don't know whether the market price drifts on its own if nobody is trading. I'd want to see the actual trade page before committing to a hold strategy; there might be decay mechanics or nothing at all, and I genuinely can't tell from what I've read.",
+    "q4_fair_vs_market": "Fair value is a computer-generated price derived from LeBron's actual stats — the app calls it a methodology, though I haven't seen the methodology page yet so I don't know the exact formula. Market price is what other users have actually been paying, driven by their collective buying and selling behavior. The gap between the two is what the app calls 'the edge,' and that spread is exactly what I care about — if it's under 3% I probably pass.",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 4,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "Bold 'Trade player tokens that move with real stats.' headline — high contrast, immediate value prop",
+          "Amber/orange CTA button 'Claim $100' — large, thumb-friendly, visually dominant",
+          "DEVNET · PRACTICE MODE nav badge — immediately signals this is not real money, which is both reassuring and a credibility limiter"
+        ],
+        "ignored_elements": [
+          "The subtle grid overlay texture in the background",
+          "'How it works' secondary link — too low contrast to register quickly",
+          "Feedback button in bottom-right corner"
+        ],
+        "visual_notes": "The dark grid aesthetic is clean and intentional — feels crypto-native without being garish. However, there are zero social proof signals, no logo mark beyond a wordmark, no user count or testimonials, and the 'DEVNET' label prominently signals pre-production status, which undercuts trust for anyone paying attention. The micro-copy below the CTA ('no real money · no seed phrase') is doing heavy lifting to compensate for the absence of credibility infrastructure."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

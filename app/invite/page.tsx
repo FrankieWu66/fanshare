@@ -38,7 +38,7 @@ const STEPS = [
   {
     n: "02",
     title: "Find a player the market has wrong",
-    body: "Every card shows a fair-value price (from stats) and a market price (what others paid). When they disagree, that's the opportunity. Green \"UNDERVALUED\" = market below fair value. Red \"OVERVALUED\" = above. Example: if stats say LeBron is worth $5.59 but the market is trading him at $4.20, you think others are sleeping on him — buy. When they catch up, you cash out the gap. Catching the gap is the skill. The outcome isn't guaranteed.",
+    body: "Every card shows a fair-value price (a daily box-score index) and a market price (what others paid). When they disagree, that's the opportunity. Green \"UNDERVALUED\" = market below fair value. Red \"OVERVALUED\" = above. Example: if stats say LeBron is worth $5.59 but the market is trading him at $4.20, you think others are sleeping on him — buy. When they catch up, you cash out the gap. Catching the gap is the skill. The outcome isn't guaranteed.",
   },
   {
     n: "03",
@@ -51,7 +51,7 @@ const STEPS = [
 const TERMS = [
   {
     k: "Fair-value price",
-    v: "What a computer thinks a player is worth based on their real NBA stats (updated daily).",
+    v: "An index computed from individual box-score stats only, updated daily. FanShare publishes it and stands aside.",
   },
   {
     k: "Market price",
@@ -137,7 +137,7 @@ export default function InvitePage() {
             FanShare
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-            Devnet · Practice mode
+            Practice mode
           </span>
         </div>
 
@@ -164,13 +164,12 @@ export default function InvitePage() {
               Trade player tokens that move with{" "}
               <em className="not-italic text-accent">real stats.</em>
             </h1>
-            <p className="m-0 max-w-[540px] text-base leading-[1.55] text-muted">
-              Every player has a token.{" "}
-              <b className="font-medium text-foreground">
-                Stats move a fair-value price.
-              </b>{" "}
-              The market decides what it actually trades at. The gap is your
-              edge — if you&apos;re right, and early.
+            <p className="m-0 max-w-[640px] text-base leading-[1.6] text-muted">
+              <b className="font-medium text-foreground">Fair-value price</b>{" "}
+              = an index computed from individual box-score stats only.
+              FanShare publishes it daily and stands aside. The market sets
+              the traded price. The gap between them is{" "}
+              <b className="font-medium text-foreground">your read.</b>
             </p>
 
             {/* CTA row */}
@@ -252,12 +251,11 @@ export default function InvitePage() {
               </span>
             </div>
             <p className="m-0 text-[14px] leading-[1.65] text-muted">
-              FanShare is a pretend stock market for NBA players. A computer
-              turns each player&apos;s real stats into a &ldquo;fair price&rdquo;
-              every day. You use $100 of fake money to bet on players the market
-              has priced wrong. If you&apos;re right, your pretend money grows.
-              If you&apos;re wrong, it shrinks. No real money, no risk — just a
-              fun test of your basketball knowledge.
+              FanShare is a pretend stock market for NBA players. Every day we
+              publish a fair-value price for each player — an index built from
+              their box-score stats, nothing else. The market sets what traders
+              actually pay. When the two disagree, that&apos;s the opportunity.
+              You use $100 of play money to test your read.
             </p>
           </div>
         </section>
@@ -274,9 +272,10 @@ export default function InvitePage() {
                 letterSpacing: "-0.02em",
               }}
             >
-              Being right <em className="not-italic text-accent">early</em> — and{" "}
-              <em className="not-italic text-accent">staying right</em> — pays
-              better than being right once.
+              The fair-value price is{" "}
+              <em className="not-italic text-accent">math.</em> The market
+              price is <em className="not-italic text-accent">people.</em>{" "}
+              The gap is the game.
             </p>
           </div>
         </section>
@@ -458,9 +457,9 @@ function MarketTicker({ movers }: { movers: Mover[] }) {
       <div className="flex h-9 items-center gap-6 overflow-hidden border-y border-border-low bg-card/50 px-4 font-mono text-xs text-muted">
         <span className="inline-flex items-center gap-1.5 text-accent">
           <Dot color="accent" pulse />
-          AWAITING TIP-OFF
+          PRE-GAME
         </span>
-        <span>Prices move after tonight&apos;s games.</span>
+        <span>Fair-value updates after tonight&apos;s box scores.</span>
       </div>
     );
   }

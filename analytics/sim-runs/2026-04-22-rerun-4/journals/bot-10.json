@@ -1,0 +1,90 @@
+{
+  "user_id": "bot-10",
+  "display_name": "Nia Johnson",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "2wXCUj6erZK3i491qCENzwkRyJcQ1EAnxzjnNmenLc6x",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:15.456Z",
+      "user_id": "bot-10",
+      "step": "landed",
+      "what_they_read": "I saw 'FanShare is a pretend stock market for NBA players' and 'Get $100 in practice money' and 'no real money' like three times. Also something about fair-value prices and a LeBron example with dollar amounts.",
+      "their_interpretation": "Okay so it's basically like... fake money fantasy basketball but instead of points you're betting on whether a player is worth more or less than what people are paying for him? Like if everyone's sleeping on LeBron you buy him and make fake money when they wake up, lol.",
+      "their_decision": "I'd click the big 'Claim $100 →' button.",
+      "their_rationale": "It says no real money like a hundred times and no signup no password which means I don't have to give my email or my card info or anything scary, so honestly what's the risk — it's free fake money and I know basketball.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'token' — like a crypto thing? I don't know what a player token actually is, is it like a coin?",
+        "'seed phrase' — they said 'no seed phrase' like that's supposed to reassure me but I have zero idea what that means, why is it even mentioned",
+        "'devnet' — I see it at the top, no clue, sounds technical and a little sketchy honestly",
+        "'market price' vs 'fair-value price' — I kind of got it from the LeBron example but the concept of two different prices for the same thing is weird to me",
+        "'the gap is your edge' — edge in what? like an advantage? I think so but it's a little vague",
+        "AWAITING TIP-OFF — is the site broken or is this like a countdown thing? confused me for a second",
+        "'Methodology' link — no idea what that is, sounds like homework"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — that jumped out immediately, free money button lol",
+        "The '10-second version' explainer box with the LeBron $5.59 vs $4.20 example — that actually made sense to me",
+        "'No real money, no risk' repeated everywhere — that's what made me feel safe enough to keep reading"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — I saw it but I was not about to read terms",
+        "The 'Thesis' section ('Being right early — and staying right — pays better than being right once') — felt like something a finance bro would say, skipped it",
+        "About · Methodology · Invite footer links — totally ignored, looked like fine print vibes",
+        "'Prices move after tonight's games' ticker at the top — I noticed it but didn't really process it"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:24:09.684Z",
+    "user_id": "bot-10",
+    "q1_what_am_i_buying": "[error] Request timed out.",
+    "q2_what_moves_price": "(error)",
+    "q3_hold_week": "(error)",
+    "q4_fair_vs_market": "(error)",
+    "overall_confidence": 0,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "Giant orange 'real stats.' text — super eye-catching, pops hard against the dark background",
+          "Big yellow 'Claim $100' button — literally the first thing I want to click",
+          "The dark grid background gives it a techy/crypto-ish vibe that looks kinda cool"
+        ],
+        "ignored_elements": [
+          "DEVNET and PRACTICE MODE nav links in the top right — what even is devnet lol",
+          "The 'Awaiting Tip-Off' status bar — I skimmed past it",
+          "The Feedback button in the bottom right corner"
+        ],
+        "visual_notes": "The dark theme with orange accent looks sleek and intentional — someone clearly designed this, not just threw it together. BUT the 'DEVNET' label and 'PRACTICE MODE' badges scattered everywhere make it feel unfinished or like a test site, which is a little sketchy for a first impression. There's zero social proof, no logos, no user count, nothing to tell me other real people use this — just vibes and a free $100 button."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

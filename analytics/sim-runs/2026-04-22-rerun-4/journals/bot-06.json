@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-06",
+  "display_name": "Tyrese Wood",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "BgmThQPZ6HtDeYiauwkw2GxMM9uM4aYZYYKb3WxCqa5v",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:07.488Z",
+      "user_id": "bot-06",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top, then scrolled through the '10-second version' explainer that called it a pretend stock market for NBA players where $100 of fake money lets you bet on mispriced players. The UNDERVALUED/OVERVALVED example with LeBron at $5.59 vs $4.20 actually made sense to me.",
+      "their_interpretation": "Okay so this is basically a paper-trading sandbox but the underlying asset is a stat-derived fair value for NBA players — think of it like a fantasy sports layer on top of a bonding curve or AMM, except the price oracle is box score data instead of supply/demand alone. No real money, no wallet connection required, which is either genuinely frictionless or means there's nothing actually on-chain yet.",
+      "their_decision": "I'd click 'Claim $100' — but only after I hit 'Methodology' first to see how they're actually computing that fair-value price.",
+      "their_rationale": "The 'no seed phrase, no signup' line removes my biggest hesitation, and 'Devnet · Practice mode' in the header tells me as a SOL holder that this is a testnet environment, not mainnet — so there's no financial exposure. But I'm an engineer; I want to see the stat formula before I trust that the gap between fair value and market price is a real signal and not just a made-up number.",
+      "confidence": 0.78,
+      "confusion_notes": [
+        "'The market decides what it actually trades at' — who IS the market here if everyone starts with fake $100? Is there a shared order book or is each user siloed?",
+        "'Buying raises the price for the next person' — this sounds like a bonding curve mechanic, but they never say that. I'd want to know the exact pricing function.",
+        "'AWAITING TIP-OFF · Prices move after tonight's games' — does that mean the app is literally non-functional right now until game time? That's a weird first impression.",
+        "'The gap is your edge — if you're right, and early' — early relative to what? Other users on the platform, or relative to the stat update cycle?"
+      ],
+      "first_impression_elements": [
+        "The 'Devnet · Practice mode' badge in the header — immediately told me this is a sandbox, not real money, which lowered my guard",
+        "The LeBron $5.59 vs $4.20 UNDERVALUED example — concrete numbers made the concept click faster than any of the surrounding copy",
+        "The 'No account yet · $100 · no real money · no seed phrase' subline under the Claim button — that three-part reassurance is doing a lot of heavy lifting"
+      ],
+      "ignored_elements": [
+        "The 'Built by FanShare' footer credit — didn't register at all",
+        "The 'Thesis' section ('Being right early — and staying right — pays better than being right once') — felt like flavor copy, skipped it",
+        "The '↓Terms explained' link — I noticed it exists but didn't click; I'd come back to it after Methodology"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:24:03.074Z",
+    "user_id": "bot-06",
+    "q1_what_am_i_buying": "[error] 429 {\"type\":\"error\",\"error\":{\"type\":\"rate_limit_error\",\"message\":\"This request would exceed your organization's rate limit of 8,000 output tokens per minute (org: d2274edd-a430-49bf-8e59-a80f49e41d77, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"},\"request_id\":\"req_011CaKfvH8rMewGwTuMn7DVc\"}",
+    "q2_what_moves_price": "(error)",
+    "q3_hold_week": "(error)",
+    "q4_fair_vs_market": "(error)",
+    "overall_confidence": 0,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "Bold orange 'real stats.' headline accent — high contrast, immediately draws the eye",
+          "Yellow 'Claim $100' CTA button — stands out strongly against the dark grid background",
+          "DEVNET / PRACTICE MODE labels in the nav — I noticed those immediately and they made me pause"
+        ],
+        "ignored_elements": [
+          "The subtle grid background texture",
+          "The 'AWAITING TIP-OFF' status bar at the top",
+          "The 'How it works' secondary CTA"
+        ],
+        "visual_notes": "The dark-mode grid aesthetic is clean and intentional — feels like a trading terminal, which fits the product. However, the DEVNET badge in the nav is a real trust killer for me; it signals this isn't production-ready, and I'm the type who reads every label. There's no social proof, no logo beyond a text wordmark, and no product screenshot — the below-fold content is just a text explainer, which leaves the page feeling sparse and early-stage."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

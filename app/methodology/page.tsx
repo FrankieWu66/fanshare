@@ -11,7 +11,7 @@ const PILLARS = [
   {
     n: "01",
     title: "Box-score pillars",
-    body: "Each player's fair value is built from four weighted pillars of recent NBA performance: scoring efficiency, playmaking, rebounding/defense, and availability. The oracle pulls fresh stats from balldontlie.io after every game.",
+    body: "Each player's fair value is built from four weighted pillars of box-score performance: scoring efficiency, playmaking, rebounding/defense, and availability. Box-score only — no sentiment, no hype, no social signal. The oracle pulls fresh stats from balldontlie.io after every game.",
   },
   {
     n: "02",
@@ -21,7 +21,7 @@ const PILLARS = [
   {
     n: "03",
     title: "Bonding-curve market",
-    body: "Each player has a constant-product bonding curve seeded at the same base price as the day-one index. Buys raise the price for the next buyer; sells lower it. The gap between market price and oracle index is the spread — your edge is calling which way it closes.",
+    body: "Each player has a constant-product bonding curve seeded at the same base price as the day-one index. Buys raise the price for the next buyer; sells lower it. The gap between market price and oracle index is the spread — your read is calling which way it closes.",
   },
   {
     n: "04",
@@ -58,7 +58,7 @@ export default function MethodologyPage() {
             FanShare
           </Link>
           <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted">
-            Devnet · Practice mode
+            Practice mode
           </span>
         </div>
 
@@ -80,11 +80,14 @@ export default function MethodologyPage() {
             <em className="not-italic text-accent">actually</em> work.
           </h1>
 
-          <p className="mt-8 text-base leading-[1.65] text-muted">
-            The short version: real NBA stats set a fair-value price every day,
-            and the market trades around that signal on a bonding curve. The
-            spread between the two is the opportunity. Here&apos;s the longer
-            version, in four pieces.
+          <p className="mt-8 text-base leading-[1.65] text-foreground">
+            <b className="font-semibold">Fair-value price</b> = an index
+            computed from individual box-score stats only. FanShare publishes
+            it daily and stands aside. The market sets the traded price. The
+            gap between them is <b className="font-semibold">your read.</b>
+          </p>
+          <p className="mt-5 text-base leading-[1.65] text-muted">
+            Here&apos;s how each piece works, in four parts.
           </p>
 
           <div className="mt-12 flex flex-col">

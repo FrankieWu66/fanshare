@@ -1,0 +1,87 @@
+{
+  "user_id": "bot-12",
+  "display_name": "Riley Park",
+  "archetype": "skeptic",
+  "viewport": "desktop",
+  "wallet_address": "9MRVa6VFbFVXzXv9Eq9m4nzijYWv5sQ8nusvDd8eY2zD",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:19.222Z",
+      "user_id": "bot-12",
+      "step": "landed",
+      "what_they_read": "Big headline says 'Trade player tokens that move with real stats' and there's a $100 claim button. Scrolled down and read the 'New here? 10-second version' block pretty carefully.",
+      "their_interpretation": "It's a fake stock market for NBA players using play money — no real cash involved, supposedly. The $100 is pretend, which is either genuinely harmless or the hook before they ask for something real.",
+      "their_decision": "I'm hovering over 'Claim $100 →' but I haven't clicked it. I'm reading the Terms section first.",
+      "their_rationale": "Every rugpull I've seen started with free money and no signup required — that's not a feature, that's a flag. The 'no account, no password' thing sounds frictionless on purpose, and frictionless on purpose usually means they're collecting something else.",
+      "confidence": 0.55,
+      "confusion_notes": [
+        "'No seed phrase' — why mention seed phrases at all if this is just fake money? That implies crypto is somewhere in the stack and they're trying to pre-empt my fear of it.",
+        "'The gap is your edge' — edge over what? Over other fake-money traders? The stakes framing feels borrowed from real trading and doesn't quite land in a demo context.",
+        "'Devnet' — okay so this IS crypto infrastructure. Devnet is a blockchain test environment. So there IS a wallet somewhere, even if it's not real money. That's not explained.",
+        "'AWAITING TIP-OFF' — is this a live game thing? Does the app only work during NBA games? What happens if I sign up now?",
+        "Who built this and why? 'Built by FanShare' tells me nothing. No team page, no Twitter link, no faces."
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — orange or prominent enough that I clocked it immediately and then immediately got suspicious",
+        "'No account yet · $100 · no real money · no seed phrase' subline — this is doing a lot of reassurance work fast, which made me more suspicious not less",
+        "'Devnet' label in the top bar — tiny but I caught it, and it told me more about the tech stack than the whole landing page did"
+      ],
+      "ignored_elements": [
+        "The LeBron $5.59 vs $4.20 example — I skimmed it, didn't process it, felt like filler",
+        "The 'Buying raises the price for the next person' mechanics paragraph — I'll care about this if I ever actually trade, which is not tonight",
+        "💬Feedback button — completely invisible to me psychologically"
+      ],
+      "emotional_arc_phase": "reflective",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 4,
+      "would_show_friend": 5
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:24:13.348Z",
+    "user_id": "bot-12",
+    "q1_what_am_i_buying": "[error] Connection error.",
+    "q2_what_moves_price": "(error)",
+    "q3_hold_week": "(error)",
+    "q4_fair_vs_market": "(error)",
+    "overall_confidence": 0,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 4,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 5,
+        "first_impression_elements": [
+          "Giant orange 'real stats.' headline — loud, designed to grab",
+          "Yellow 'Claim $100' CTA button — screams free money, which is exactly what a rugpull screams",
+          "Dark grid background — someone watched too many crypto startup videos"
+        ],
+        "ignored_elements": [
+          "DEVNET label in the nav — buried, easy to miss, but actually the most important thing on the page",
+          "The 'How it works' secondary CTA",
+          "AWAITING TIP-OFF status bar"
+        ],
+        "visual_notes": "Clean dark aesthetic with decent typographic hierarchy — this isn't thrown together. But 'DEVNET' and 'PRACTICE MODE' plastered everywhere while a button says 'Claim $100' is a contradiction that my nervous system clocks immediately. Zero social proof, no team, no about, no footer — just a CTA and vibes. I've seen this layout before and I didn't get my money back."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "terms_expanded",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "about_demo_clicked"
+    ]
+  }
+}

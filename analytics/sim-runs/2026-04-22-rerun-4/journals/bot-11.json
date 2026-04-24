@@ -1,0 +1,90 @@
+{
+  "user_id": "bot-11",
+  "display_name": "Kwame Ade",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "Fnwrc5nGVuDLjMzYat71VcDG3jJSMob9cTDa3Ccc6sAC",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:17.557Z",
+      "user_id": "bot-11",
+      "step": "landed",
+      "what_they_read": "I saw 'Trade player tokens that move with real stats' up top and then that big 'Claim $100' button, and I read the part that says it's like a pretend stock market for NBA players where a computer gives each player a fair price every day.",
+      "their_interpretation": "Okay so this is basically like fantasy basketball but instead of picking a lineup you're buying and selling players like stocks, and if the fair value says LeBron is worth $5.59 that means his price is GOING to $5.59 — that's basically guaranteed money if I buy him at $4.20, right?",
+      "their_decision": "I'm clicking 'Claim $100' — no question.",
+      "their_rationale": "It says no real money, no risk, no signup, no password — like what do I have to lose? And my boy told me about this, so if it was sketchy he wouldn't have sent me the link. The LeBron example made it click for me.",
+      "confidence": 0.72,
+      "confusion_notes": [
+        "'token' — I get that it's like a share of a player but is it crypto? Like a coin? Nobody said crypto but it feels like crypto",
+        "'devnet' — that word is just sitting in the corner and nobody explained it, sounds technical and slightly scary",
+        "'seed phrase' — they said 'no seed phrase' like that's supposed to reassure me but I don't know what a seed phrase even is so now I'm low-key nervous about it",
+        "'market price' vs 'fair-value price' — I think I get it but I'm also pretty sure the fair value IS the price it's going to, like that's the destination, right?",
+        "'SOL' — didn't see this word on the page but my friend mentioned it and now I'm wondering if that's coming later",
+        "'Buying raises the price for the next person' — wait so I'm affecting other people's money? Even if it's fake that's weird to think about",
+        "'AWAITING TIP-OFF' — is the whole site broken right now or is that normal?"
+      ],
+      "first_impression_elements": [
+        "Big bold 'Claim $100 →' button — that jumped out immediately, felt like a gift",
+        "The LeBron $5.59 vs $4.20 example — that made the whole thing make sense in two seconds",
+        "'No real money · no seed phrase' reassurance line right under the button"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — I saw it but I didn't click it, felt like fine print",
+        "'About · Methodology · Invite' footer links — didn't even register honestly",
+        "The 'Thesis' section about being right early — skimmed past it, felt like something for people who already know what they're doing",
+        "'💬Feedback' button — totally invisible to me"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:24:13.058Z",
+    "user_id": "bot-11",
+    "q1_what_am_i_buying": "[error] Connection error.",
+    "q2_what_moves_price": "(error)",
+    "q3_hold_week": "(error)",
+    "q4_fair_vs_market": "(error)",
+    "overall_confidence": 0,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "Big bold headline with 'real stats' in orange — that popped immediately, looks legit",
+          "Yellow 'Claim $100' button is super eye-catching, first thing I wanted to click",
+          "Dark grid background feels like a trading app, gives it a serious vibe"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' text in the top right nav — didn't really register",
+          "The 'AWAITING TIP-OFF' status bar — scrolled past it mentally",
+          "The 'NEW HERE? 10-SECOND VERSION' section at the bottom — hadn't gotten there yet"
+        ],
+        "visual_notes": "The page looks clean and intentional — dark theme with orange accents reads like a real fintech product, which builds initial confidence. However there's no logo beyond a text wordmark, zero social proof like user counts or testimonials, and the 'PRACTICE MODE' and 'DEVNET' labels scattered around feel like warning signs I can't quite decode — makes me wonder if this is even finished. The CTA is strong but the page feels sparse, like it's missing something that would make me fully trust it."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

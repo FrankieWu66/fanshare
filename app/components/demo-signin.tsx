@@ -46,7 +46,7 @@ export function DemoSignin({ onClose }: Props) {
 
     try {
       await connectDemo(trimmed);
-      toast.success("0.667 SOL landed in your wallet. Go find a mispriced player.");
+      toast.success("$100 landed. Go find a mispriced player.");
       // Grant confirmed on-chain: wallet is provisioned + 0.05 SOL transferred
       // inside the /api/demo/register call. Read the address from localStorage
       // where the wallet context just wrote it (context doesn't return it).
@@ -139,7 +139,7 @@ export function DemoSignin({ onClose }: Props) {
 
         {/* Fine print */}
         <p className="mt-4 text-center text-[11px] text-muted/70">
-          Demo mode uses fake SOL on Solana devnet. No real money involved.
+          Practice mode. No real money, no risk.
         </p>
 
         {/* Divider + real wallet option */}

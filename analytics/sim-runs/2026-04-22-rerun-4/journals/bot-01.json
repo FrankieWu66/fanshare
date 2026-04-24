@@ -1,0 +1,87 @@
+{
+  "user_id": "bot-01",
+  "display_name": "Alex Rivera",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "FdNpiuJJHFnKqoneSYRDeDheV2xGhkoiT5y1CcexPndC",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:22:57.717Z",
+      "user_id": "bot-01",
+      "step": "landed",
+      "what_they_read": "I caught 'Trade player tokens that move with real stats' right at the top, then the LeBron example — '$5.59 fair value, market trading at $4.20' — that one jumped out hard. Also saw 'No real money, no seed phrase' pretty fast.",
+      "their_interpretation": "Okay so it's basically a fantasy stock market for NBA players but on-chain vibes — fake money, but the price logic is tied to actual stats. Like a simulation where being smarter than the crowd about LeBron's numbers actually pays off in play money.",
+      "their_decision": "I'm clicking 'Claim $100 →' right now.",
+      "their_rationale": "No signup, no seed phrase, no real money — there's literally zero downside and they used LeBron as the example which, yeah, that's me. The vibe feels clean enough and I wanna see what LeBron's token is sitting at before tip-off.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'fair-value price' vs 'market price' — I get the concept but I'm not 100% sure how the computer calculates the fair-value number, feels like a black box",
+        "'Devnet' in the header — I know that's a blockchain test environment but a non-crypto person would have zero idea what that means",
+        "'AWAITING TIP-OFF' — cute but I wasn't sure if that meant the app was broken or just waiting for tonight's games",
+        "The 'gap is your edge' line — sounds cool but it's doing a lot of work without explaining the actual mechanism"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — that's the first thing my eyes went to, orange energy",
+        "The LeBron price example ($5.59 vs $4.20) — instantly made it real for me",
+        "'No real money, no seed phrase' badge — that killed my hesitation fast"
+      ],
+      "ignored_elements": [
+        "'↓Terms explained' link — didn't even register it was there",
+        "About · Methodology · Invite footer links — skipped completely",
+        "The 'Thesis' section — saw the word, kept scrolling",
+        "💬Feedback button"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:23:48.876Z",
+    "user_id": "bot-01",
+    "q1_what_am_i_buying": "It's like a fake stock for LeBron, bro. The app gives me play money and I'm basically betting on his token — not real shares or anything, just pretend. It moves with his actual stats somehow.",
+    "q2_what_moves_price": "Okay so two things I think — his real game stats push some 'fair value' number, and then other people buying or selling moves the actual market price. If everyone's sleeping on LeBron and I buy, I'm nudging that price up for the next person.",
+    "q3_hold_week": "Honestly? I'm not totally sure. I guess the fair value keeps updating with his stats every day, so if he goes off this week the fair price climbs — but I don't know if my token just sits there or if it auto-updates. The app didn't really spell that out for me.",
+    "q4_fair_vs_market": "Fair value is what the computer thinks he's worth based on his stats — like $5.59 for LeBron in their example. Market price is what people are actually paying for the token right now. If the market is low and fair value is high, that's the gap I'm trying to catch before everyone else does.",
+    "overall_confidence": 0.52,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "trust_inventory_completeness": 4,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "That big orange 'real stats.' text — immediately grabbed me, feels hype",
+          "Yellow 'Claim $100' button — pops hard against the dark background, can't miss it",
+          "Dark grid background — gives it that crypto trading terminal energy I recognize"
+        ],
+        "ignored_elements": [
+          "DEVNET and PRACTICE MODE nav links top right — too small, didn't register",
+          "The 'How it works' secondary CTA — yellow button already had my attention",
+          "The fine print below the button about no account / no seed phrase"
+        ],
+        "visual_notes": "Dark theme with that orange accent hits different — feels like a real trading app, not some fantasy sports knockoff. But there's zero social proof, no logos, no user counts, nothing that says other people are already in here getting bags. The 'DEVNET' label in the nav is a slight red flag — makes it feel unfinished, like I'm beta testing someone's side project."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

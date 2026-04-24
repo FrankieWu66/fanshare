@@ -1,0 +1,86 @@
+{
+  "user_id": "bot-07",
+  "display_name": "Diego Morales",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "5YKB39iDsWoCkPGbj7PDD3yJsNYVHZafcnD3GTfbvLyw",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:09.198Z",
+      "user_id": "bot-07",
+      "step": "landed",
+      "what_they_read": "I caught 'Trade player tokens that move with real stats' right away, then the '10-second version' block that called it a pretend stock market for NBA players. The LeBron example — stats say $5.59, market says $4.20 — actually made it click.",
+      "their_interpretation": "So it's basically a paper-trading sim where a formula prices players off their real stats, and the market price drifts from that formula based on what other people are doing — the gap between those two numbers is where you make or lose fake money. No real dollars, no wallet drain, which is the part I needed confirmed.",
+      "their_decision": "I'd click 'Claim $100' and poke around the player cards to see if the fair-value model is doing anything interesting or just noise.",
+      "their_rationale": "It's devnet play money and they said no seed phrase, so there's no real downside — worst case I waste ten minutes. The value angle actually appeals to me: if the model flags something as undervalued and I agree with the underlying stats, that's the exact bet I'd want to make anyway.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'The gap is your edge' — slightly vague on first read; I had to get to the LeBron example before I understood gap meant fair-value minus market-price",
+        "'Buying raises the price for the next person' — is this a bonding curve mechanic? They never name the mechanism, just describe the effect, which leaves me wondering how price discovery actually works under the hood",
+        "'AWAITING TIP-OFF / Prices move after tonight's games' — does that mean I can't trade right now, or just that prices won't update until after the game? Unclear whether the market is live or frozen",
+        "No mention of how the $100 is denominated — is it in fake USD, fake SOL, or some internal token unit? Matters for interpreting card prices"
+      ],
+      "first_impression_elements": [
+        "Big 'Claim $100 →' button — first thing my eye landed on, and 'no real money · no seed phrase' right underneath it settled my skepticism fast",
+        "The LeBron $5.59 vs $4.20 example — concrete numbers made the concept real instead of abstract",
+        "'AWAITING TIP-OFF' status badge — caught my attention because it implied the market is actually live and tied to tonight's schedule"
+      ],
+      "ignored_elements": [
+        "Footer links — About, Methodology, Invite — didn't register at all on first pass",
+        "'↓Terms explained' toggle — I noticed it exists but didn't click; 'no real money' was enough reassurance",
+        "'ThesisBeing right early — and staying right — pays better than being right once' section — felt like flavor text, skipped it"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:24:05.684Z",
+    "user_id": "bot-07",
+    "q1_what_am_i_buying": "[error] 429 {\"type\":\"error\",\"error\":{\"type\":\"rate_limit_error\",\"message\":\"This request would exceed your organization's rate limit of 8,000 output tokens per minute (org: d2274edd-a430-49bf-8e59-a80f49e41d77, model: claude-sonnet-4-6). For details, refer to: https://docs.claude.com/en/api/rate-limits. You can see the response headers for current usage. Please reduce the prompt length or the maximum tokens requested, or try again later. You may also contact sales at https://claude.com/contact-sales to discuss your options for a rate limit increase.\"},\"request_id\":\"req_011CaKfvSK1DpLuHFzRifzwu\"}",
+    "q2_what_moves_price": "(error)",
+    "q3_hold_week": "(error)",
+    "q4_fair_vs_market": "(error)",
+    "overall_confidence": 0,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "Bold orange 'real stats.' headline accent — high contrast, immediately draws the eye",
+          "Yellow 'Claim $100' CTA button — stands out hard against the dark grid background",
+          "Grid-pattern dark background gives it a Bloomberg/trading terminal aesthetic that feels intentional"
+        ],
+        "ignored_elements": [
+          "DEVNET · PRACTICE MODE nav labels top right — too small and low contrast to register quickly",
+          "The 'How it works ↓' secondary CTA — visually undersold, easy to skip past",
+          "The bottom 'NEW HERE? 10-SECOND VERSION.' explainer block — below fold, didn't pull me down"
+        ],
+        "visual_notes": "The dark terminal aesthetic is clean and thematically appropriate for a trading product — it signals 'serious tool' not 'fantasy app.' However, there are zero social proof signals, no logo mark beyond a text wordmark, and the 'DEVNET' label in the nav quietly screams 'this is not production-ready,' which is a real trust gap for someone who's thinking about whether this is legit. The hierarchy is solid but the page feels sparse — one hero, one CTA, no product screenshot or UI preview to anchor what you're actually getting into."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

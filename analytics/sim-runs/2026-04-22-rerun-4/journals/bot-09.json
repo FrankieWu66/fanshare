@@ -1,0 +1,80 @@
+{
+  "user_id": "bot-09",
+  "display_name": "Sam Jefferson",
+  "archetype": "newbie",
+  "viewport": "desktop",
+  "wallet_address": "3F5GSRmWV1hXyefJKkJv5GDz6PwXeFhTo18RjXVEFgdQ",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:13.619Z",
+      "user_id": "bot-09",
+      "step": "landed",
+      "what_they_read": "Trade player tokens that move with real stats.",
+      "their_interpretation": "(no interpretation)",
+      "their_decision": "(no explicit decision)",
+      "their_rationale": "(no rationale)",
+      "confidence": 0.5,
+      "confusion_notes": [],
+      "first_impression_elements": [
+        "Big bold orange text 'real stats.' — it pops immediately, feels energetic",
+        "Yellow 'Claim $100' button — my eyes went straight to it, looks clickable and safe-ish",
+        "Dark grid background — feels techy, like a trading app or game dashboard"
+      ],
+      "ignored_elements": [
+        "DEVNET · PRACTICE MODE nav links in top right — didn't register what those mean",
+        "The 'AWAITING TIP-OFF' status bar — saw it but didn't process it",
+        "The fine print '$100 · no real money · no seed phrase' below the button"
+      ],
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:24:10.217Z",
+    "user_id": "bot-09",
+    "q1_what_am_i_buying": "[error] Request timed out.",
+    "q2_what_moves_price": "(error)",
+    "q3_hold_week": "(error)",
+    "q4_fair_vs_market": "(error)",
+    "overall_confidence": 0,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "Big bold orange text 'real stats.' — it pops immediately, feels energetic",
+          "Yellow 'Claim $100' button — my eyes went straight to it, looks clickable and safe-ish",
+          "Dark grid background — feels techy, like a trading app or game dashboard"
+        ],
+        "ignored_elements": [
+          "DEVNET · PRACTICE MODE nav links in top right — didn't register what those mean",
+          "The 'AWAITING TIP-OFF' status bar — saw it but didn't process it",
+          "The fine print '$100 · no real money · no seed phrase' below the button"
+        ],
+        "visual_notes": "The dark theme with orange accent is cohesive and intentional — someone clearly designed this, not just threw it together. However there's almost zero social proof, no logo mark beyond a text wordmark, and the 'DEVNET' label in the corner quietly screams 'this might not be finished yet' to anyone who notices it. The hero section is clean but the page feels sparse and early-stage, which undercuts trust for a newcomer who doesn't know if this is a real product or a prototype."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

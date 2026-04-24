@@ -1,0 +1,89 @@
+{
+  "user_id": "bot-14",
+  "display_name": "Ellie Vance",
+  "archetype": "skeptic",
+  "viewport": "mobile",
+  "wallet_address": "JCPoZLs5WQeCk9Xy5P9VwX4LgvfZduZDN8irQPcKNGrr",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:23.235Z",
+      "user_id": "bot-14",
+      "step": "landed",
+      "what_they_read": "I read the top line — 'Trade player tokens that move with real stats' — and then immediately scanned for the catch near the $100 button. Found the small print: 'no real money · no seed phrase.'",
+      "their_interpretation": "Okay so it's fake money, fake trading, NBA players as the underlying thing — basically a fantasy sports simulator dressed up in stock market language. The 'Devnet' label and 'Practice mode' banners suggest this is a demo build, not a live product.",
+      "their_decision": "I haven't clicked anything yet and I'm not sure I will — I'm going to read the Terms and the Methodology links first.",
+      "their_rationale": "The '$100' framing still pattern-matches to every phishing page I've ever seen, even with the 'no real money' disclaimer right under it. I need to see who built this and whether the methodology link goes somewhere real before I hand over any click that might trigger an account creation.",
+      "confidence": 0.62,
+      "confusion_notes": [
+        "'Devnet' — is this blockchain terminology? That word is doing a lot of work and it's not explained anywhere on this screen.",
+        "'No seed phrase' — why mention seed phrases at all if there's no crypto? Now I'm wondering if there IS crypto involved and they're just downplaying it.",
+        "'The gap is your edge' — sounds like trading copy, not a game description. Feels like they're trying to make fake money feel real, which is either clever or manipulative.",
+        "'AWAITING TIP-OFF · Prices move after tonight's games' — is this live data? Is there a server? Who's running this?",
+        "Step 03 says 'Buying raises the price for the next person' — that is literally how a pump works. Red flag phrasing even if the intent is innocent.",
+        "'Built by FanShare' — that's not a trust signal, that's a tautology. Who IS FanShare?"
+      ],
+      "first_impression_elements": [
+        "Big bold 'Claim $100 →' button in what looks like an accent color — that's the first thing my eye went to and also the first thing I distrusted",
+        "'No real money · no seed phrase' in small text directly under the button — I did actually read this, it slowed my skepticism slightly",
+        "'Devnet' badge next to the FanShare logo in the header — I noticed it immediately and it raised more questions than it answered"
+      ],
+      "ignored_elements": [
+        "The LeBron $5.59 vs $4.20 example — I skimmed past it, felt like marketing filler",
+        "'💬Feedback' button in the corner — didn't register at all",
+        "The 'Thesis' section ('Being right early pays better than being right once') — felt like startup manifesto copy, tuned it out",
+        "The three-step 'How it works' numbered list — I clocked the headings but didn't read the body text yet"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "mobile",
+      "visual_professionalism": 6,
+      "trust_signal_strength": 3,
+      "would_show_friend": 4
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:33:37.613Z",
+    "user_id": "bot-14",
+    "q1_what_am_i_buying": "[error] Connection error.",
+    "q2_what_moves_price": "(error)",
+    "q3_hold_week": "(error)",
+    "q4_fair_vs_market": "(error)",
+    "overall_confidence": 0,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 6,
+        "trust_signal_strength": 3,
+        "trust_inventory_completeness": 2,
+        "would_show_friend": 4,
+        "first_impression_elements": [
+          "Bold 'real stats.' in orange — the color contrast is doing heavy lifting",
+          "'AWAITING TIP-OFF' status bar in orange feels live and urgent but also unfinished",
+          "Big yellow 'Claim $100' CTA button — immediately suspicious of what I'm actually claiming"
+        ],
+        "ignored_elements": [
+          "The faint grid lines in the background — decorative noise",
+          "'How it works' secondary link — didn't pull my eye at all",
+          "Hamburger menu — no reason to trust there's anything behind it"
+        ],
+        "visual_notes": "Dark grid aesthetic is fine but feels like a crypto app cosplaying as a sports product — no logos, no team branding, no faces, nothing that says 'real.' DEVNET in the nav is a red flag I can't unsee; that's developer infrastructure language leaking into a consumer page. Zero social proof, zero identity beyond a wordmark, and 'no real money' buried at the bottom reads like a disclaimer, not a feature."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

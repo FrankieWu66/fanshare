@@ -1,0 +1,87 @@
+{
+  "user_id": "bot-02",
+  "display_name": "Maya Patel",
+  "archetype": "hype",
+  "viewport": "desktop",
+  "wallet_address": "4XVAEJgfF8anFbb4316JptqvYTkPXkaTT3ow2ixi27Zb",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:22:59.402Z",
+      "user_id": "bot-02",
+      "step": "landed",
+      "what_they_read": "I caught 'Trade player tokens that move with real stats' right away, then the '$100 in practice money' and the three-step breakdown — especially the LeBron example with the $5.59 fair value versus $4.20 market price thing.",
+      "their_interpretation": "Okay so it's basically like fantasy sports but instead of drafting a team you're betting on whether the market is sleeping on a player or overhyping them — and you get a hundred fake dollars to mess around with first, no strings attached.",
+      "their_decision": "I'm clicking 'Claim $100' right now, no hesitation.",
+      "their_rationale": "No signup, no password, no real money — like what am I even risking here? And if this is what I think it is, I already know Tatum is criminally undervalued by casual fans so I want to see what the market has him priced at immediately.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'The gap is your edge' — sounds cool but took me a second to parse what 'gap' actually means in practice",
+        "'Devnet' in the top bar — I know that's a crypto thing meaning test network but most people landing here probably don't and it makes it feel more technical than the rest of the page",
+        "'AWAITING TIP-OFF — Prices move after tonight's games' — does that mean I can't actually do anything right now? That's a little confusing timing-wise",
+        "'Buying raises the price for the next person' — this sounds like it could be a bonding curve mechanic but they never say that, so I'm just guessing"
+      ],
+      "first_impression_elements": [
+        "Big bold 'Trade player tokens that move with real stats' headline — felt premium and direct",
+        "'Claim $100 →' button — that's the first thing my eye went to after the headline, it's doing a lot of work",
+        "The LeBron $5.59 vs $4.20 example — that made the whole concept click instantly and felt concrete"
+      ],
+      "ignored_elements": [
+        "The 'Thesis' section with 'Being right early — and staying right — pays better than being right once' — saw it, skimmed past it",
+        "The footer links — About, Methodology, Invite — completely ignored",
+        "'↓Terms explained' link — I know I should care but I didn't stop for it",
+        "The 'Practice mode. No real money, no financial risk, no financial advice.' disclaimer at the very bottom"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 7
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:23:53.593Z",
+    "user_id": "bot-02",
+    "q1_what_am_i_buying": "Okay so like, it's a fake token for a player — Tatum, LeBron, whoever — and it's basically a little piece of pretend stock that's supposed to reflect how that player is actually performing stat-wise. It's not real money or anything, it's just play money vibes but tied to real NBA numbers.",
+    "q2_what_moves_price": "Two things I think — the stats move some kind of 'fair value' price automatically, like the computer recalculates it based on what players actually do on the court. But then OTHER people buying and selling also moves the market price, so if everyone's hyping Tatum after a 40-point game and piling in, the price goes up from that too.",
+    "q3_hold_week": "Honestly I'm not totally sure — I think the fair value keeps updating with his stats every day, so if he keeps balling out the fair value climbs. But the market price depends on what other people are doing, so if nobody's trading him it might just kind of sit there? I don't really know if there's like a timer or anything, the app didn't really spell that out for me.",
+    "q4_fair_vs_market": "Fair value is what the computer says the player is WORTH based on actual stats, and market price is what people are actually paying for the token right now. The gap between those two is supposedly where you make your money — like if JT's stats say he's worth five bucks but people are only paying three, you buy in and wait for everyone else to catch up.",
+    "overall_confidence": 0.45,
+    "flagged_wrong": true
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "trust_inventory_completeness": 3,
+        "would_show_friend": 7,
+        "first_impression_elements": [
+          "That massive bold headline with the orange 'real stats.' pop — immediately grabbed me, very hype energy",
+          "The bright yellow 'Claim $100' button is SO loud and clickable, I almost tapped it before reading anything",
+          "The dark grid background gives it that Bloomberg terminal slash crypto dashboard vibe which honestly slaps"
+        ],
+        "ignored_elements": [
+          "The 'DEVNET · PRACTICE MODE' nav links in the top right — tiny and boring",
+          "The 'AWAITING TIP-OFF' status bar — I saw it but it didn't register as important",
+          "The 'NEW HERE? 10-SECOND VERSION' explainer section at the bottom — I was already focused on the CTA"
+        ],
+        "visual_notes": "The dark theme with that orange accent is genuinely clean and sporty — it feels like a real product someone put thought into, not a template. BUT there's zero social proof, no logo mark beyond a text wordmark, and 'DEVNET' screaming in the nav is a little sketchy — like is this even live? The 'no real money' disclaimer is reassuring but the overall page feels early-stage, like a cool prototype a dev friend built, not a polished launch."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}

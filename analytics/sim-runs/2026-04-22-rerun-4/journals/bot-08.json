@@ -1,0 +1,87 @@
+{
+  "user_id": "bot-08",
+  "display_name": "Tomas Huerta",
+  "archetype": "value",
+  "viewport": "desktop",
+  "wallet_address": "GxD5DAsj6gQ9A9EV6WxWjqo88w1rCXUsZdTFDyg29TYC",
+  "entries": [
+    {
+      "ts": "2026-04-22T23:23:11.220Z",
+      "user_id": "bot-08",
+      "step": "landed",
+      "what_they_read": "Saw 'Trade player tokens that move with real stats' up top, then the plain-English explainer calling it a pretend stock market for NBA players with $100 fake money. Read the LeBron example — $5.59 fair value, $4.20 market price.",
+      "their_interpretation": "It's a paper-trading sim where some algorithm prices NBA players off box scores, and the market can drift from that number — you're basically hunting mispricings with play money. No wallet connect, no seed phrase, nothing at stake.",
+      "their_decision": "I'd click 'Claim $100' and poke around.",
+      "their_rationale": "The mechanic they're describing — fair value versus market price, gap as edge — is exactly how I think about real assets, and the LeBron example made it concrete fast. No real money means the downside of being wrong is zero, so there's no reason to sit on my hands.",
+      "confidence": 0.82,
+      "confusion_notes": [
+        "'Devnet' in the header — I know that's a Solana test environment but most people won't, and it's never explained",
+        "'AWAITING TIP-OFF' banner — not sure if that means prices are frozen right now or the whole thing is offline",
+        "Buying raises the price for the next person — sounds like a bonding curve, but that word never appears; I'm inferring",
+        "'Methodology' link — curious what the stat-to-price formula actually is, but it's buried in the footer"
+      ],
+      "first_impression_elements": [
+        "The LeBron $5.59 vs $4.20 undervalued example — made the whole concept click in one read",
+        "'No account yet · $100 · no real money · no seed phrase' line under the button — removed every objection I had before I formed it",
+        "AWAITING TIP-OFF banner — caught my eye immediately, made me wonder if the thing is even live"
+      ],
+      "ignored_elements": [
+        "Footer links: About, Methodology, Invite",
+        "Terms explained toggle — I'll read it eventually but not on first landing",
+        "💬Feedback button",
+        "The 'Built by FanShare' line"
+      ],
+      "emotional_arc_phase": "behavioral",
+      "viewport": "desktop",
+      "visual_professionalism": 7,
+      "trust_signal_strength": 5,
+      "would_show_friend": 6
+    }
+  ],
+  "checkpoint": {
+    "ts": "2026-04-22T23:24:02.206Z",
+    "user_id": "bot-08",
+    "q1_what_am_i_buying": "Far as I can tell, it's a pretend stake in a player — like a fake share that tracks how he performs statistically. Not a real asset, no real money behind it. Just a number that moves with his stats.",
+    "q2_what_moves_price": "Two things from what I read — the stats feed updates a 'fair value' daily, and then other traders buying or selling push the market price around separately. So it's both the player's actual performance and what the crowd decides to pay.",
+    "q3_hold_week": "Honestly the app didn't spell that out clearly. I'd guess the fair value keeps updating as his stats roll in each night, and the market price drifts based on what other people are doing. Whether my position gains or bleeds, I'm not sure — I'd have to watch it.",
+    "q4_fair_vs_market": "Fair value is what the computer calculates from real stats — kind of the 'should be worth' number. Market price is what people are actually paying, driven by hype or panic. The gap between those two is where I want to live — buy when market's below fair, wait for the crowd to catch up.",
+    "overall_confidence": 0.52,
+    "flagged_wrong": false
+  },
+  "visual_assessments": [
+    {
+      "page": "/invite",
+      "step": "landed",
+      "data": {
+        "visual_professionalism": 7,
+        "trust_signal_strength": 5,
+        "trust_inventory_completeness": 4,
+        "would_show_friend": 6,
+        "first_impression_elements": [
+          "Bold orange 'real stats.' headline — high contrast, pulls the eye immediately",
+          "Yellow CTA button 'Claim $100' — oversized, rounded, hard to miss",
+          "Dark grid background — gives it a Bloomberg terminal / trading desk aesthetic"
+        ],
+        "ignored_elements": [
+          "DEVNET · PRACTICE MODE nav labels top right — felt like system status noise",
+          "Feedback widget bottom right — standard filler",
+          "The 'How it works ↓' secondary link — didn't feel urgent enough to register"
+        ],
+        "visual_notes": "The dark grid with orange accent is a deliberate design choice that reads as 'serious trading tool' — I respect the restraint. But the page is thin on identity: no logo mark beyond a text wordmark, zero social proof, no product screenshot or chart preview to anchor the concept. The 'DEVNET' label in the nav is a quiet red flag — signals this is still in development, which undercuts the confidence the headline tries to project. Hierarchy is clean but the trust stack is shallow."
+      }
+    }
+  ],
+  "tally_submitted": false,
+  "smoothness": {
+    "fired": [
+      "invite_page_viewed",
+      "invite_cta_clicked",
+      "grant_claimed",
+      "feedback_opened"
+    ],
+    "missing": [
+      "terms_expanded",
+      "about_demo_clicked"
+    ]
+  }
+}
