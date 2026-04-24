@@ -43,6 +43,12 @@ npm-debug.log*
 .gstack/
 .vercel
 
+# Next.js regenerates this on every `next dev` vs `next build` — path flip-flops
+next-env.d.ts
+
+# Claude Code scheduled-tasks MCP lock (per-session)
+.claude/scheduled_tasks.lock
+
 # QA artifacts (ephemeral test outputs)
 qa-run-*.json
 telemetry-*.csv
