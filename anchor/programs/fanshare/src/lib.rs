@@ -803,6 +803,12 @@ pub fn calculate_sell_return(base_price: u64, slope: u64, tokens_sold: u64, amou
 
 /// Calculate how many whole tokens can be bought with `sol_amount` SOL.
 /// Binary search for maximum affordable token count.
+///
+/// SIM-004 fix: for very large sol_amount values the binary search mid-point could
+/// trigger MathOverflow inside calculate_buy_cost, which previously propagated as an
+/// opaque error indistinguishable from DustAmount. The search now caps `hi` to the
+/// minimum of max_buyable and a u64-safe upper bound derived from base_price alone,
+/// so the intermediate arithmetic never overflows u128 for any realistic input.
 pub fn calculate_tokens_for_sol(
     base_price: u64,
     slope: u64,
@@ -815,11 +821,21 @@ pub fn calculate_tokens_for_sol(
         return Ok(0);
     }
 
+    // Safe upper bound: even ignoring slope, you can buy at most
+    // sol_amount / base_price tokens. This keeps mid * base_price within u128
+    // and prevents overflow in the binary search loop.
+    let safe_upper = if base_price > 0 {
+        (sol_amount as u128 / base_price as u128).min(max_buyable as u128) as u64
+    } else {
+        max_buyable
+    };
+
     let mut lo: u64 = 0;
-    let mut hi: u64 = max_buyable;
+    let mut hi: u64 = safe_upper;
 
     while lo < hi {
         let mid = lo + (hi - lo + 1) / 2;
+        // calculate_buy_cost uses u128 internally and is safe for mid <= safe_upper
         let cost = calculate_buy_cost(base_price, slope, tokens_sold, mid)?;
         if cost <= sol_amount {
             lo = mid;

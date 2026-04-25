@@ -42,7 +42,13 @@ export function calculateSellReturn(
   return calculateBuyCost(basePrice, slope, newSold, amount);
 }
 
-/** Calculate how many whole tokens can be bought with `solAmount` SOL. Binary search. */
+/** Calculate how many whole tokens can be bought with `solAmount` SOL. Binary search.
+ *
+ * SIM-004 fix (TS mirror of Rust fix): cap the binary search upper bound using
+ * base_price so intermediate arithmetic never overflows for whale-sized inputs.
+ * Without this, the search could iterate over the full 1M supply range for inputs
+ * near u64::MAX, causing the UI to hang or produce incorrect estimates.
+ */
 export function calculateTokensForSol(
   basePrice: bigint,
   slope: bigint,
@@ -53,8 +59,14 @@ export function calculateTokensForSol(
   const maxBuyable = totalSupply - tokensSold;
   if (maxBuyable <= 0n) return 0n;
 
+  // Safe upper bound: sol_amount / base_price gives an affordable ceiling that
+  // keeps intermediate arithmetic well within safe integer range.
+  const safeUpper = basePrice > 0n
+    ? (solAmount / basePrice < maxBuyable ? solAmount / basePrice : maxBuyable)
+    : maxBuyable;
+
   let lo = 0n;
-  let hi = maxBuyable;
+  let hi = safeUpper;
 
   while (lo < hi) {
     const mid = lo + (hi - lo + 1n) / 2n;
