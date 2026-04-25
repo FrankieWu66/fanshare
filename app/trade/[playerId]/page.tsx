@@ -1010,6 +1010,26 @@ export default function TradePage({
                       </p>
                     )}
 
+                    {/* SIM-006: oracle index price + spread direction — visible before buy confirm.
+                        Spread direction text makes the core product claim legible at the moment
+                        of decision: "Market is X% below/above oracle." */}
+                    {indexPrice > 0n && (
+                      <div className="rounded-lg border border-border-low px-3 py-2 text-xs space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted">Oracle fair value</span>
+                          <span className="font-mono font-semibold tabular-nums">
+                            {formatUsd(indexPrice)}
+                          </span>
+                        </div>
+                        {spreadLabel && (
+                          <p className={`text-right font-medium ${spreadLabel.pctColor}`}>
+                            Market is {Math.abs(spread).toFixed(1)}%{" "}
+                            {spread > 0 ? "above" : "below"} oracle
+                          </p>
+                        )}
+                      </div>
+                    )}
+
                     {status !== "connected" ? (
                       <div className="text-center text-sm text-muted">
                         Connect wallet to buy
@@ -1103,6 +1123,25 @@ export default function TradePage({
                         <span className="ml-1 font-mono font-semibold">
                           {formatUsd(solOut)}
                         </span>
+                      </div>
+                    )}
+
+                    {/* SIM-006: oracle index price + spread direction on sell tab too —
+                        user should see oracle context before confirming a sell. */}
+                    {indexPrice > 0n && (
+                      <div className="rounded-lg border border-border-low px-3 py-2 text-xs space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-muted">Oracle fair value</span>
+                          <span className="font-mono font-semibold tabular-nums">
+                            {formatUsd(indexPrice)}
+                          </span>
+                        </div>
+                        {spreadLabel && (
+                          <p className={`text-right font-medium ${spreadLabel.pctColor}`}>
+                            Market is {Math.abs(spread).toFixed(1)}%{" "}
+                            {spread > 0 ? "above" : "below"} oracle
+                          </p>
+                        )}
                       </div>
                     )}
 
