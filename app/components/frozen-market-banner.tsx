@@ -64,24 +64,23 @@ export function FrozenMarketBanner({ marketStatus, onClaimExit }: FrozenMarketBa
     );
   }
 
-  // Market frozen — trading fully halted until close_timestamp, then process_exit
+  // Market frozen — trading fully halted (Demo 1: full halt, no in-app sell window).
+  // SIM-001 fix: previous banner said "Exit claim available in X" which implied a sell
+  // path that does not exist in Demo 1. Now clearly states trading is halted and directs
+  // users to contact support. The process_exit flow (sell window + treasury backstop)
+  // is deferred to Demo 2.
   return (
     <div className="mb-5 rounded-xl border border-accent/30 bg-accent-subtle px-4 py-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <p className="text-sm font-semibold text-accent">
-            This market is frozen. Trading disabled.
+            This market is frozen. All trading is paused.
           </p>
           <p className="mt-0.5 text-xs text-muted">
-            Exit claim available in{" "}
-            <span className="font-mono font-semibold text-accent">
-              {formatCountdown(secondsRemaining)}
-            </span>
-            .
+            Your tokens are safe. If you hold a position on this player, contact{" "}
+            <span className="font-semibold text-accent">@fanshares</span> for assistance.
+            Exit claims will be available in a future update.
           </p>
-        </div>
-        <div className="font-mono text-lg font-bold tabular-nums text-accent">
-          {formatCountdown(secondsRemaining)}
         </div>
       </div>
     </div>
