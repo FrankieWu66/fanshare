@@ -434,11 +434,14 @@ pub mod fanshare {
         treasury.balance_lamports = treasury.balance_lamports.checked_add(fee_treasury).unwrap();
         treasury.total_collected = treasury.total_collected.checked_add(fee_treasury).unwrap();
 
-        // Compute spread at buy
+        // Compute spread at buy using pre-trade market price (tokens_sold before this trade).
+        // SIM-002 fix: was incorrectly using new_tokens_sold (post-trade), which inflated
+        // the spread and corrupted Sharp Calls leaderboard rankings.
+        let pre_trade_market_price = current_price(base_price, slope, tokens_sold);
         let new_tokens_sold = curve.tokens_sold;
-        let market_price = current_price(base_price, slope, new_tokens_sold);
+        let market_price_after = current_price(base_price, slope, new_tokens_sold);
         let index_price = ctx.accounts.stats_oracle.index_price_lamports;
-        let spread_at_buy = compute_spread(market_price, index_price);
+        let spread_at_buy = compute_spread(pre_trade_market_price, index_price);
 
         emit!(TradeEvent {
             mint: mint_key,
@@ -448,7 +451,7 @@ pub mod fanshare {
             sol_amount: exact_sol_cost,
             is_buy: true,
             tokens_sold_after: new_tokens_sold,
-            price_after: market_price,
+            price_after: market_price_after,
             fee_lamports: fee_total,
             spread_at_buy,
         });
