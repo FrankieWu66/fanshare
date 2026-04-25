@@ -34,15 +34,76 @@ import {
   usdToLamports,
 } from "../app/lib/oracle-weights";
 import { pushPriceHistoryEntry } from "../app/lib/kv-history";
-import { PLAYER_API_MAP, resolveStats } from "../app/lib/shared/stats";
+import { PLAYER_API_MAP, resolveStatsWithContext } from "../app/lib/shared/stats";
 import { getMarketStatusPda, getStatsOraclePda, PROGRAM_ID } from "../app/lib/shared/pdas";
 import {
   buildUpdateOracleInstruction,
   pillarLamportDeltas,
 } from "../app/lib/shared/oracle-instruction";
+import {
+  applyInjuryPolicy,
+  defaultPlayerOracleState,
+  loadPlayerStateFromKv,
+  savePlayerStateToKv,
+  type PlayerOracleState,
+} from "../app/lib/shared/injury-policy";
 
 // Load .env.local for KV credentials (Next.js convention)
 dotenv.config({ path: path.join(path.dirname(fileURLToPath(import.meta.url)), "../.env.local") });
+
+// ── Local state store (script fallback when KV is not configured) ─────────
+
+const LOCAL_STATE_PATH = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../.oracle-player-state.json",
+);
+
+function loadLocalState(): Record<string, PlayerOracleState> {
+  try {
+    if (fs.existsSync(LOCAL_STATE_PATH)) {
+      return JSON.parse(fs.readFileSync(LOCAL_STATE_PATH, "utf-8")) as Record<string, PlayerOracleState>;
+    }
+  } catch { /* ignore */ }
+  return {};
+}
+
+function saveLocalState(state: Record<string, PlayerOracleState>): void {
+  try {
+    fs.writeFileSync(LOCAL_STATE_PATH, JSON.stringify(state, null, 2));
+  } catch (err) {
+    console.warn("  ⚠ Could not write local oracle state file:", err);
+  }
+}
+
+/**
+ * Load player state: try KV first, fall back to local JSON file.
+ * In mock mode, always returns a default state (treats all players as full-sample).
+ */
+async function loadState(cluster: string, playerId: string, useMock: boolean): Promise<PlayerOracleState> {
+  if (useMock) return defaultPlayerOracleState();
+  const kvUrl = process.env.KV_REST_API_URL;
+  const kvToken = process.env.KV_REST_API_TOKEN;
+  if (kvUrl && kvToken) {
+    return loadPlayerStateFromKv(cluster, playerId);
+  }
+  const all = loadLocalState();
+  return all[`${cluster}:${playerId}`] ?? defaultPlayerOracleState();
+}
+
+async function persistState(
+  cluster: string, playerId: string, state: PlayerOracleState, useMock: boolean,
+): Promise<void> {
+  if (useMock) return;
+  const kvUrl = process.env.KV_REST_API_URL;
+  const kvToken = process.env.KV_REST_API_TOKEN;
+  if (kvUrl && kvToken) {
+    await savePlayerStateToKv(cluster, playerId, state);
+    return;
+  }
+  const all = loadLocalState();
+  all[`${cluster}:${playerId}`] = state;
+  saveLocalState(all);
+}
 
 // Anchor discriminator helper: first 8 bytes of sha256("global:<method_name>")
 function anchorDiscriminator(methodName: string): Buffer {
@@ -186,32 +247,70 @@ async function main() {
   console.log(`Players:   ${Object.keys(mints).length}\n`);
 
   const statsSourceDate = BigInt(Math.floor(new Date().setUTCHours(0, 0, 0, 0) / 1000));
+  const rpcUrl = process.env.SOLANA_RPC_URL ?? "";
+  const cluster =
+    process.env.SOLANA_CLUSTER ??
+    (rpcUrl.includes("devnet") ? "devnet" :
+     rpcUrl.includes("mainnet") ? "mainnet" :
+     rpcUrl.includes("testnet") ? "testnet" : "localnet");
+
   let updated = 0;
+  let frozen = 0;
   let skipped = 0;
 
   for (const [playerId, mintAddress] of Object.entries(mints)) {
     const mintPubkey = new PublicKey(mintAddress);
     const [statsOraclePda] = getStatsOraclePda(mintPubkey);
 
-    const stats = await resolveStats(playerId, { mock: useMock });
-    if (!stats) {
+    // Load per-player oracle state for injury-policy (Phase C).
+    const playerState = await loadState(cluster, playerId, useMock);
+
+    // Resolve stats with context (gamesThisSeason + mostRecentGameDate for policy).
+    const ctx = await resolveStatsWithContext(playerId, {
+      mock: useMock,
+      windowResetAfterDate: playerState.windowResetAfterDate,
+    });
+    if (!ctx) {
       console.log(`  ✗ No stats for ${playerId}, skipping`);
       skipped++;
       continue;
     }
 
     // Calculate 4-pillar breakdown
-    const pillars = calculatePillarBreakdown(stats);
-    const indexLamports = usdToLamports(pillars.usdPrice);
+    const pillars = calculatePillarBreakdown(ctx.stats);
+
+    // Apply injury policy (Rules 1–5).
+    const policy = applyInjuryPolicy(
+      playerId,
+      pillars.usdPrice,
+      playerState,
+      ctx.mostRecentGameDate,
+      ctx.gamesThisSeason,
+      pillars.usdPrice,
+    );
+
+    // Persist updated state.
+    await persistState(cluster, playerId, policy.updatedState, useMock);
+
+    // Rule 1/2/4: frozen — skip on-chain update.
+    if (policy.freeze) {
+      console.log(`${playerId.padEnd(12)} → FROZEN (${policy.reason})`);
+      frozen++;
+      await new Promise((r) => setTimeout(r, 200));
+      continue;
+    }
+
+    const finalUsdPrice = policy.finalUsdPrice;
+    const indexLamports = usdToLamports(finalUsdPrice);
 
     // Pillar lamport deltas (for OracleUpdateEvent)
     const deltas = pillarLamportDeltas(pillars);
 
     console.log(
-      `${playerId.padEnd(12)} → $${pillars.usdPrice.toFixed(2)} ` +
+      `${playerId.padEnd(12)} → $${finalUsdPrice.toFixed(2)} ` +
       `(S:$${(pillars.scoring * 0.12).toFixed(2)} P:$${(pillars.playmaking * 0.12).toFixed(2)} ` +
       `D:$${(pillars.defense * 0.12).toFixed(2)} W:$${(pillars.winning * 0.12).toFixed(2)}) ` +
-      `= ${indexLamports} lamports`
+      `= ${indexLamports} lamports [${policy.reason}]`
     );
 
     // Build and send the transaction
@@ -239,18 +338,12 @@ async function main() {
           const entry = JSON.stringify({
             t: Math.floor(Date.now() / 1000),
             p: Number(indexLamports),
-            usd: pillars.usdPrice,
+            usd: finalUsdPrice,
             scoring: pillars.scoring * 0.12,
             playmaking: pillars.playmaking * 0.12,
             defense: pillars.defense * 0.12,
             winning: pillars.winning * 0.12,
           });
-          const rpcUrl = process.env.SOLANA_RPC_URL ?? "";
-          const cluster =
-            process.env.SOLANA_CLUSTER ??
-            (rpcUrl.includes("devnet") ? "devnet" :
-             rpcUrl.includes("mainnet") ? "mainnet" :
-             rpcUrl.includes("testnet") ? "testnet" : "localnet");
           const key = `price-history:${cluster}:${playerId}`;
           await pushPriceHistoryEntry(key, entry);
           console.log(`  ✓ KV price history recorded (with pillar breakdown)`);
@@ -267,7 +360,7 @@ async function main() {
     await new Promise((r) => setTimeout(r, 500));
   }
 
-  console.log(`\n✅ Oracle update done: ${updated} updated, ${skipped} skipped`);
+  console.log(`\n✅ Oracle update done: ${updated} updated, ${frozen} frozen, ${skipped} skipped`);
 
   if (!useMock) {
     await checkInactivePlayers(connection, authority, mints);
