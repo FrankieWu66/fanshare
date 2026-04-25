@@ -255,9 +255,15 @@ export default function TradePage({
   const buyDisabledByFreeze = isFrozen; // buy disabled whenever frozen
   const sellDisabledByFreeze = isFrozen; // sell disabled whenever frozen (full halt)
 
+  // Insufficient-balance gate for buy (separate from freeze).
+  // Only meaningful once balance has loaded — null means "loading", treat as not-insufficient
+  // so we don't block the user from typing into a fresh page.
+  const insufficientBalance =
+    balance.lamports != null && solLamports > balance.lamports;
+
   // ── Handlers ─────────────────────────────────────────────────────────────
   const handleBuy = useCallback(async () => {
-    if (isBusy || buyDisabledByFreeze || !address || !player || !curve || solLamports === 0n || tokensOut === 0n) return;
+    if (isBusy || buyDisabledByFreeze || !address || !player || !curve || solLamports === 0n || tokensOut === 0n || insufficientBalance) return;
     track("first_buy_attempted", {
       wallet: address,
       player_id: playerId,
@@ -347,7 +353,7 @@ export default function TradePage({
         message: msg.slice(0, 200),
       });
     }
-  }, [isBusy, buyDisabledByFreeze, address, player, curve, solLamports, tokensOut, send, playerId, priceAfterBuy]);
+  }, [isBusy, buyDisabledByFreeze, address, player, curve, solLamports, tokensOut, send, playerId, priceAfterBuy, insufficientBalance]);
 
   const handleSell = useCallback(async () => {
     if (isBusy || sellDisabledByFreeze || !address || !player || !curve || tokenAmountIn === 0n || solOut === 0n) return;
@@ -998,6 +1004,11 @@ export default function TradePage({
                         Amount too small — enter at least {formatUsd(marketPrice)}
                       </p>
                     )}
+                    {insufficientBalance && (
+                      <p className="text-xs text-negative">
+                        Not enough SOL — try a smaller amount.
+                      </p>
+                    )}
 
                     {status !== "connected" ? (
                       <div className="text-center text-sm text-muted">
@@ -1016,7 +1027,7 @@ export default function TradePage({
                       <div aria-live="polite" aria-atomic="true">
                         <button
                           onClick={handleBuy}
-                          disabled={isBusy || solLamports === 0n || tokensOut === 0n}
+                          disabled={isBusy || solLamports === 0n || tokensOut === 0n || insufficientBalance}
                           className="w-full cursor-pointer rounded-xl bg-positive py-3 text-sm font-bold text-background transition hover:opacity-90 active:scale-[0.98] active:opacity-80 disabled:cursor-not-allowed disabled:opacity-40"
                         >
                           {txStage === "signing" && "Approve in wallet..."}
