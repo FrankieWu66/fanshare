@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useWallet } from "../lib/wallet/context";
 import { useBalance } from "../lib/hooks/use-balance";
 import { usePlayerMarkets } from "../lib/hooks/use-player-markets";
@@ -79,7 +80,61 @@ const TERMS = [
 const DISCLAIMER =
   "Practice mode. No real money, no financial risk, no financial advice.";
 
+// ── Private-beta gate ─────────────────────────────────────────────────────
+// Reads NEXT_PUBLIC_DEMO_INVITE_CODE at build time (client-safe). When the
+// env var is set, the ?code= URL param must match exactly or the page blocks.
+// Fails closed: missing env var = gate active, no code = blocked.
+
+const INVITE_CODE = process.env.NEXT_PUBLIC_DEMO_INVITE_CODE ?? "";
+
+function PrivateBetaBlock() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background px-6">
+      <div className="max-w-sm text-center">
+        <div className="mb-4 inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-muted">
+          <span className="inline-block h-px w-6 bg-border" />
+          Private beta
+          <span className="inline-block h-px w-6 bg-border" />
+        </div>
+        <h1
+          className="m-0 mb-4 font-display font-extrabold text-foreground"
+          style={{ fontSize: "clamp(28px, 5vw, 36px)", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+        >
+          FanShare is currently in private beta.
+        </h1>
+        <p className="m-0 text-[15px] leading-[1.6] text-muted">
+          You&apos;ll need an invitation from Frankie to get access.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// GateCheck must be a separate component so useSearchParams() is inside Suspense.
+function GateCheck() {
+  const searchParams = useSearchParams();
+  const code = searchParams.get("code") ?? "";
+
+  // Gate: block when env var is set and code doesn't match.
+  // If INVITE_CODE is empty (env var unset), gate is active — fails closed.
+  const gateActive = INVITE_CODE.length > 0;
+  const codeValid = gateActive && code === INVITE_CODE;
+  if (!codeValid) return <PrivateBetaBlock />;
+
+  return <InvitePageContent />;
+}
+
 export default function InvitePage() {
+  // Suspense boundary required by Next.js when useSearchParams() is used
+  // in a component below this export.
+  return (
+    <Suspense fallback={<PrivateBetaBlock />}>
+      <GateCheck />
+    </Suspense>
+  );
+}
+
+function InvitePageContent() {
   const { wallet, isDemoMode } = useWallet();
   const [showSignin, setShowSignin] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
