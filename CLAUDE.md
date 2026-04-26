@@ -142,7 +142,9 @@ ORACLE_SECRET_KEY=       # JSON array from oracle-keypair.json e.g. [1,2,3,...]
 SOLANA_RPC_URL=          # Helius devnet URL (see RPC Provider section above)
 SOLANA_CLUSTER=          # "devnet"
 CRON_SECRET=             # Random secret — Vercel injects as Authorization: Bearer <secret>
-BALLDONTLIE_API_KEY=     # Optional — improves balldontlie.io rate limits
+BALLDONTLIE_API_KEY=     # Required for advanced stats (GOAT tier $39.99/mo).
+                         # Lives in ~/.zshrc for cross-domain shell access AND in Vercel env vars.
+                         # Rotation: update in BOTH places + balldontlie.io issuer (revoke old).
 ```
 
 ## Helius Webhook

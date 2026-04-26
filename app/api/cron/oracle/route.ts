@@ -74,6 +74,14 @@ export async function GET(request: Request) {
   );
   const connection = new Connection(rpcUrl, "confirmed");
   const cluster = (process.env.SOLANA_CLUSTER ?? (rpcUrl.includes("devnet") ? "devnet" : "localnet")).trim();
+
+  if (!process.env.BALLDONTLIE_API_KEY) {
+    console.warn(
+      "[oracle] BALLDONTLIE_API_KEY missing — running unauthenticated. " +
+      "Advanced stats fields will be null. Set the env var in Vercel."
+    );
+  }
+
   const mints = PLAYER_MINTS as Record<string, string>;
   const statsSourceDate = BigInt(Math.floor(new Date().setUTCHours(0, 0, 0, 0) / 1000));
 
