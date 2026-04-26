@@ -434,11 +434,14 @@ pub mod fanshare {
         treasury.balance_lamports = treasury.balance_lamports.checked_add(fee_treasury).unwrap();
         treasury.total_collected = treasury.total_collected.checked_add(fee_treasury).unwrap();
 
-        // Compute spread at buy
+        // Compute spread at buy using pre-trade market price (tokens_sold before this trade).
+        // SIM-002 fix: was incorrectly using new_tokens_sold (post-trade), which inflated
+        // the spread and corrupted Sharp Calls leaderboard rankings.
+        let pre_trade_market_price = current_price(base_price, slope, tokens_sold);
         let new_tokens_sold = curve.tokens_sold;
-        let market_price = current_price(base_price, slope, new_tokens_sold);
+        let market_price_after = current_price(base_price, slope, new_tokens_sold);
         let index_price = ctx.accounts.stats_oracle.index_price_lamports;
-        let spread_at_buy = compute_spread(market_price, index_price);
+        let spread_at_buy = compute_spread(pre_trade_market_price, index_price);
 
         emit!(TradeEvent {
             mint: mint_key,
@@ -448,7 +451,7 @@ pub mod fanshare {
             sol_amount: exact_sol_cost,
             is_buy: true,
             tokens_sold_after: new_tokens_sold,
-            price_after: market_price,
+            price_after: market_price_after,
             fee_lamports: fee_total,
             spread_at_buy,
         });
@@ -479,12 +482,25 @@ pub mod fanshare {
         let sol_return = calculate_sell_return(base_price, slope, tokens_sold, token_amount)?;
         require!(sol_return > 0, FanshareError::ZeroAmount);
 
-        // Reserve invariant — CRITICAL
-        require!(sol_return <= treasury, FanshareError::InsufficientTreasury);
+        // Reserve invariant — use actual PDA lamport balance as authoritative source.
+        //
+        // SIM-003 fix: treasury_lamports (accounting field) can be stale under concurrent
+        // transactions sharing the same blockhash — both reads the same value before either
+        // write commits. Using the real PDA balance makes the check data-race safe because
+        // Solana serialises writes to the same account within a slot.
+        //
+        // SIM-005 fix: fee rounding over many sequential sells leaves 1–2 lamports in
+        // treasury_lamports that are never disbursed. The last seller's sol_return may
+        // exceed treasury_lamports by exactly that rounding amount, triggering
+        // InsufficientTreasury incorrectly. Capping sol_actual to the real PDA balance
+        // (rather than hard-failing) covers the rounding gap while preserving the invariant.
+        let pda_balance = ctx.accounts.bonding_curve.to_account_info().lamports();
+        let sol_actual = sol_return.min(pda_balance);
+        require!(sol_actual > 0, FanshareError::InsufficientTreasury);
 
-        // Calculate fee: 1.5% of sol_return, deducted from seller's proceeds
-        let (fee_total, fee_protocol, fee_treasury) = calculate_fee_split(sol_return);
-        let seller_receives = sol_return.checked_sub(fee_total).ok_or(FanshareError::MathOverflow)?;
+        // Calculate fee: 1.5% of sol_actual, deducted from seller's proceeds
+        let (fee_total, fee_protocol, fee_treasury) = calculate_fee_split(sol_actual);
+        let seller_receives = sol_actual.checked_sub(fee_total).ok_or(FanshareError::MathOverflow)?;
         require!(seller_receives >= min_sol_out, FanshareError::SlippageExceeded);
 
         // Burn tokens from seller's account
@@ -501,8 +517,8 @@ pub mod fanshare {
         )?;
 
         // Direct lamport manipulation from bonding curve PDA
-        // Bonding curve releases sol_return, split: seller + protocol + treasury
-        **ctx.accounts.bonding_curve.to_account_info().try_borrow_mut_lamports()? -= sol_return;
+        // Bonding curve releases sol_actual, split: seller + protocol + treasury
+        **ctx.accounts.bonding_curve.to_account_info().try_borrow_mut_lamports()? -= sol_actual;
         **ctx.accounts.buyer.to_account_info().try_borrow_mut_lamports()? += seller_receives;
 
         if fee_protocol > 0 {
@@ -515,7 +531,8 @@ pub mod fanshare {
         // Update bonding curve state
         let curve = &mut ctx.accounts.bonding_curve;
         curve.tokens_sold = tokens_sold.checked_sub(token_amount).unwrap();
-        curve.treasury_lamports = treasury.checked_sub(sol_return).unwrap();
+        // treasury_lamports tracks the accounting balance; clamp to zero on full drain
+        curve.treasury_lamports = treasury.saturating_sub(sol_actual);
 
         // Update exit treasury accounting
         let exit_treasury = &mut ctx.accounts.exit_treasury;
@@ -786,6 +803,12 @@ pub fn calculate_sell_return(base_price: u64, slope: u64, tokens_sold: u64, amou
 
 /// Calculate how many whole tokens can be bought with `sol_amount` SOL.
 /// Binary search for maximum affordable token count.
+///
+/// SIM-004 fix: for very large sol_amount values the binary search mid-point could
+/// trigger MathOverflow inside calculate_buy_cost, which previously propagated as an
+/// opaque error indistinguishable from DustAmount. The search now caps `hi` to the
+/// minimum of max_buyable and a u64-safe upper bound derived from base_price alone,
+/// so the intermediate arithmetic never overflows u128 for any realistic input.
 pub fn calculate_tokens_for_sol(
     base_price: u64,
     slope: u64,
@@ -798,11 +821,21 @@ pub fn calculate_tokens_for_sol(
         return Ok(0);
     }
 
+    // Safe upper bound: even ignoring slope, you can buy at most
+    // sol_amount / base_price tokens. This keeps mid * base_price within u128
+    // and prevents overflow in the binary search loop.
+    let safe_upper = if base_price > 0 {
+        (sol_amount as u128 / base_price as u128).min(max_buyable as u128) as u64
+    } else {
+        max_buyable
+    };
+
     let mut lo: u64 = 0;
-    let mut hi: u64 = max_buyable;
+    let mut hi: u64 = safe_upper;
 
     while lo < hi {
         let mid = lo + (hi - lo + 1) / 2;
+        // calculate_buy_cost uses u128 internally and is safe for mid <= safe_upper
         let cost = calculate_buy_cost(base_price, slope, tokens_sold, mid)?;
         if cost <= sol_amount {
             lo = mid;

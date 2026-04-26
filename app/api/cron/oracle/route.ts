@@ -32,12 +32,17 @@ import {
   usdToLamports,
 } from "@/app/lib/oracle-weights";
 import { pushPriceHistoryEntry } from "@/app/lib/kv-history";
-import { resolveStats } from "@/app/lib/shared/stats";
+import { resolveStatsWithContext } from "@/app/lib/shared/stats";
 import { getStatsOraclePda } from "@/app/lib/shared/pdas";
 import {
   buildUpdateOracleInstruction,
   pillarLamportDeltas,
 } from "@/app/lib/shared/oracle-instruction";
+import {
+  applyInjuryPolicy,
+  loadPlayerStateFromKv,
+  savePlayerStateToKv,
+} from "@/app/lib/shared/injury-policy";
 
 async function writeKvPriceHistory(
   playerId: string, indexLamports: bigint, usdPrice: number,
@@ -85,19 +90,51 @@ export async function GET(request: Request) {
   const mints = PLAYER_MINTS as Record<string, string>;
   const statsSourceDate = BigInt(Math.floor(new Date().setUTCHours(0, 0, 0, 0) / 1000));
 
-  const results: Array<{ playerId: string; status: string; usdPrice?: number; tx?: string; error?: string }> = [];
+  const results: Array<{ playerId: string; status: string; usdPrice?: number; tx?: string; error?: string; policyReason?: string }> = [];
 
   for (const [playerId, mintAddress] of Object.entries(mints)) {
     const mintPubkey = new PublicKey(mintAddress);
     const [statsOraclePda] = getStatsOraclePda(mintPubkey);
 
-    // Vercel cron always runs live mode. resolveStats falls back to mock
-    // (DEVNET_PLAYERS.stats) automatically if balldontlie fails.
-    const stats = await resolveStats(playerId, { mock: false });
-    if (!stats) { results.push({ playerId, status: "no_stats" }); continue; }
+    // Load per-player oracle state for injury-policy (Phase C).
+    const playerState = await loadPlayerStateFromKv(cluster, playerId);
 
-    const pillars = calculatePillarBreakdown(stats);
-    const indexLamports = usdToLamports(pillars.usdPrice);
+    // Vercel cron always runs live mode. resolveStatsWithContext falls back to mock
+    // (DEVNET_PLAYERS.stats) automatically if balldontlie fails.
+    // Pass windowResetAfterDate so Rule 5 filtering applies to the rolling window.
+    const ctx = await resolveStatsWithContext(playerId, {
+      mock: false,
+      windowResetAfterDate: playerState.windowResetAfterDate,
+    });
+    if (!ctx) { results.push({ playerId, status: "no_stats" }); continue; }
+
+    const pillars = calculatePillarBreakdown(ctx.stats);
+
+    // Apply injury policy (Rules 1–5).
+    // lastOracleUsd is the formula output before policy caps; used as the
+    // freeze passthrough value when the player didn't play today.
+    const policy = applyInjuryPolicy(
+      playerId,
+      pillars.usdPrice,
+      playerState,
+      ctx.mostRecentGameDate,
+      ctx.gamesThisSeason,
+      pillars.usdPrice, // lastOracleUsd — formula output is the baseline
+    );
+
+    // Persist updated state regardless of freeze/update outcome.
+    await savePlayerStateToKv(cluster, playerId, policy.updatedState);
+
+    // Rule 1/2/4: frozen — skip on-chain update, hold last value.
+    if (policy.freeze) {
+      results.push({ playerId, status: "frozen", policyReason: policy.reason });
+      await new Promise((r) => setTimeout(r, 200));
+      continue;
+    }
+
+    // Apply post-formula caps (Rule 3 short-sample) from policy result.
+    const finalUsdPrice = policy.finalUsdPrice;
+    const indexLamports = usdToLamports(finalUsdPrice);
     const deltas = pillarLamportDeltas(pillars);
 
     try {
@@ -116,15 +153,15 @@ export async function GET(request: Request) {
       const sig = await sendAndConfirmTransaction(connection, tx, [authority], { commitment: "confirmed" });
 
       await writeKvPriceHistory(
-        playerId, indexLamports, pillars.usdPrice,
+        playerId, indexLamports, finalUsdPrice,
         pillars.scoring * 0.12, pillars.playmaking * 0.12,
         pillars.defense * 0.12, pillars.winning * 0.12, cluster,
       );
 
-      results.push({ playerId, status: "updated", usdPrice: pillars.usdPrice, tx: sig });
+      results.push({ playerId, status: "updated", usdPrice: finalUsdPrice, tx: sig, policyReason: policy.reason });
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
-      results.push({ playerId, status: "failed", usdPrice: pillars.usdPrice, error: errMsg.slice(0, 200) });
+      results.push({ playerId, status: "failed", usdPrice: finalUsdPrice, error: errMsg.slice(0, 200) });
     }
 
     await new Promise((r) => setTimeout(r, 200));
