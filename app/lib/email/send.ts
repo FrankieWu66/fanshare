@@ -45,7 +45,10 @@ export interface SendEmailResult {
  * In DRY_RUN mode, logs intent and returns a stub — never calls Resend.
  */
 export async function sendEmail(opts: SendEmailOptions): Promise<SendEmailResult> {
-  const from = opts.from ?? "FanShare <noreply@fanshares.xyz>";
+  // Default to Resend's built-in address — works without custom domain verification.
+  // Switch to a verified custom domain (e.g. "FanShare <noreply@fanshares.xyz>")
+  // once fanshares.xyz is added + verified in the Resend dashboard under Domains.
+  const from = opts.from ?? "FanShare <onboarding@resend.dev>";
 
   if (isDryRun) {
     console.log(
@@ -64,8 +67,11 @@ export async function sendEmail(opts: SendEmailOptions): Promise<SendEmailResult
   });
 
   if (error) {
-    throw new Error(`[email] Resend error: ${error.message}`);
+    // Log the full error object so it appears in Vercel function logs
+    console.error("[email] Resend rejected send:", JSON.stringify(error));
+    throw new Error(`[email] Resend error: ${error.message} (name=${error.name})`);
   }
 
+  console.log(`[email] sent to=${opts.to} from=${from} id=${data?.id}`);
   return { id: data?.id ?? null, dryRun: false };
 }
